@@ -155,4 +155,4 @@ const { ripples, handleMouseLeave } = useRippleEffect();
   </div>
 </template>
 
-<style src="../assets/login.css"></style>
+<style src="@/assets/login.css"></style>

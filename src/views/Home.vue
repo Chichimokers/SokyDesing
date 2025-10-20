@@ -336,4 +336,4 @@ const handleRetryFromHome = async (tx: any) => {
   }, 500)
 }
 </script>
-<style src="../assets/home.css"></style>
+<style src="@/assets/home.css"></style>
