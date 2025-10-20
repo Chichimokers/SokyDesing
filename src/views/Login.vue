@@ -11,7 +11,7 @@ const { ripples, handleMouseLeave } = useRippleEffect();
     class="login-background  flex items-center justify-center h-screen bg-repeat bg-center relative overflow-hidden"
   >
   
-    
+  
 
     <!-- Tu contenido del login (sin cambios) -->
     <div class="login-content bg-[#1f1f1f]/95 p-8 rounded-2xl shadow-xl w-96 text-white">
@@ -70,6 +70,8 @@ const { ripples, handleMouseLeave } = useRippleEffect();
                 stroke-linejoin="round"
               />
             </svg>
+
+            
           </div>
         </div>
 

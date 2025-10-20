@@ -44,6 +44,20 @@
           >
             Perfil
           </router-link>
+            <router-link 
+            to="/balance" 
+            class="nav-link px-5 py-2 rounded-xl transition-all duration-300"
+            :class="{ 'nav-link-active': $route.path === '/balance' }"
+          >
+            Balance
+          </router-link>
+            <router-link 
+            to="/subscription" 
+            class="nav-link px-5 py-2 rounded-xl transition-all duration-300"
+            :class="{ 'nav-link-active': $route.path === '/subscription' }"
+          >
+            Suscripción
+          </router-link>
         </div>
 
         <!-- User Section Mejorado -->
