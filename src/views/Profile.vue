@@ -105,7 +105,7 @@
           </h2>
           
           <div class="space-y-4">
-            <div v-for="activity in user.recentActivity" :key="activity.id" class="activity-item flex items-center justify-between p-4 bg-white/5 hover:bg-white/10 rounded-xl transition-all duration-300">
+            <div v-for="activity in combinedRecent" :key="activity.id" class="activity-item flex items-center justify-between p-4 bg-white/5 hover:bg-white/10 rounded-xl transition-all duration-300">
               <div class="flex items-center gap-4">
                 <div class="w-12 h-12 rounded-full flex items-center justify-center" 
                      :class="getActivityIcon(activity.type).bgClass">
@@ -138,7 +138,8 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import Navbar from '@/components/Navbar.vue'
+import { useRecharge } from '../composables/useRecharge'
+import Navbar from '../components/Navbar.vue'
 
 // User data (in real app, this would come from an API)
 const user = ref({
@@ -155,23 +156,31 @@ const user = ref({
   recentActivity: [
     {
       id: 1,
-      type: 'recharge',
-      title: 'Recarga Completada',
+      type: 'mobile_recharge',
+      title: 'Recarga Móvil Completada',
       description: '700 CUP + Internet ilimitado 20 días',
       amount: '$50.00',
       date: new Date('2024-01-15')
     },
     {
       id: 2,
-      type: 'nauta',
+      type: 'nauta_hogar',
       title: 'Nauta Hogar Plus',
-      description: 'Paquete de internet activado',
+      description: 'Paquete de internet activado • correo@nauta.cu',
       amount: '$25.00',
       date: new Date('2024-01-10')
     },
     {
       id: 3,
-      type: 'recharge',
+      type: 'nauta_plus',
+      title: 'Nauta Plus',
+      description: 'Suscripción activada • +53 5812 6024',
+      amount: '$18.50',
+      date: new Date('2024-01-08')
+    },
+    {
+      id: 4,
+      type: 'mobile_recharge',
       title: 'Recarga Rápida',
       description: '500 CUP enviados',
       amount: '$35.00',
@@ -180,6 +189,51 @@ const user = ref({
   ]
 })
 
+// Mostrar últimas 3 recargas desde el history compartido
+const { getHistory } = useRecharge()
+const recentFromHistory = getHistory(3)
+
+// Mapea el history a la estructura de recentActivity para mostrar en el perfil
+const historyActivities = recentFromHistory.map((tx, idx) => {
+  // Determinar el tipo de recarga según el ID de la oferta
+  let type = 'recharge'
+  let title = 'Recarga Completada'
+  
+  if (tx.offer.id === 'nauta') {
+    type = 'nauta_hogar'
+    title = 'Nauta Hogar Plus'
+  } else if (tx.offer.id === 'nauta_plus') {
+    type = 'nauta_plus'
+    title = 'Nauta Plus'
+  } else {
+    type = 'mobile_recharge'
+    title = 'Recarga Móvil'
+  }
+  
+  // Ajustar título según el status
+  if (tx.status === 'error') {
+    title = tx.offer.id === 'nauta' ? 'Nauta Hogar Fallida' : 
+            tx.offer.id === 'nauta_plus' ? 'Nauta Plus Fallida' : 
+            'Recarga Móvil Fallida'
+  } else if (tx.status === 'processing') {
+    title = tx.offer.id === 'nauta' ? 'Procesando Nauta Hogar' : 
+            tx.offer.id === 'nauta_plus' ? 'Procesando Nauta Plus' : 
+            'Procesando Recarga'
+  }
+
+  return {
+    id: `h-${tx.id}-${idx}`,
+    type: type,
+    title: title,
+    description: `${tx.offer.data} • ${tx.phoneNumber}${tx.email ? ` • ${tx.email}` : ''}`,
+    amount: `$${tx.offer.priceUSDT.toFixed(2)}`,
+    date: tx.timestamp
+  }
+})
+
+// Prepend history activities to the existing recentActivity (without mutating original data)
+const combinedRecent = [...historyActivities, ...user.value.recentActivity].slice(0, 6)
+
 interface IconConfig {
   bgClass: string
   iconClass: string
@@ -187,14 +241,32 @@ interface IconConfig {
 }
 
 const getActivityIcon = (type: string): IconConfig => {
-  const defaultIcon: IconConfig = {
-    bgClass: 'bg-blue-500/20',
-    iconClass: 'text-blue-400',
-    path: 'M13 10V3L4 14h7v7l9-11h-7z'
-  }
-  
   const icons: Record<string, IconConfig> = {
-    recharge: defaultIcon,
+    // Recarga móvil normal
+    mobile_recharge: {
+      bgClass: 'bg-blue-500/20',
+      iconClass: 'text-blue-400',
+      path: 'M13 10V3L4 14h7v7l9-11h-7z'
+    },
+    // Recargas heredadas (compatibilidad)
+    recharge: {
+      bgClass: 'bg-blue-500/20',
+      iconClass: 'text-blue-400',
+      path: 'M13 10V3L4 14h7v7l9-11h-7z'
+    },
+    // Nauta Hogar Plus
+    nauta_hogar: {
+      bgClass: 'bg-green-500/20',
+      iconClass: 'text-green-400',
+      path: 'M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0'
+    },
+    // Nauta Plus
+    nauta_plus: {
+      bgClass: 'bg-purple-500/20',
+      iconClass: 'text-purple-400',
+      path: 'M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z'
+    },
+    // Nauta genérico (compatibilidad)
     nauta: {
       bgClass: 'bg-green-500/20',
       iconClass: 'text-green-400',
@@ -202,7 +274,8 @@ const getActivityIcon = (type: string): IconConfig => {
     }
   }
   
-  return icons[type] ?? defaultIcon
+  // Retornar el icono específico o el default de recarga móvil
+  return icons[type] ?? icons.mobile_recharge!
 }
 
 const formatDate = (date: Date) => {

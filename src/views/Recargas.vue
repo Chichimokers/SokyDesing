@@ -1,150 +1,300 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
-    <Navbar />
+  <div class="min-h-screen bg-[#0f0f0f] text-white relative">
+    <!-- Banner como fondo -->
+    <div class="fixed inset-0 z-0">
+      <img 
+        src="../assets/images/offer_phpqvu0b1h9ad7g92AMXgY_1760792874.webp" 
+        alt="Soky Recargas Background"
+        class="w-full h-full object-cover"
+      >
+      <div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+    </div>
 
-    <div class="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
-      <div class="max-w-6xl mx-auto space-y-12">
-        
-        <!-- Encabezado -->
-        <div class="text-center">
-          <h1 class="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 drop-shadow-lg">
-            Recargas Disponibles
+    <!-- Contenido principal -->
+    <div class="relative z-10">
+      <Navbar />
+      
+      <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="text-center mb-12">
+          <h1 class="text-4xl md:text-5xl font-bold mb-4">
+            Recargas a <span class="animated-gradient">Cuba</span>
           </h1>
-          <p class="text-white/70 mt-3 text-lg">
-            Elige la mejor opción para tus seres queridos en Cuba
+          <p class="text-xl text-gray-300 max-w-2xl mx-auto">
+            Envía recargas telefónicas a tus seres queridos de forma rápida y segura
           </p>
         </div>
 
-        <!-- Ofertas -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-          <!-- Oferta 1 -->
-          <div class="bg-white/5 border border-white/10 rounded-3xl p-8 shadow-2xl backdrop-blur-xl hover:bg-white/10 transition-all duration-300 transform hover:-translate-y-1 hover:scale-[1.02]">
-            <div class="flex justify-between items-start mb-4">
-              <h3 class="text-2xl font-bold text-white">INTERNET ILIMITADO</h3>
-              <span class="bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-sm font-bold shadow-md">
-                POPULAR
+        <!-- Progreso del proceso -->
+        <div class="max-w-4xl mx-auto mb-12">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+              <div 
+                class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300"
+                :class="{
+                  'bg-blue-500 text-white': currentStep >= 1,
+                  'bg-gray-600 text-gray-400': currentStep < 1
+                }"
+              >
+                1
+              </div>
+              <span class="text-sm font-medium" :class="currentStep >= 1 ? 'text-white' : 'text-gray-400'">
+                Números
               </span>
             </div>
-            <p class="text-white/60 mb-4">Del 1 al 31 de octubre</p>
-            <div class="text-4xl font-extrabold mb-3 text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-400">
-              700 CUP
+            
+            <div class="flex-1 h-0.5 mx-4" :class="currentStep >= 2 ? 'bg-blue-500' : 'bg-gray-600'"></div>
+            
+            <div class="flex items-center space-x-2">
+              <div 
+                class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300"
+                :class="{
+                  'bg-blue-500 text-white': currentStep >= 2,
+                  'bg-gray-600 text-gray-400': currentStep < 2
+                }"
+              >
+                2
+              </div>
+              <span class="text-sm font-medium" :class="currentStep >= 2 ? 'text-white' : 'text-gray-400'">
+                Plan
+              </span>
             </div>
-            <ul class="space-y-2 mb-6 text-white/80">
-              <li class="flex items-center">
-                <svg class="w-5 h-5 mr-2 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M5 13l4 4L19 7" />
-                </svg>
-                Datos ilimitados 24h
-              </li>
-              <li class="flex items-center">
-                <svg class="w-5 h-5 mr-2 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M5 13l4 4L19 7" />
-                </svg>
-                Válido por 20 días
-              </li>
-            </ul>
-            <button class="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 rounded-2xl font-semibold transition-all duration-300 shadow-lg hover:shadow-blue-400/30 transform hover:scale-105">
-              Seleccionar
-            </button>
-          </div>
-
-          <!-- Oferta 2 -->
-          <div class="bg-white/5 border border-white/10 rounded-3xl p-8 shadow-2xl backdrop-blur-xl hover:bg-white/10 transition-all duration-300 transform hover:-translate-y-1 hover:scale-[1.02]">
-            <h3 class="text-2xl font-bold mb-4 text-white">OFERTA ESPECIAL</h3>
-            <p class="text-white/60 mb-4">Del 21 al 26 de cada mes</p>
-            <div class="text-4xl font-extrabold mb-3 text-transparent bg-clip-text bg-gradient-to-r from-green-200 to-white">
-              3000 CUP
+            
+            <div class="flex-1 h-0.5 mx-4" :class="currentStep >= 3 ? 'bg-blue-500' : 'bg-gray-600'"></div>
+            
+            <div class="flex items-center space-x-2">
+              <div 
+                class="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300"
+                :class="{
+                  'bg-blue-500 text-white': currentStep >= 3,
+                  'bg-gray-600 text-gray-400': currentStep < 3
+                }"
+              >
+                3
+              </div>
+              <span class="text-sm font-medium" :class="currentStep >= 3 ? 'text-white' : 'text-gray-400'">
+                Procesar
+              </span>
             </div>
-            <ul class="space-y-2 mb-6 text-white/80">
-              <li class="flex items-center">
-                <svg class="w-5 h-5 mr-2 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M5 13l4 4L19 7" />
-                </svg>
-                Internet Ilimitado
-              </li>
-              <li class="flex items-center">
-                <svg class="w-5 h-5 mr-2 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M5 13l4 4L19 7" />
-                </svg>
-                Llamadas y SMS incluidos
-              </li>
-            </ul>
-            <button class="w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-2xl font-semibold transition-all duration-300 shadow-lg hover:shadow-green-400/30 transform hover:scale-105">
-              Seleccionar
-            </button>
           </div>
         </div>
 
-        <!-- Ofertas Internacionales -->
-        <div class="bg-black/40 backdrop-blur-md rounded-3xl p-10 border border-white/10 shadow-2xl">
-          <h2 class="text-2xl font-bold mb-8 text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
-            Ofertas Internacionales de Datos
-          </h2>
+        <!-- Contenido por pasos -->
+        <div class="max-w-6xl mx-auto">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            
+            <!-- Paso 1: Gestión de números -->
+            <div class="order-1">
+              <PhoneNumberManager
+                :phone-numbers="phoneNumbers"
+                :validate-phone="validateCubanPhone"
+                @add-phone="addPhoneNumber"
+                @remove-phone="removePhoneNumber"
+              />
+            </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div
-              v-for="(offer, index) in internationalOffers"
-              :key="index"
-              class="bg-white/5 border border-white/10 rounded-2xl p-6 text-center shadow-lg backdrop-blur-xl hover:bg-white/10 transition-all transform hover:scale-105"
-            >
-              <div class="text-3xl font-extrabold text-blue-300 mb-2">{{ offer.data }}</div>
-              <div class="text-white/70 mb-1">{{ offer.minutes }}</div>
-              <div class="text-gray-500 mb-5">{{ offer.sms }}</div>
-              <button class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2.5 rounded-xl font-semibold transition-all shadow-lg hover:shadow-blue-400/30">
-                Comprar
+            <!-- Paso 2: Selección de plan -->
+            <div class="order-2">
+              <PlanSelector
+                :offers="availableOffers"
+                :selected-offer="selectedOffer"
+                @select-offer="selectOffer"
+              />
+            </div>
+          </div>
+
+          <!-- Resumen y botón de procesar -->
+          <div v-if="validPhoneNumbers.length > 0 && selectedOffer" class="mt-8">
+            <div class="bg-black/50 backdrop-blur-md rounded-2xl p-6 border border-white/10">
+              <h3 class="text-xl font-bold text-white mb-4">Resumen de la recarga</h3>
+              
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <!-- Números válidos -->
+                <div>
+                  <h4 class="font-semibold text-gray-300 mb-2">Números a recargar ({{ validPhoneNumbers.length }})</h4>
+                  <div class="space-y-2">
+                    <div 
+                      v-for="phone in validPhoneNumbers" 
+                      :key="phone.id"
+                      class="flex items-center space-x-2 p-2 bg-[#2a2a2a] rounded-lg"
+                    >
+                      <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                      </svg>
+                      <span class="text-sm text-white">{{ formatPhoneDisplay(phone.number) }}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Detalles del plan -->
+                <div>
+                  <h4 class="font-semibold text-gray-300 mb-2">Plan seleccionado</h4>
+                  <div class="p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+                    <div class="flex items-center justify-between mb-2">
+                      <span class="font-medium text-white">{{ selectedOffer.data }} + {{ selectedOffer.minutes }} + {{ selectedOffer.sms }}</span>
+                      <span class="text-blue-400 font-bold">${{ selectedOffer.priceUSDT }} USDT</span>
+                    </div>
+                    <div class="text-xs text-gray-400">
+                      Por número • Total: ${{ (selectedOffer.priceUSDT * validPhoneNumbers.length).toFixed(2) }} USDT
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+        
+             
+
+              <!-- Botón de procesar -->
+              <button
+                @click="startRechargeProcess"
+                :disabled="!canProcess || isProcessing"
+                class="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed text-white py-4 rounded-lg text-lg font-semibold transition-all duration-300 transform hover:scale-105 disabled:hover:scale-100"
+              >
+                <span v-if="isProcessing" class="flex items-center justify-center space-x-2">
+                  <svg class="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="m4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  <span>Procesando...</span>
+                </span>
+                <span v-else>
+                  Procesar {{ validPhoneNumbers.length }} recarga{{ validPhoneNumbers.length > 1 ? 's' : '' }} • ${{ totalCost }} USDT
+                </span>
               </button>
             </div>
           </div>
         </div>
-
       </div>
+
+      <Footer />
     </div>
 
-    <Footer />
+    <!-- Modal de estado de recarga -->
+    <RechargeStatus
+      :transaction="currentTransaction"
+      @close="resetTransaction"
+      @retry="handleRetry"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
+import { computed, ref, watch } from 'vue'
 import Navbar from '@/components/Navbar.vue'
 import Footer from '@/components/Footer.vue'
+import PhoneNumberManager from '@/components/PhoneNumberManager.vue'
+import PlanSelector from '@/components/PlanSelector.vue'
+import RechargeStatus from '@/components/RechargeStatus.vue'
+import { useRecharge } from '@/composables/useRecharge'
 
-const internationalOffers = [
-  { data: '9GB', minutes: '75 min', sms: '80 SMS' },
-  { data: '14GB', minutes: '115 min', sms: '120 SMS' },
-  { data: '20GB', minutes: '145 min', sms: '140 SMS' },
-]
+const {
+  phoneNumbers,
+  selectedOffer,
+  currentTransaction,
+  email,
+  availableOffers,
+  canProcess,
+  addPhoneNumber,
+  removePhoneNumber,
+  selectOffer,
+  processRecharge,
+  validateCubanPhone,
+  resetTransaction
+} = useRecharge()
+
+const isProcessing = ref(false)
+
+// Estados calculados
+const validPhoneNumbers = computed(() => 
+  phoneNumbers.value.filter(phone => phone.isValid)
+)
+
+const totalCost = computed(() => {
+  if (!selectedOffer.value) return 0
+  return (selectedOffer.value.priceUSDT * validPhoneNumbers.value.length).toFixed(2)
+})
+
+const currentStep = computed(() => {
+  if (validPhoneNumbers.value.length === 0) return 1
+  if (!selectedOffer.value) return 2
+  return 3
+})
+
+// Formatear número para mostrar
+const formatPhoneDisplay = (phone: string) => {
+  if (phone.startsWith('+53')) {
+    const digits = phone.slice(3)
+    if (digits.length === 8) {
+      return `+53 ${digits.slice(0, 4)} ${digits.slice(4)}`
+    }
+  } else if (phone.startsWith('53')) {
+    const digits = phone.slice(2)
+    if (digits.length === 8) {
+      return `+53 ${digits.slice(0, 4)} ${digits.slice(4)}`
+    }
+  } else if (phone.length === 8) {
+    return `+53 ${phone.slice(0, 4)} ${phone.slice(4)}`
+  }
+  return phone
+}
+
+// Procesar todas las recargas
+const startRechargeProcess = async () => {
+  if (!canProcess.value || isProcessing.value) return
+  
+  isProcessing.value = true
+  
+  try {
+    // Procesar la primera recarga (para el ejemplo, solo una)
+    const firstPhone = validPhoneNumbers.value[0]
+    if (!firstPhone) {
+      console.warn('No hay números válidos para procesar')
+      return
+    }
+
+    await processRecharge(firstPhone.number, email.value)
+  } catch (error) {
+    console.error('Error processing recharge:', error)
+  } finally {
+    isProcessing.value = false
+  }
+}
+
+// Manejar reintento
+const handleRetry = async (transaction: any) => {
+  resetTransaction()
+  // Pequeña pausa para que se vea la transición
+  setTimeout(() => {
+    startRechargeProcess()
+  }, 500)
+}
+
+// Watch para actualizar el paso actual
+watch([validPhoneNumbers, selectedOffer], () => {
+  // Lógica adicional si es necesaria
+})
 </script>
 
+<style src="../assets/Home.css"></style>
 <style scoped>
-/* Adaptado del estilo de Balance.vue */
-.backdrop-blur-xl {
-  backdrop-filter: blur(25px);
+/* Estilos adicionales específicos para Recargas */
+.animated-gradient {
+  background: linear-gradient(
+    45deg,
+    #0056b3,
+    #cf142b,
+    #ffffff,
+    #0056b3
+  );
+  background-size: 300% 300%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-shift 3s ease infinite;
 }
 
-.bg-white\/5 {
-  background-color: rgba(255, 255, 255, 0.05);
-}
-
-.hover\:bg-white\/10:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
-.shadow-2xl {
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-}
-
-button {
-  transition: all 0.3s ease;
-}
-
-@supports (backdrop-filter: blur(20px)) {
-  .bg-white\/5 {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(20px);
-  }
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
 }
 </style>

@@ -167,7 +167,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import Navbar from '@/components/Navbar.vue'
+import Navbar from '../components/Navbar.vue'
 
 interface Subscription {
   id: number

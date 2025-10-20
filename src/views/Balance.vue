@@ -28,10 +28,16 @@
               </div>
 
               <div class="space-y-3">
-                <button class="w-full bg-blue-500 hover:bg-blue-600 text-white py-4 px-6 rounded-2xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
+                <button 
+                  @click="openCryptoDepositPopup"
+                  class="w-full bg-blue-500 hover:bg-blue-600 text-white py-4 px-6 rounded-2xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+                >
                   Acreditar
                 </button>
-                <button class="w-full bg-white/10 hover:bg-white/20 text-white py-4 px-6 rounded-2xl font-semibold transition-all duration-300 border border-white/20">
+                <button 
+                  @click="openTransferPopup"
+                  class="w-full bg-white/10 hover:bg-white/20 text-white py-4 px-6 rounded-2xl font-semibold transition-all duration-300 border border-white/20"
+                >
                   Transferir
                 </button>
               </div>
@@ -135,12 +141,41 @@
         </div>
       </div>
     </div>
+
+    <!-- Crypto Deposit Popup -->
+    <CryptoDepositPopup 
+      :isOpen="showCryptoDepositPopup"
+      @close="closeCryptoDepositPopup"
+      @depositInitiated="handleDepositInitiated"
+    />
+
+    <!-- Transfer Balance Popup -->
+    <TransferBalancePopup 
+      :isOpen="showTransferPopup"
+      :availableBalance="balance.current"
+      @close="closeTransferPopup"
+      @transferInitiated="handleTransferInitiated"
+    />
+
+    <!-- Balance Status Popup -->
+    <BalanceStatusPopup 
+      :isOpen="showStatusPopup"
+      :status="statusData.status"
+      :operationDetails="statusData.operationDetails"
+      :errorDetails="statusData.errorDetails"
+      :primaryAction="statusData.primaryAction"
+      @close="closeStatusPopup"
+      @statusChecked="handleStatusCheck"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import Navbar from '@/components/Navbar.vue'
+import Navbar from '../components/Navbar.vue'
+import CryptoDepositPopup from '../components/CryptoDepositPopup.vue'
+import TransferBalancePopup from '../components/TransferBalancePopup.vue'
+import BalanceStatusPopup from '../components/BalanceStatusPopup.vue'
 
 interface Transaction {
   id: number
@@ -152,17 +187,164 @@ interface Transaction {
   date: Date
 }
 
+interface OperationDetails {
+  type: 'deposit' | 'transfer'
+  amount?: number
+  recipient?: string
+  cryptocurrency?: string
+  transactionId?: string
+  timestamp?: Date
+}
+
+interface StatusData {
+  status: 'success' | 'pending' | 'error'
+  operationDetails?: OperationDetails
+  errorDetails?: string
+  primaryAction?: {
+    label: string
+    action: () => void
+  }
+}
+
 interface IconConfig {
   bgClass: string
   iconClass: string
   path: string
 }
 
+// Popup states
+const showCryptoDepositPopup = ref(false)
+const showTransferPopup = ref(false)
+const showStatusPopup = ref(false)
+
+// Status popup data
+const statusData = ref<StatusData>({
+  status: 'pending'
+})
+
 // Balance data
 const balance = ref({
-  current: 0.00,
+  current: 125.50,
   pending: 22.00
 })
+
+// Popup handlers
+const openCryptoDepositPopup = () => {
+  showCryptoDepositPopup.value = true
+}
+
+const closeCryptoDepositPopup = () => {
+  showCryptoDepositPopup.value = false
+}
+
+const openTransferPopup = () => {
+  showTransferPopup.value = true
+}
+
+const closeTransferPopup = () => {
+  showTransferPopup.value = false
+}
+
+const closeStatusPopup = () => {
+  showStatusPopup.value = false
+}
+
+// Operation handlers
+const handleDepositInitiated = (cryptocurrency: string, amount: number, qrData: string) => {
+  // Simulate pending deposit
+  statusData.value = {
+    status: 'pending',
+    operationDetails: {
+      type: 'deposit',
+      amount: amount,
+      cryptocurrency: cryptocurrency,
+      transactionId: generateTransactionId(),
+      timestamp: new Date()
+    }
+  }
+  
+  showStatusPopup.value = true
+  
+  // Add to transactions
+  transactions.value.unshift({
+    id: Date.now(),
+    type: 'credit',
+    title: `Depósito ${cryptocurrency.toUpperCase()}`,
+    description: `Depósito pendiente de confirmación`,
+    amount: amount,
+    status: 'Pendiente',
+    date: new Date()
+  })
+  
+  // Simulate confirmation after delay
+  setTimeout(() => {
+    if (statusData.value.operationDetails) {
+      statusData.value.status = 'success'
+      balance.value.current += amount
+      
+      // Update transaction status
+      const latestTransaction = transactions.value[0]
+      if (latestTransaction && latestTransaction.id) {
+        latestTransaction.status = 'Completado'
+        latestTransaction.description = `Depósito confirmado via ${cryptocurrency.toUpperCase()}`
+      }
+    }
+  }, 5000)
+}
+
+const handleTransferInitiated = (recipient: string, amount: number, message: string, fee: number) => {
+  const totalAmount = amount + fee
+  
+  if (totalAmount > balance.value.current) {
+    statusData.value = {
+      status: 'error',
+      operationDetails: {
+        type: 'transfer',
+        amount: amount,
+        recipient: recipient
+      },
+      errorDetails: 'Saldo insuficiente para completar la transferencia'
+    }
+    showStatusPopup.value = true
+    return
+  }
+  
+  // Process transfer
+  balance.value.current -= totalAmount
+  
+  statusData.value = {
+    status: 'success',
+    operationDetails: {
+      type: 'transfer',
+      amount: amount,
+      recipient: recipient,
+      transactionId: generateTransactionId(),
+      timestamp: new Date()
+    }
+  }
+  
+  showStatusPopup.value = true
+  
+  // Add to transactions
+  transactions.value.unshift({
+    id: Date.now(),
+    type: 'debit',
+    title: 'Transferencia Enviada',
+    description: `Para: ${recipient}${message ? ` - ${message}` : ''}`,
+    amount: -totalAmount,
+    status: 'Completado',
+    date: new Date()
+  })
+}
+
+const handleStatusCheck = () => {
+  // Simulate checking transaction status
+  console.log('Checking transaction status...')
+}
+
+const generateTransactionId = (): string => {
+  return 'TXN-' + Math.random().toString(36).substr(2, 9).toUpperCase()
+}
 
 const pendingDeposit = ref({
   amount: '22.00',
@@ -170,17 +352,17 @@ const pendingDeposit = ref({
 })
 
 const stats = ref({
-  recharges: 0,
-  credits: 1,
-  transactions: 0
+  recharges: 12,
+  credits: 5,
+  transactions: 17
 })
 
 const transactions = ref<Transaction[]>([
   {
     id: 1,
     type: 'credit',
-    title: 'Depósito PayPal',
-    description: 'Recarga de saldo desde PayPal',
+    title: 'Depósito USDT',
+    description: 'Depósito confirmado via Tether',
     amount: 50.00,
     status: 'Completado',
     date: new Date('2024-01-15')
@@ -198,10 +380,19 @@ const transactions = ref<Transaction[]>([
     id: 3,
     type: 'credit',
     title: 'Transferencia Recibida',
-    description: 'De: usuario@email.com',
+    description: 'De: maria@email.com - Pago servicios',
     amount: 30.00,
     status: 'Completado',
     date: new Date('2024-01-13')
+  },
+  {
+    id: 4,
+    type: 'debit',
+    title: 'Transferencia Enviada',
+    description: 'Para: carlos@email.com - Préstamo',
+    amount: -75.50,
+    status: 'Completado',
+    date: new Date('2024-01-12')
   }
 ])
 
@@ -235,6 +426,7 @@ const formatDate = (date: Date) => {
     year: 'numeric' 
   })
 }
+
 </script>
 
 <style scoped>

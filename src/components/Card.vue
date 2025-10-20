@@ -20,7 +20,7 @@
       <!-- Botón fijo en la parte inferior -->
       <button 
         class="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 rounded-lg font-semibold transition duration-300 mt-auto"
-        @click="$emit('select')"
+        @click="$emit('select', offer)"
       >
         {{ buttonText }}
       </button>
@@ -29,21 +29,25 @@
 </template>
 
 <script setup lang="ts">
+import type { RechargeOffer } from '@/composables/useRecharge'
+
 interface Props {
   title: string
   img: string
   description: string
   buttonText?: string
   color?: 'blue' | 'green' | 'purple' | 'orange'
+  offer?: RechargeOffer | null
 }
 
 const props = withDefaults(defineProps<Props>(), {
   buttonText: 'Seleccionar',
-  color: 'blue'
+  color: 'blue',
+  offer: null
 })
 
 defineEmits<{
-  select: []
+  select: [offer: RechargeOffer | null]
 }>()
 
 const colorConfig = {

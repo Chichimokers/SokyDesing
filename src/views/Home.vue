@@ -83,38 +83,58 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
            <FeatureCard
           title="Recarga internacional"
-          description="700CUP + internet ilimitado 20 días"
-          img="src/assets/images/offer_phpvs6t513o1seq2HjVWek_1759183674.webp"
+          :description="`Desde ${minPrice} USDT - Recargas rápidas y seguras`"
+          img="src/assets/images/offer_phpqvu0b1h9ad7g92AMXgY_1760792874.webp"
+          :button-text="`Desde ${minPrice} USDT`"
+          :offer="cardOffers.recharge"
           color="blue"
+          @select="handleCardSelect"
         />
     
-
-
-
-
          <FeatureCard
           title="Nauta hogar plus"
-          description="Internet a mayor velocidad"
+          :description="`Desde ${minPrice} USDT - Internet a mayor velocidad`"
           img="src/assets/images/offer_phpvAETPl_1752334228.webp"
+          :button-text="`Desde ${minPrice} USDT`"
+          :offer="cardOffers.nauta"
           color="blue"
+          @select="handleCardSelect"
+        />
+        <FeatureCard
+          title="Nauta Plus"
+          :description="`Desde ${minPrice} USDT - Conexión rápida y estable`"
+          img="src/assets/images/offer_phpvs6t513o1seq2HjVWek_1759183674.webp"
+          :button-text="`Desde ${minPrice} USDT`"
+          :offer="cardOffers.nauta_plus"
+          color="green"
+          @select="handleCardSelect"
         />
            <FeatureCard
-          title="Recargas Rápidas"
-          description="Recibe tu recarga al instante. Procesamiento en 2-5 minutos las 24 horas del día."
+          title="Planes de datos"
+          :description="`Desde ${minPrice} USDT - Procesamiento en 2-5 minutos las 24 horas del día`"
           img="src/assets/images/offer_phpsm6RzF_1750409890.webp"
+          :button-text="`Desde ${minPrice} USDT`"
+          :offer="cardOffers.data"
           color="green"
+          @select="handleCardSelect"
         />
           <FeatureCard
-          title="Recargas Rápidas"
-          description="Recibe tu recarga al instante. Procesamiento en 2-5 minutos las 24 horas del día."
+          title="Ofertas especiales"
+          :description="`Desde ${minPrice} USDT - Los mejores precios del mercado`"
           img="src/assets/images/offer_phpsgr4K8_1754776835.webp"
+          :button-text="`Desde ${minPrice} USDT`"
+          :offer="cardOffers.special"
           color="blue"
+          @select="handleCardSelect"
         />
              <FeatureCard
-          title="Recargas Rápidas"
-          description="Recibe tu recarga al instante. Procesamiento en 2-5 minutos las 24 horas del día."
+          title="Recargas múltiples"
+          :description="`Desde ${minPrice} USDT - Hasta 5 números a la vez`"
           img="src/assets/images/offer_phph1je9vurekis8bYDwm3_1759729559.jpg"
+          :button-text="`Desde ${minPrice} USDT`"
+          :offer="cardOffers.multiple"
           color="blue"
+          @select="handleCardSelect"
         />
 
         </div>
@@ -165,14 +185,155 @@
    
 
     <Footer />
+    
+    <!-- Phone Number Popup -->
+    <PhoneNumberPopup 
+      :is-open="showPopup"
+      :selected-offer="selectedOffer"
+      @close="closePopup"
+      @proceed="proceedToRecharge"
+      @subscribe="proceedToRecharge"
+    />
+    <RechargeStatus
+      :transaction="currentTransaction"
+      @close="resetTransaction"
+      @retry="handleRetryFromHome"
+    />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import Navbar from '@/components/Navbar.vue'
-import Footer from '@/components/Footer.vue'
-import FeatureCard from '@/components/Card.vue'
-import { LightningIcon, ShieldIcon, CurrencyIcon, SupportIcon } from '@/components/icon'
+import { computed, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import Navbar from '../components/Navbar.vue'
+import Footer from '../components/Footer.vue'
+import FeatureCard from '../components/Card.vue'
+import PhoneNumberPopup from '../components/PhoneNumberPopup.vue'
+import RechargeStatus from '../components/RechargeStatus.vue'
+import { LightningIcon, ShieldIcon, CurrencyIcon, SupportIcon } from '../components/icon'
+import { useRecharge, type RechargeOffer, type PhoneNumber } from '../composables/useRecharge'
+
+const router = useRouter()
+const { availableOffers, minPrice, selectOffer, resetTransaction, processRecharge, currentTransaction } = useRecharge()
+
+// Estado del popup
+const showPopup = ref(false)
+const selectedOffer = ref<RechargeOffer | null>(null)
+
+// Crear ofertas específicas para cada card
+const cardOffers = computed(() => ({
+  recharge: {
+    id: 'recharge',
+    title: 'Recarga internacional',
+    data: '9GB',
+    minutes: '75MIN', 
+    sms: '80SMS',
+    price: 20.50,
+    priceUSDT: minPrice.value
+  } as RechargeOffer,
+  nauta: {
+    id: 'nauta',
+    title: 'Nauta hogar plus',
+    data: '14GB',
+    minutes: '0MIN',
+    sms: '0SMS', 
+    price: 30.50,
+    priceUSDT: minPrice.value
+  } as RechargeOffer,
+  nauta_plus: {
+    id: 'nauta_plus',
+    title: 'Nauta Plus',
+    data: '7GB',
+    minutes: '0MIN',
+    sms: '0SMS', 
+    price: 18.50,
+    priceUSDT: minPrice.value
+  } as RechargeOffer,
+  data: {
+    id: 'data',
+    title: 'Planes de datos',
+    data: '20GB',
+    minutes: '165MIN',
+    sms: '160SMS',
+    price: 40.50,
+    priceUSDT: minPrice.value
+  } as RechargeOffer,
+  special: {
+    id: 'special',
+    title: 'Ofertas especiales',
+    data: '2MB',
+    minutes: '0MIN',
+    sms: '0SMS',
+    price: 21.50,
+    priceUSDT: minPrice.value
+  } as RechargeOffer,
+  multiple: {
+    id: 'multiple',
+    title: 'Recargas múltiples',
+    data: '9GB',
+    minutes: '75MIN',
+    sms: '80SMS', 
+    price: 20.50,
+    priceUSDT: minPrice.value
+  } as RechargeOffer
+}))
+
+const handleCardSelect = (offer: RechargeOffer | null) => {
+  if (offer) {
+    selectedOffer.value = offer
+    showPopup.value = true
+    resetTransaction() // Reset any previous transaction state
+  }
+}
+
+const closePopup = () => {
+  showPopup.value = false
+  selectedOffer.value = null
+}
+
+const proceedToRecharge = async (phoneNumbers: PhoneNumber[], offer: RechargeOffer, email?: string, selectedPlan?: any, autoRenewal?: boolean) => {
+  // Seleccionar la oferta globalmente
+  selectOffer(offer)
+  closePopup()
+
+  // Determinar si es una suscripción o recarga normal
+  const isSubscription = offer.id === 'nauta' || offer.id === 'nauta_plus'
+  
+  if (isSubscription && phoneNumbers.length > 0) {
+    // Para suscripciones, procesar una vez y mostrar confirmación específica
+    const primaryPhone = phoneNumbers[0] // Tomar el primer número para suscripciones
+    
+    if (primaryPhone) {
+      // Crear transacción con información del plan seleccionado
+      const enrichedOffer = {
+        ...offer,
+        selectedPlan: selectedPlan,
+        autoRenewal: autoRenewal,
+        priceUSDT: selectedPlan?.price || selectedPlan?.priceUSDT || offer.priceUSDT
+      }
+      
+      await processRecharge(primaryPhone.number, email || '')
+      // Mostrar mensaje de suscripción activada
+      router.push({ name: 'Subscriptions' }) // Navegar a página de suscripciones
+    }
+  } else {
+    // Para recargas normales, procesar secuencialmente todos los números
+    for (const p of phoneNumbers) {
+      await processRecharge(p.number, email || '')
+      // pequeña pausa para que el usuario perciba la transición si lo desea
+      await new Promise(resolve => setTimeout(resolve, 400))
+    }
+    // Después de procesar todo, ir al perfil (historial)
+    router.push({ name: 'Profile' })
+  }
+}
+
+const handleRetryFromHome = async (tx: any) => {
+  resetTransaction()
+  setTimeout(() => {
+    processRecharge(tx.phoneNumber, tx.email || '')
+  }, 500)
+}
 </script>
 <style src="../assets/home.css"></style>
