@@ -147,12 +147,43 @@
               <div class="bg-[#2a2a2a] rounded-lg p-3 mb-2">
                 <div class="text-xs text-gray-300 font-mono break-all">{{ generatedAddress }}</div>
               </div>
+              
               <button
-                @click="copyAddress"
-                class="text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors"
-              >
-                📋 Copiar dirección
-              </button>
+              @click="copyAddress"
+              class="flex items-center justify-center gap-2 mx-auto text-sm font-medium transition-all duration-300"
+              :class="copied ? 'text-green-400' : 'text-blue-400 hover:text-blue-300'"
+                  >
+                  <template v-if="!copied">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M19.5 16.5L19.5 4.5L18.75 3.75H9L8.25 4.5L8.25 7.5L5.25 7.5L4.5 8.25V20.25L5.25 21H15L15.75 20.25V17.25H18.75L19.5 16.5ZM15.75 15.75L15.75 8.25L15 7.5L9.75 7.5V5.25L18 5.25V15.75H15.75ZM6 9L14.25 9L14.25 19.5L6 19.5L6 9Z"
+                              fill="currentColor"
+                            />
+                          </svg>
+                          Copiar dirección
+                  </template>
+
+                        <!-- Ícono palomita -->
+                    <template v-else>
+                          <svg
+                            class="w-5 h-5 text-green-400 animate-check"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M5 13l4 4L19 7"
+                              stroke="currentColor"
+                              stroke-width="2.5"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                          </svg>
+                    </template>
+                  
+                </button>
             </div>
 
             <!-- Información importante -->
@@ -197,7 +228,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-
+const copied = ref(false)
 interface Crypto {
   id: string
   name: string
@@ -295,9 +326,10 @@ const goBack = () => {
 const copyAddress = async () => {
   try {
     await navigator.clipboard.writeText(generatedAddress.value)
-    // Podrías mostrar una notificación aquí
-  } catch (err) {
-    console.error('Error copying address:', err)
+    copied.value = true
+    setTimeout(() => (copied.value = false), 2000)
+  } catch (error) {
+    console.error('Error copiando dirección:', error)
   }
 }
 
@@ -327,5 +359,19 @@ input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+@keyframes drawCheck {
+  0% {
+    stroke-dasharray: 0 24;
+    stroke-dashoffset: 24;
+  }
+  100% {
+    stroke-dasharray: 24 24;
+    stroke-dashoffset: 0;
+  }
+}
+
+.animate-check path {
+  animation: drawCheck 0.4s ease forwards;
 }
 </style>
