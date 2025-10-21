@@ -2,6 +2,33 @@
   <div class="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
     <Navbar />
     
+    <!-- Success Notification -->
+    <transition 
+      enter-active-class="transition-all duration-300 ease-out"
+      leave-active-class="transition-all duration-300 ease-in"
+      enter-from-class="opacity-0 translate-y-[-20px]"
+      leave-to-class="opacity-0 translate-y-[-20px]"
+    >
+      <div v-if="showSuccessMessage" class="fixed top-24 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-md px-4">
+        <div class="bg-green-500/90 backdrop-blur-sm text-white px-6 py-4 rounded-xl shadow-2xl border border-green-400/30 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <svg class="w-6 h-6 text-green-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+            <span class="font-semibold">{{ successMessage }}</span>
+          </div>
+          <button 
+            @click="showSuccessMessage = false"
+            class="text-green-100 hover:text-white transition-colors duration-200"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </transition>
+    
     <!-- Profile Header Section -->
     <div class="pt-24 pb-12 px-4 sm:px-6 lg:px-8">
       <div class="max-w-4xl mx-auto">
@@ -47,12 +74,18 @@
               
               <!-- Action Buttons -->
               <div class="flex flex-col sm:flex-row gap-3 justify-center md:justify-start">
-                <button class="profile-btn bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
+                <router-link 
+                  to="/profile/edit"
+                  class="profile-btn bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 text-center"
+                >
                   Editar Perfil
-                </button>
-                <button class="profile-btn border border-blue-500 text-blue-300 hover:bg-blue-500 hover:text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300">
+                </router-link>
+                <router-link 
+                  to="/profile/change-password"
+                  class="profile-btn border border-blue-500 text-blue-300 hover:bg-blue-500 hover:text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 text-center"
+                >
                   Cambiar Contraseña
-                </button>
+                </router-link>
               </div>
             </div>
           </div>
@@ -137,9 +170,37 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import { useRecharge } from '../composables/useRecharge'
 import Navbar from '../components/Navbar.vue'
+
+const route = useRoute()
+const showSuccessMessage = ref(false)
+const successMessage = ref('')
+
+// Handle success messages from query params
+onMounted(() => {
+  if (route.query.success) {
+    const successType = route.query.success as string
+    switch (successType) {
+      case 'password-changed':
+        successMessage.value = 'Contraseña actualizada exitosamente'
+        break
+      case 'profile-updated':
+        successMessage.value = 'Perfil actualizado exitosamente'
+        break
+      default:
+        successMessage.value = 'Operación completada exitosamente'
+    }
+    showSuccessMessage.value = true
+    
+    // Auto hide after 5 seconds
+    setTimeout(() => {
+      showSuccessMessage.value = false
+    }, 5000)
+  }
+})
 
 // User data (in real app, this would come from an API)
 const user = ref({
