@@ -16,8 +16,81 @@
 
 @keyframes gradient-shift {
   0%, 100% { background-position: 0% 50%; }
-  
   50% { background-position: 100% 50%; }
+}
+
+/* Optimizaciones globales para performance */
+* {
+  /* Mejorar rendering de texto */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Optimizar elementos con transform */
+.transform-gpu {
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Prevenir layout shifts en imágenes */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Optimizar scrolling suave */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Reducir repaint en elementos fijos */
+.fixed {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+/* Optimizaciones específicas para background fixed */
+.bg-fixed {
+  /* Forzar aceleración GPU */
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+  /* Prevenir repaints */
+  will-change: auto;
+  contain: layout style paint;
+  /* Optimizar rendering */
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: optimize-contrast;
+}
+
+/* Mejoras para móviles - evitar background-attachment: fixed en móviles */
+@media (max-width: 768px) {
+  .bg-fixed {
+    background-attachment: scroll !important;
+    /* Compensar con optimizaciones adicionales */
+    transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+}
+
+/* Prevenir saltos durante el scroll */
+.min-h-screen {
+  /* Crear contexto de apilamiento estable */
+  position: relative;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Optimizar elementos con overlay */
+.bg-black\/40,
+.bg-black\/60 {
+  /* Usar compositing layer independiente */
+  transform: translateZ(0);
+  will-change: auto;
 }
 
 

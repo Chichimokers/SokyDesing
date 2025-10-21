@@ -57,9 +57,12 @@
               </div>
               
               <div class="flex gap-2">
-                <button class="flex-1 bg-blue-500/20 text-blue-400 py-2 px-4 rounded-xl text-sm font-medium border border-blue-500/30 hover:bg-blue-500/30 transition-all">
+                <router-link 
+                  :to="`/subscription/manage/${subscription.id}`"
+                  class="flex-1 bg-blue-500/20 text-blue-400 py-2 px-4 rounded-xl text-sm font-medium border border-blue-500/30 hover:bg-blue-500/30 transition-all text-center"
+                >
                   Gestionar
-                </button>
+                </router-link>
                 <button class="flex-1 bg-red-500/20 text-red-400 py-2 px-4 rounded-xl text-sm font-medium border border-red-500/30 hover:bg-red-500/30 transition-all">
                   Cancelar
                 </button>

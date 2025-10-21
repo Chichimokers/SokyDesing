@@ -1,13 +1,18 @@
 <template>
-  <div class="min-h-screen bg-[#0f0f0f] text-white relative">
-    <!-- Banner como fondo -->
-    <div class="fixed inset-0 z-0">
-      <img 
-        src="@/assets/images/offer_phpqvu0b1h9ad7g92AMXgY_1760792874.webp" 
-        alt="Soky Recargas Background"
-        class="w-full h-full object-cover"
-      >
-      <div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+  <div class="min-h-screen bg-[#0f0f0f] text-white relative overflow-hidden">
+    <!-- Banner como fondo estabilizado -->
+    <div class="fixed inset-0 z-0"
+         :style="{
+           backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${backgroundImage})`,
+           backgroundSize: 'cover',
+           backgroundPosition: 'center center',
+           backgroundRepeat: 'no-repeat',
+           backgroundAttachment: 'fixed',
+           transform: 'translate3d(0, 0, 0)',
+           backfaceVisibility: 'hidden',
+           willChange: 'auto',
+           contain: 'layout style paint'
+         }">
     </div>
 
     <!-- Contenido principal -->
@@ -189,6 +194,7 @@ import PhoneNumberManager from '@/components/PhoneNumberManager.vue'
 import PlanSelector from '@/components/PlanSelector.vue'
 import RechargeStatus from '@/components/RechargeStatus.vue'
 import { useRecharge } from '@/composables/useRecharge'
+import backgroundImage from '@/assets/images/offer_phpqvu0b1h9ad7g92AMXgY_1760792874.webp'
 
 const router = useRouter()
 
@@ -320,6 +326,37 @@ watch([validPhoneNumbers, selectedOffer], () => {
 @keyframes gradient-shift {
   0%, 100% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
+}
+
+/* Optimizaciones para evitar saltos en el background */
+.min-h-screen {
+  /* Forzar aceleración por hardware */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Estabilizar imagen de fondo */
+img {
+  /* Evitar re-rendering innecesario */
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  /* Forzar GPU */
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+}
+
+/* Optimizar overlays */
+.bg-black\/40,
+.bg-black\/60 {
+  /* Usar compositing optimizado */
+  transform: translateZ(0);
+  will-change: auto;
+}
+
+/* Prevenir layout shifts */
+.fixed {
+  contain: layout style paint;
 }
 </style>
 

@@ -6,6 +6,7 @@ import MultipleRecharge from '@/views/MultipleRecharge.vue'
 import Profile from '@/views/Profile.vue'
 import Balance from '@/views/Balance.vue'
 import Subscriptions from '@/views/Subscriptions.vue'
+import ManageSubscription from '@/views/ManageSubscription.vue'
 
 import Code from '@/views/Code.vue'
 import Register from '@/views/Register.vue'
@@ -26,6 +27,8 @@ const router = createRouter({
     { path: '/profile/change-password', name: 'ChangePassword', component: ChangePassword },
     { path: '/balance', name: 'Balance', component: Balance },
     { path: '/subscription', name: 'Subscriptions', component: Subscriptions },
+     { path: '/subscriptions', name: 'Subscriptionss', component: Subscriptions },
+    { path: '/subscription/manage/:id', name: 'ManageSubscription', component: ManageSubscription },
     { path: '/code', name: 'Code', component: Code },
     { path: '/register', name: 'Register', component: Register },
     { path: '/forgot-password', name: 'forgot-password', component: ForgotPassword },

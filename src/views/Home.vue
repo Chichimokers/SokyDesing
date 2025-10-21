@@ -2,10 +2,10 @@
   <div class="min-h-screen relative">
     <!-- Banner como fondo -->
     <div class="fixed inset-0 z-0">
-      <img 
-        src="@/assets/images/offer_phpqvu0b1h9ad7g92AMXgY_1760792874.webp" 
+      <img
+        src="@/assets/images/offer_phpqvu0b1h9ad7g92AMXgY_1760792874.webp"
         alt="Soky Recargas - Recargas a Cuba"
-        class="w-full h-full object-cover"
+        class="object-cover"
       >
       <!-- Overlay para mejor legibilidad -->
       <div class="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
@@ -214,6 +214,7 @@ import PhoneNumberPopup from '../components/PhoneNumberPopup.vue'
 import RechargeStatus from '../components/RechargeStatus.vue'
 import { LightningIcon, ShieldIcon, CurrencyIcon, SupportIcon } from '../components/icon'
 import { useRecharge, type RechargeOffer, type PhoneNumber } from '../composables/useRecharge'
+import backgroundImage from '@/assets/images/offer_phpqvu0b1h9ad7g92AMXgY_1760792874.webp'
 import bannerImage from '@/assets/images/offer_phpqvu0b1h9ad7g92AMXgY_1760792874.webp'
 import rechargeImage from '@/assets/images/offer_phpqvu0b1h9ad7g92AMXgY_1760792874.webp'
 import nautaImage from '@/assets/images/offer_phpvAETPl_1752334228.webp'
@@ -357,3 +358,36 @@ const handleStatusClose = () => {
 }
 import '@/assets/home.css'
 </script>
+
+<style scoped>
+/* Optimizaciones para evitar saltos en el background */
+.min-h-screen {
+  /* Forzar aceleración por hardware */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Estabilizar imagen de fondo */
+img {
+  /* Evitar re-rendering innecesario */
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  /* Forzar GPU */
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+}
+
+/* Optimizar overlays */
+.bg-black\/40,
+.bg-black\/60 {
+  /* Usar compositing optimizado */
+  transform: translateZ(0);
+  will-change: auto;
+}
+
+/* Prevenir layout shifts */
+.fixed {
+  contain: layout style paint;
+}
+</style>
