@@ -7,7 +7,7 @@
           <router-link to="/" class="flex items-center space-x-3 group">
             <div class="h-16 w-16 p-1 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 group-hover:from-blue-600 group-hover:to-purple-700 transition-all duration-300 shadow-lg">
               <img 
-                src="../assets/images/android-chrome-192x192.png" 
+                src="@/assets/images/android-chrome-192x192.png" 
                 alt="Soky Recargas"
                 class="w-full h-full object-contain rounded-xl"
               >

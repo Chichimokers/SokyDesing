@@ -3,7 +3,7 @@
     <!-- Banner como fondo -->
     <div class="fixed inset-0 z-0">
       <img 
-        src="../assets/images/offer_phpqvu0b1h9ad7g92AMXgY_1760792874.webp" 
+        src="@/assets/images/offer_phpqvu0b1h9ad7g92AMXgY_1760792874.webp" 
         alt="Soky Recargas Background"
         class="w-full h-full object-cover"
       >

@@ -9,7 +9,7 @@
 
         <div class="">
         <img 
-            src="../assets/images/logo.webp" 
+            src="@/assets/images/logo.webp" 
             alt="Soky Recargas" 
             class="mx-auto mb-4 w-48" 
         >
