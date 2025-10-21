@@ -196,7 +196,7 @@
     />
     <RechargeStatus
       :transaction="currentTransaction"
-      @close="resetTransaction"
+      @close="handleStatusClose"
       @retry="handleRetryFromHome"
     />
     </div>
@@ -300,6 +300,8 @@ const closePopup = () => {
   selectedOffer.value = null
 }
 
+const navigationPending = ref<null | { name: string }>(null)
+
 const proceedToRecharge = async (phoneNumbers: PhoneNumber[], offer: RechargeOffer, email?: string, selectedPlan?: any, autoRenewal?: boolean) => {
   // Seleccionar la oferta globalmente
   selectOffer(offer)
@@ -322,8 +324,8 @@ const proceedToRecharge = async (phoneNumbers: PhoneNumber[], offer: RechargeOff
       }
       
       await processRecharge(primaryPhone.number, email || '')
-      // Mostrar mensaje de suscripción activada
-      router.push({ name: 'Subscriptions' }) // Navegar a página de suscripciones
+      // Defer navigation until user closes the status popup
+      navigationPending.value = { name: 'Subscriptions' }
     }
   } else {
     // Para recargas normales, procesar secuencialmente todos los números
@@ -332,8 +334,8 @@ const proceedToRecharge = async (phoneNumbers: PhoneNumber[], offer: RechargeOff
       // pequeña pausa para que el usuario perciba la transición si lo desea
       await new Promise(resolve => setTimeout(resolve, 400))
     }
-    // Después de procesar todo, ir al perfil (historial)
-    router.push({ name: 'Profile' })
+    // Después de procesar todo, defer navigation until user closes status popup
+    navigationPending.value = { name: 'Profile' }
   }
 }
 
@@ -343,5 +345,15 @@ const handleRetryFromHome = async (tx: any) => {
     processRecharge(tx.phoneNumber, tx.email || '')
   }, 500)
 }
+
+const handleStatusClose = () => {
+  // Clear composable transaction state
+  resetTransaction()
+  // If a navigation was deferred, perform it now
+  if (navigationPending.value) {
+    router.push(navigationPending.value)
+    navigationPending.value = null
+  }
+}
+import '@/assets/home.css'
 </script>
-<style src="@/assets/home.css"></style>

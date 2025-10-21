@@ -32,20 +32,16 @@
     {{ isSubscription ? 'Tu suscripción está siendo procesada' : 'Tu recarga está siendo procesada' }}
   </p>
         
-  <div class="bg-[#0f1213] rounded-lg p-4 mb-6 border border-white/5 text-white">
-          <div class="flex items-center justify-between text-sm">
-            <span class="text-gray-400">Teléfono:</span>
-            <span class="font-semibold text-white">{{ formatPhone(transaction.phoneNumber) }}</span>
+          <div class="bg-[#0f1213] rounded-lg p-4 mb-6 border border-white/5 text-white">
+            <div class="grid grid-cols-2 gap-y-2 text-sm">
+              <div class="text-gray-400">Teléfono:</div>
+              <div class="font-semibold text-white">{{ formatPhone(transaction.phoneNumber) }}</div>
+              <div class="text-gray-400">Monto:</div>
+              <div class="font-semibold text-green-400">${{ transaction.offer.priceUSDT }} USDT</div>
+              <div class="text-gray-400">Plan:</div>
+              <div class="font-medium text-white">{{ transaction.offer.data }}</div>
+            </div>
           </div>
-          <div class="flex items-center justify-between text-sm mt-2">
-            <span class="text-gray-400">Monto:</span>
-            <span class="font-semibold text-green-400">${{ transaction.offer.priceUSDT }} USDT</span>
-          </div>
-          <div class="flex items-center justify-between text-sm mt-2">
-            <span class="text-gray-400">Plan:</span>
-            <span class="font-semibold text-white">{{ transaction.offer.data }}</span>
-          </div>
-        </div>
         
         <p class="text-xs text-gray-500">
           Tiempo estimado: 2-5 minutos
@@ -54,30 +50,12 @@
 
       <!-- Estado: Completada -->
       <div v-else-if="transaction.status === 'completed'" class="text-center">
-        <!-- Icono de éxito con animación -->
-        <div class="relative mb-6">
-          <div class="flex justify-center">
-            <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center animate-bounce-in">
-              <svg class="w-8 h-8 text-white animate-check-draw" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-              </svg>
-            </div>
-          </div>
-          
-          <!-- Efectos de celebración -->
-          <div class="absolute inset-0 flex items-center justify-center">
-            <div class="w-20 h-20 border-2 border-green-500/30 rounded-full animate-ping"></div>
-          </div>
-          
-          <!-- Partículas de celebración -->
-          <div class="absolute top-2 left-1/2 transform -translate-x-1/2">
-            <div class="w-2 h-2 bg-yellow-400 rounded-full animate-confetti-1"></div>
-          </div>
-          <div class="absolute top-0 right-1/4">
-            <div class="w-2 h-2 bg-blue-400 rounded-full animate-confetti-2"></div>
-          </div>
-          <div class="absolute top-1 left-1/4">
-            <div class="w-2 h-2 bg-red-400 rounded-full animate-confetti-3"></div>
+        <!-- Icono de éxito simple y claro -->
+        <div class="mb-6 flex justify-center">
+          <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center">
+            <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M5 13l4 4L19 7" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            </svg>
           </div>
         </div>
 
@@ -89,38 +67,53 @@
   </p>
         
   <div class="bg-[#07110a] border border-green-800/30 rounded-lg p-4 mb-6 text-white">
-          <div class="flex items-center justify-between text-sm mb-2">
-            <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
-            </svg>
-            <span class="text-gray-300">Teléfono: </span>
-            <span class="font-semibold text-white">{{ formatPhone(transaction.phoneNumber) }}</span>
-          </div>
-          
-          <div v-if="transaction.email" class="flex items-center justify-between text-sm mb-2">
-            <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-            </svg>
-            <span class="text-gray-300">Email: </span>
-            <span class="font-medium text-white">{{ transaction.email }}</span>
-          </div>
-          
-          <div class="flex items-center justify-between text-sm mb-2">
-            <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
-            </svg>
-            <span class="text-gray-300">Monto: </span>
-            <span class="font-semibold text-green-400">${{ transaction.offer.priceUSDT }} USDT</span>
-          </div>
-          
-          <div class="flex items-center justify-between text-sm">
-            <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0A2.723 2.723 0 003 15.546V8.91c0-2.2.9-4.2 2.46-5.71A7.93 7.93 0 0111 1h.36a8.044 8.044 0 015.54 2.2c1.56 1.51 2.46 3.51 2.46 5.71v6.636z"/>
-            </svg>
-            <span class="text-gray-300">
-              {{ isSubscription ? 'Servicio:' : 'Oferta:' }}
-            </span>
-            <span class="font-medium text-white">{{ transaction.offer.data }}</span>
+          <div class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-3 text-sm">
+            <!-- Teléfono -->
+            <div class="flex items-center">
+              <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+              </svg>
+              <span class="text-gray-300 ml-2">Teléfono:</span>
+            </div>
+            <span class="font-semibold text-white text-right">{{ formatPhone(transaction.phoneNumber) }}</span>
+            
+            <!-- Email (conditional) -->
+            <template v-if="transaction.email">
+              <div class="flex items-center">
+                <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                </svg>
+                <span class="text-gray-300 ml-2">Email:</span>
+              </div>
+              <span class="font-medium text-white text-right">{{ transaction.email }}</span>
+            </template>
+            
+            <!-- Monto -->
+            <div class="flex items-center">
+              <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
+              </svg>
+              <span class="text-gray-300 ml-2">Monto:</span>
+            </div>
+            <span class="font-semibold text-green-400 text-right">${{ transaction.offer.priceUSDT }} USDT</span>
+            
+            <!-- Servicio/Oferta -->
+            <div class="flex items-center">
+              <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0A2.723 2.723 0 003 15.546V8.91c0-2.2.9-4.2 2.46-5.71A7.93 7.93 0 0111 1h.36a8.044 8.044 0 015.54 2.2c1.56 1.51 2.46 3.51 2.46 5.71v6.636z"/>
+              </svg>
+              <span class="text-gray-300 ml-2">{{ isSubscription ? 'Servicio:' : 'Oferta:' }}</span>
+            </div>
+            <span class="font-medium text-white text-right">{{ transaction.offer.data }}</span>
+            
+            <!-- Tiempo/Desde -->
+            <div class="flex items-center">
+              <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              <span class="text-gray-300 ml-2">Desde:</span>
+            </div>
+            <span class="font-medium text-white text-right">{{ formatTime(transaction.timestamp) }}</span>
           </div>
           
           <!-- Mensaje adicional para suscripciones -->
@@ -136,13 +129,7 @@
             </div>
           </div>
           
-          <div class="flex items-center justify-between text-sm mt-2">
-            <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
-            <span class="text-gray-300">Desde: </span>
-            <span class="font-medium text-white">{{ formatTime(transaction.timestamp) }}</span>
-          </div>
+      
         </div>
         
         <button

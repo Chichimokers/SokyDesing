@@ -1,148 +1,59 @@
 <template>
-  <div
-    v-if="isOpen"
-    class="fixed inset-0 z-50 overflow-y-auto"
-    @click="closePopup"
-  >
-    <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-      <!-- Overlay -->
-      <div class="fixed inset-0 bg-black/70 backdrop-blur-sm transition-opacity"></div>
-
-      <!-- Modal -->
-      <div
-        class="inline-block align-bottom bg-[#1a1a1a] rounded-2xl border border-white/10 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
-        @click.stop
-      >
-        <!-- Header -->
-        <div class="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4">
-          <div class="flex items-center justify-between">
-            <div>
-              <h3 class="text-lg font-semibold text-white">{{ selectedOffer?.title || 'Recarga' }}</h3>
-              <p class="text-blue-100 text-sm">Desde {{ selectedOffer?.priceUSDT }} USDT</p>
-            </div>
-            <button
-              @click="closePopup"
-              class="text-white/80 hover:text-white transition-colors p-1"
-            >
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-              </svg>
-            </button>
-          </div>
+  <Modal :isOpen="isOpen" @close="closePopup">
+    <template #header>
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="text-lg font-semibold text-white">{{ selectedOffer?.title || 'Recarga' }}</h3>
+          <p class="text-blue-100 text-sm">Desde {{ selectedOffer?.priceUSDT }} USDT</p>
         </div>
+        <button @click="closePopup" class="text-white/80 hover:text-white transition-colors p-1"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+      </div>
+    </template>
 
-        <!-- Content -->
-        <div class="px-6 py-6">
-          <div class="mb-6">
-            <p class="text-gray-300 text-sm">
-              Agrega hasta 5 números de teléfono para esta recarga. Todos los números recibirán la misma oferta.
-            </p>
-          </div>
+    <div>
+      <div class="mb-6"><p class="text-gray-300 text-sm">Agrega hasta 5 números de teléfono para esta recarga. Todos los números recibirán la misma oferta.</p></div>
 
-          <!-- Conditional Email (only for nauta offers) -->
-          <div v-if="selectedOffer && selectedOffer.id === 'nauta'" class="mb-4">
-            <label class="block text-sm text-gray-300 mb-2">Email</label>
-            <div class="flex items-center space-x-3">
-              <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12H8m8 0l-4 4m4-4l-4-4"/>
-              </svg>
-              <input
-                v-model="email"
-                type="email"
-                placeholder="correo@nauta.cu"
-                class="w-full bg-[#1a1a1a] border border-white/10 rounded-md px-3 py-2 text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-          </div>
-
-          <!-- Plan Selector -->
-          <div class="mb-6">
-            <PopupPlanSelector
-              :plan-type="getPlanType()"
-              :mobile-plans="mobilePlans"
-              :selected-plan="selectedPlan"
-              @select-plan="handlePlanSelection"
-              @auto-renewal-change="handleAutoRenewalChange"
-            />
-          </div>
-
-          <!-- Phone Number Manager -->
-          <PhoneNumberManager
-            :phone-numbers="phoneNumbers"
-            :validate-phone="validatePhone"
-            @add-phone="handleAddPhone"
-            @remove-phone="handleRemovePhone"
-          />
-        </div>
-
-        <!-- Footer -->
-        <div class="bg-[#2a2a2a] px-6 py-4">
-          <div class="flex items-center justify-between">
-            <!-- Resumen -->
-            <div class="text-sm text-gray-400">
-              <span v-if="validPhoneCount > 0">
-                {{ validPhoneCount }} número{{ validPhoneCount !== 1 ? 's' : '' }} válido{{ validPhoneCount !== 1 ? 's' : '' }}
-              </span>
-              <span v-else>Sin números válidos</span>
-            </div>
-
-            <!-- Botones: different actions depending on offer type -->
-            <div class="flex space-x-3">
-              <button
-                @click="closePopup"
-                class="px-4 py-2 text-gray-400 hover:text-white transition-colors"
-              >
-                Cancelar
-              </button>
-
-              <!-- Nauta hogar plus: show email + phone + Suscribirse + Continuar -->
-              <template v-if="selectedOffer && selectedOffer.id === 'nauta'">
-                <button
-                  @click="proceedToSubscribe"
-                  :disabled="validPhoneCount === 0 || !email || !selectedPlan"
-                  class="bg-green-500 hover:bg-green-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white px-5 py-2 rounded-lg font-semibold transition duration-300"
-                >
-                  Suscribirse
-                </button>
-                <button
-                  @click="proceedToRecharge"
-                  :disabled="validPhoneCount === 0 || !email || !selectedPlan"
-                  class="bg-blue-500 hover:bg-blue-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white px-6 py-2 rounded-lg font-semibold transition duration-300"
-                >
-                  Recargar ({{ totalPrice.toFixed(2) }} USDT)
-                </button>
-              </template>
-
-              <!-- Nauta Plus: show only phone + Suscribirse (number only + subscribe) -->
-              <template v-else-if="selectedOffer && selectedOffer.id === 'nauta_plus'">
-                <button
-                  @click="proceedToSubscribe"
-                  :disabled="validPhoneCount === 0 || !selectedPlan"
-                  class="bg-green-500 hover:bg-green-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white px-6 py-2 rounded-lg font-semibold transition duration-300"
-                >
-                  Suscribirse
-                </button>
-              </template>
-
-              <!-- Default: only Continuar (recarga) for all other offers -->
-              <template v-else>
-                <button
-                  @click="proceedToRecharge"
-                  :disabled="validPhoneCount === 0 || !selectedPlan"
-                  class="bg-blue-500 hover:bg-blue-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white px-6 py-2 rounded-lg font-semibold transition duration-300"
-                >
-                  Continuar ({{ totalPrice.toFixed(2) }} USDT)
-                </button>
-              </template>
-            </div>
-          </div>
+      <div v-if="selectedOffer && selectedOffer.id === 'nauta'" class="mb-4">
+        <label class="block text-sm text-gray-300 mb-2">Email</label>
+        <div class="flex items-center space-x-3">
+          <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12H8m8 0l-4 4m4-4l-4-4"/></svg>
+          <input v-model="email" type="email" placeholder="correo@nauta.cu" class="w-full bg-[#1a1a1a] border border-white/10 rounded-md px-3 py-2 text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500" />
         </div>
       </div>
+
+      <div class="mb-6">
+        <PopupPlanSelector :plan-type="getPlanType()" :mobile-plans="mobilePlans" :selected-plan="selectedPlan" @select-plan="handlePlanSelection" @auto-renewal-change="handleAutoRenewalChange" />
+      </div>
+
+      <PhoneNumberManager :phone-numbers="phoneNumbers" :validate-phone="validatePhone" @add-phone="handleAddPhone" @remove-phone="handleRemovePhone" />
     </div>
-  </div>
+
+    <template #footer>
+      <div class="flex items-center justify-between">
+        <div class="text-sm text-gray-400"><span v-if="validPhoneCount > 0">{{ validPhoneCount }} número{{ validPhoneCount !== 1 ? 's' : '' }} válido{{ validPhoneCount !== 1 ? 's' : '' }}</span><span v-else>Sin números válidos</span></div>
+        <div class="flex space-x-3">
+          <button @click="closePopup" class="px-4 py-2 text-gray-400 hover:text-white transition-colors">Cancelar</button>
+
+          <template v-if="selectedOffer && selectedOffer.id === 'nauta'">
+            <button @click="proceedToSubscribe" :disabled="validPhoneCount === 0 || !email || !selectedPlan" class="bg-green-500 hover:bg-green-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white px-5 py-2 rounded-lg font-semibold transition duration-300">Suscribirse</button>
+            <button @click="proceedToRecharge" :disabled="validPhoneCount === 0 || !email || !selectedPlan" class="bg-blue-500 hover:bg-blue-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white px-6 py-2 rounded-lg font-semibold transition duration-300">Recargar ({{ totalPrice.toFixed(2) }} USDT)</button>
+          </template>
+
+          <template v-else-if="selectedOffer && selectedOffer.id === 'nauta_plus'">
+            <button @click="proceedToSubscribe" :disabled="validPhoneCount === 0 || !selectedPlan" class="bg-green-500 hover:bg-green-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white px-6 py-2 rounded-lg font-semibold transition duration-300">Suscribirse</button>
+          </template>
+
+          <template v-else>
+            <button @click="proceedToRecharge" :disabled="validPhoneCount === 0 || !selectedPlan" class="bg-blue-500 hover:bg-blue-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white px-6 py-2 rounded-lg font-semibold transition duration-300">Continuar ({{ totalPrice.toFixed(2) }} USDT)</button>
+          </template>
+        </div>
+      </div>
+    </template>
+  </Modal>
 </template>
 
 <script setup lang="ts">
+import Modal from './Modal.vue'
 import { computed, ref } from 'vue'
 import PhoneNumberManager from './PhoneNumberManager.vue'
 import PopupPlanSelector from './PopupPlanSelector.vue'

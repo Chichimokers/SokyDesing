@@ -4,11 +4,11 @@
     :class="cardClasses"
   >
     <!-- Imagen Principal - Altura fija -->
-    <div class="h-40 overflow-hidden flex-shrink-0">
+    <div class="h-50 w-50 overflow-hidden flex-shrink-0" >
       <img 
         :src="img" 
         :alt="title" 
-        class="w-full h-full object-cover group-hover:scale-110 transition duration-300"
+        class="w-full h-full object-scale-down  group-hover:scale-110 transition duration-300"
       >
     </div>
     
