@@ -175,6 +175,7 @@ const form = reactive({
 const showPassword = ref(false)
 const showConfirmPassword = ref(false)
 
+
 const register = () => {
   console.log(form)
 }
