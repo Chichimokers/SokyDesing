@@ -9,10 +9,10 @@
           
      
           <div class="lg:col-span-1">
-            <div class="balance-card bg-gradient-to-br from-slate-800 to-slate-900 rounded-3xl p-8 border border-white/10 shadow-2xl">
+            <div class="balance-card bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-white/10 shadow-2xl">
       
-              <div class="flex items-center justify-between mb-6">
-                <h2 class="text-white/80 text-lg font-medium">Saldo</h2>
+              <div class="flex items-center justify-between mb-4 sm:mb-6">
+                <h2 class="text-white/80 text-base sm:text-lg font-medium">Saldo</h2>
                 <button 
                   @click="toggleBalanceVisibility"
                   class="w-8 h-8 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-all duration-300"
@@ -33,11 +33,11 @@
               </div>
 
 
-              <div class="mb-8">
-                <h1 class="text-5xl font-bold text-white mb-2">
+              <div class="mb-6 sm:mb-8">
+                <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-2">
                   {{ isBalanceVisible ? `$${balance.current.toFixed(2)}` : '$***.**' }}
                 </h1>
-                <p class="text-white/60 text-sm">Disponible para usar</p>
+                <p class="text-white/60 text-xs sm:text-sm">Disponible para usar</p>
               </div>
 
               <div class="space-y-2 sm:space-y-3">
@@ -111,9 +111,11 @@
                 </h2>
                 <div class="flex flex-wrap items-center gap-1 sm:gap-2 text-xs sm:text-sm">
                   <span class="text-green-400 font-medium">Depósito</span>
-                  <span class="text-green-400 font-bold">${{ pendingDeposit.amount }}</span>
+                  <span class="text-green-400 font-bold">
+                    {{ isBalanceVisible ? `$${pendingDeposit.amount}` : '$**.**' }}
+                  </span>
                   <span class="text-gray-400">Pendiente {{ pendingDeposit.time }}</span>
-                  <button class="bg-green-500/20 text-green-400 px-2 sm:px-3 py-1 rounded-lg font-medium border border-green-500/30 hover:bg-green-500/30 transition-all">
+                  <button class="bg-green-500/20 text-green-400 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg font-medium border border-green-500/30 hover:bg-green-500/30 transition-all text-xs sm:text-sm">
                     Detalles
                   </button>
                 </div>
@@ -137,7 +139,7 @@
                   </div>
                   <div class="text-right flex-shrink-0">
                     <p class="font-semibold text-sm sm:text-base" :class="transaction.type === 'credit' ? 'text-green-400' : 'text-red-400'">
-                      {{ transaction.type === 'credit' ? '+' : '-' }}${{ Math.abs(transaction.amount).toFixed(2) }}
+                      {{ transaction.type === 'credit' ? '+' : '-' }}{{ isBalanceVisible ? `$${Math.abs(transaction.amount).toFixed(2)}` : '$**.**' }}
                     </p>
                     <p class="text-gray-500 text-xs sm:text-sm">{{ transaction.status }}</p>
                   </div>
