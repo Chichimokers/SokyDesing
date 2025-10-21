@@ -1,15 +1,21 @@
 <template>
   <div class="min-h-screen relative overflow-hidden">
-    <!-- Banner como fondo -->
-   <div class="fixed inset-0 z-0">
+    <!-- Banner como fondo estático optimizado -->
+    <div class="home-background-container">
+      <!-- Capa base desenfocada para rellenar bordes -->
+      <img 
+        :src="backgroundImage" 
+        alt="Soky Recargas Background blur"
+        class="home-background-blur"
+      >
+      <!-- Imagen nítida completa sin recortes -->
       <img 
         :src="backgroundImage" 
         alt="Soky Recargas Background"
-        class="w-full h-full object-cover"
-        style="transform: translate3d(0, 0, 0); backface-visibility: hidden; will-change: auto;"
+        class="home-background-image"
       >
       <!-- Overlay para mejor legibilidad -->
-      <div class="absolute inset-0 bg-black/60"></div>
+      <div class="home-background-overlay"></div>
     </div>
 
     <!-- Contenido sobre el banner -->
