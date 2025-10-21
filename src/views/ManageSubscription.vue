@@ -3,7 +3,7 @@
     <Navbar />
     
     <!-- Manage Subscription Section -->
-    <div class="pt-24 pb-12 px-4 sm:px-6 lg:px-8">
+    <div class="pt-28 md:pt-32 pb-12 px-4 sm:px-6 lg:px-8">
       <div class="max-w-4xl mx-auto">
         
         <!-- Header with Back Button -->
@@ -227,59 +227,53 @@
     </div>
 
     <!-- Cancel Subscription Modal -->
-    <div v-if="showCancelModal" class="fixed inset-0 z-50 flex items-center justify-center">
-      <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" @click="showCancelModal = false"></div>
-      <div class="relative bg-black/40 backdrop-blur-xl rounded-3xl p-8 border border-red-500/30 shadow-2xl max-w-md w-full mx-4">
-        <div class="text-center">
-          <div class="w-20 h-20 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
-            <svg class="w-10 h-10 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/>
-            </svg>
-          </div>
-          <h3 class="text-2xl font-bold text-white mb-4">¿Cancelar Suscripción?</h3>
-          <p class="text-gray-300 mb-6 leading-relaxed">
-            Tu suscripción se cancelará al final del período de facturación actual. 
-            Seguirás teniendo acceso hasta el {{ formatDate(subscription.nextPayment) }}.
-          </p>
-          <div class="flex gap-3">
-            <button 
-              @click="showCancelModal = false"
-              class="flex-1 bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300"
-            >
-              Mantener
-            </button>
-            <button 
-              @click="cancelSubscription"
-              class="flex-1 bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300"
-            >
-              Sí, Cancelar
-            </button>
-          </div>
+    <Modal :isOpen="showCancelModal" @close="showCancelModal = false">
+      <div class="text-center">
+        <div class="w-20 h-20 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
+          <svg class="w-10 h-10 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+          </svg>
         </div>
-      </div>
-    </div>
-
-    <!-- Success/Status Modal -->
-    <div v-if="showStatusModal" class="fixed inset-0 z-50 flex items-center justify-center">
-      <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" @click="showStatusModal = false"></div>
-      <div class="relative bg-gradient-to-br from-green-600/90 to-emerald-600/90 backdrop-blur-xl rounded-3xl p-8 border border-green-400/30 shadow-2xl max-w-md w-full mx-4">
-        <div class="text-center">
-          <div class="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-6">
-            <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-            </svg>
-          </div>
-          <h3 class="text-2xl font-bold text-white mb-4">{{ statusMessage.title }}</h3>
-          <p class="text-green-100 mb-6 leading-relaxed">{{ statusMessage.description }}</p>
+        <h3 class="text-2xl font-bold text-white mb-4">¿Cancelar Suscripción?</h3>
+        <p class="text-gray-300 mb-6 leading-relaxed">
+          Tu suscripción se cancelará al final del período de facturación actual. 
+          Seguirás teniendo acceso hasta el {{ formatDate(subscription.nextPayment) }}.
+        </p>
+        <div class="flex gap-3">
           <button 
-            @click="showStatusModal = false"
-            class="bg-white/20 hover:bg-white/30 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300"
+            @click="showCancelModal = false"
+            class="flex-1 bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300"
           >
-            Entendido
+            Mantener
+          </button>
+          <button 
+            @click="cancelSubscription"
+            class="flex-1 bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300"
+          >
+            Sí, Cancelar
           </button>
         </div>
       </div>
-    </div>
+    </Modal>
+
+    <!-- Success Modal -->
+    <Modal :isOpen="showStatusModal" @close="showStatusModal = false">
+      <div class="text-center">
+        <div class="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
+          <svg class="w-10 h-10 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+          </svg>
+        </div>
+        <h3 class="text-2xl font-bold text-white mb-4">{{ statusMessage.title }}</h3>
+        <p class="text-gray-300 mb-6 leading-relaxed">{{ statusMessage.description }}</p>
+        <button 
+          @click="showStatusModal = false"
+          class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300"
+        >
+          Entendido
+        </button>
+      </div>
+    </Modal>
 
     <!-- Footer -->
     <Footer />
@@ -291,6 +285,7 @@ import { ref, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import Navbar from '../components/Navbar.vue'
 import Footer from '../components/Footer.vue'
+import Modal from '../components/Modal.vue'
 
 const router = useRouter()
 const route = useRoute()

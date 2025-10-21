@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { useRippleEffect } from '@/composables/ripleEffects'
+import Navbar from '../components/Navbar.vue'
 
 const { ripples, handleMouseLeave } = useRippleEffect()
 const codigo = ref(['', '', '', '', '', ''])
@@ -33,8 +34,9 @@ function verificarCodigo() {
 </script>
 
 <template>
+  <Navbar />
   <div
-    class="login-background flex items-center justify-center h-screen bg-repeat bg-center relative overflow-hidden"
+    class="login-background flex items-center justify-center h-screen bg-repeat bg-center relative overflow-hidden pt-24 md:pt-28"
   >
     <div
       class="login-content bg-[#1f1f1f]/95 p-8 rounded-2xl shadow-xl w-96 text-white"

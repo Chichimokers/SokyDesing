@@ -192,17 +192,13 @@ const validateForm = () => {
   errors.value = { phoneNumber: '', nautaEmail: '' }
   let isValid = true
 
-  // Validar teléfono (más flexible)
+  // Validar teléfono
   if (!form.value.phoneNumber.trim()) {
     errors.value.phoneNumber = 'El número de teléfono es requerido'
     isValid = false
-  } else {
-    const cleanPhone = form.value.phoneNumber.replace(/\s+/g, '')
-    // Permitir +535xxxxxxx, 535xxxxxxx, 5xxxxxxx (8 dígitos mínimo)
-    if (!/^(\+?53)?[5-9]\d{7,8}$/.test(cleanPhone)) {
-      errors.value.phoneNumber = 'Número de teléfono cubano inválido'
-      isValid = false
-    }
+  } else if (!/^(\+53|53)?\s*[5-9]\d{7}$/.test(form.value.phoneNumber.replace(/\s/g, ''))) {
+    errors.value.phoneNumber = 'Número de teléfono cubano inválido'
+    isValid = false
   }
 
   // Validar email para Nauta Hogar
@@ -220,41 +216,22 @@ const validateForm = () => {
 }
 
 const handleSubmit = async () => {
-  console.log('🔥 handleSubmit called')
-  console.log('📝 Form data:', form.value)
-  console.log('✅ Terms accepted:', form.value.acceptTerms)
-  console.log('📞 Phone number:', form.value.phoneNumber)
-  
-  const isFormValid = validateForm()
-  console.log('✔️ Form valid:', isFormValid)
-  
-  if (!isFormValid || !form.value.acceptTerms) {
-    console.log('❌ Validation failed - form valid:', isFormValid, 'terms accepted:', form.value.acceptTerms)
-    return
-  }
+  if (!validateForm() || !form.value.acceptTerms) return
 
-  console.log('🚀 Starting subscription process...')
   isLoading.value = true
   
   try {
-    // Simular tiempo de procesamiento
-    await new Promise(resolve => setTimeout(resolve, 2000))
-    
     const subscriptionData = {
-      plan: {
-        id: props.plan?.id,
-        name: props.plan?.name,
-        type: props.plan?.type,
-        price: props.plan?.price
-      },
+      planId: props.plan?.id,
+      planName: props.plan?.name,
+      planType: props.plan?.type,
       phoneNumber: form.value.phoneNumber,
       nautaEmail: isNautaHogar.value ? form.value.nautaEmail : null,
+      price: props.plan?.price,
       acceptedTerms: true,
-      billingDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // +30 días
       subscriptionDate: new Date().toISOString()
     }
     
-    console.log('📤 Emitting subscription data:', subscriptionData)
     emit('subscribe', subscriptionData)
   } catch (error) {
     console.error('Subscription error:', error)

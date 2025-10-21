@@ -1,13 +1,6 @@
 <template>
-  <div v-if="show" class="fixed inset-0 z-50 flex items-center justify-center p-4">
-    <!-- Backdrop -->
-    <div 
-      class="absolute inset-0 bg-black/70 backdrop-blur-sm"
-      @click="$emit('close')"
-    ></div>
-
-    <!-- Modal -->
-    <div class="relative bg-black/40 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-6 sm:p-8 border shadow-2xl max-w-sm sm:max-w-md w-full"
+  <Modal :isOpen="show" @close="$emit('close')">
+    <div class="relative bg-black/40 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-6 sm:p-8 border shadow-2xl"
          :class="modalClasses">
       <div class="text-center">
         <!-- Icon -->
@@ -79,11 +72,12 @@
         </div>
       </div>
     </div>
-  </div>
+  </Modal>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import Modal from './Modal.vue'
 
 interface Props {
   show: boolean

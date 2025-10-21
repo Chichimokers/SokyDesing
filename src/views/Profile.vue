@@ -2,26 +2,28 @@
   <div class="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
     <Navbar />
     
-    <!-- Success Notification -->
+    <!-- Success Notification - Completamente responsive y bien posicionado -->
     <transition 
       enter-active-class="transition-all duration-300 ease-out"
       leave-active-class="transition-all duration-300 ease-in"
-      enter-from-class="opacity-0 translate-y-[-20px]"
-      leave-to-class="opacity-0 translate-y-[-20px]"
+      enter-from-class="opacity-0 translate-y-[-20px] scale-95"
+      leave-to-class="opacity-0 translate-y-[-20px] scale-95"
     >
-      <div v-if="showSuccessMessage" class="fixed top-24 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-md px-4">
-        <div class="bg-green-500/90 backdrop-blur-sm text-white px-6 py-4 rounded-xl shadow-2xl border border-green-400/30 flex items-center justify-between">
-          <div class="flex items-center gap-3">
-            <svg class="w-6 h-6 text-green-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-            </svg>
-            <span class="font-semibold">{{ successMessage }}</span>
+      <div v-if="showSuccessMessage" class="fixed inset-x-2 top-20 sm:inset-x-4 sm:top-24 md:top-28 sm:left-1/2 sm:transform sm:-translate-x-1/2 z-[9998] sm:w-full sm:max-w-md">
+        <div class="bg-green-500/95 backdrop-blur-md text-white px-4 sm:px-6 py-3 sm:py-4 rounded-xl sm:rounded-2xl shadow-2xl border border-green-400/40 flex items-center justify-between gap-3">
+          <div class="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+            <div class="flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 bg-green-400/20 rounded-full flex items-center justify-center">
+              <svg class="w-3 h-3 sm:w-4 sm:h-4 text-green-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+              </svg>
+            </div>
+            <span class="font-semibold text-sm sm:text-base truncate">{{ successMessage }}</span>
           </div>
           <button 
             @click="showSuccessMessage = false"
-            class="text-green-100 hover:text-white transition-colors duration-200"
+            class="flex-shrink-0 p-1 text-green-100 hover:text-white hover:bg-green-400/20 rounded-lg transition-all duration-200"
           >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
             </svg>
           </button>
@@ -30,7 +32,7 @@
     </transition>
     
     <!-- Profile Header Section -->
-    <div class="pt-24 pb-12 px-4 sm:px-6 lg:px-8">
+    <div class="pt-28 md:pt-32 pb-12 px-4 sm:px-6 lg:px-8">
       <div class="max-w-4xl mx-auto">
         <!-- Profile Card -->
         <div class="profile-card bg-black/40 backdrop-blur-md rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-white/10 shadow-2xl">

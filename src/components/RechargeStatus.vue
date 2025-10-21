@@ -1,9 +1,9 @@
 <template>
-  <div v-if="transaction" class="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center z-50">
-    <div class="bg-[#0b0b0b] rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl border border-white/5">
+  <Modal :isOpen="!!transaction" @close="$emit('close')">
+    <div class="space-y-0">
       
       <!-- Estado: Procesando -->
-      <div v-if="transaction.status === 'processing'" class="text-center">
+      <div v-if="transaction.status === 'processing'" class="text-center bg-[#0b0b0b] rounded-2xl p-8 border border-white/5">
         <!-- Animación de carga -->
         <div class="relative mb-6">
           <div class="flex justify-center">
@@ -37,7 +37,23 @@
               <div class="text-gray-400">Teléfono:</div>
               <div class="font-semibold text-white">{{ formatPhone(transaction.phoneNumber) }}</div>
               <div class="text-gray-400">Monto:</div>
-              <div class="font-semibold text-green-400">${{ transaction.offer.priceUSDT }} USDT</div>
+              <div class="font-semibold text-green-400 flex items-center justify-end gap-2">
+                <span>{{ amountText }}</span>
+                <button
+                  @click="toggleAmount"
+                  class="p-1 rounded hover:bg-white/10 text-gray-300 hover:text-white transition-colors"
+                  :title="showAmount ? 'Ocultar monto' : 'Mostrar monto'"
+                  aria-label="Alternar visibilidad del monto"
+                >
+                  <svg v-if="showAmount" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029M9.879 9.88a3 3 0 114.242 4.24M9.879 9.88L3 3m6.879 6.88L21 21"/>
+                  </svg>
+                  <svg v-else class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  </svg>
+                </button>
+              </div>
               <div class="text-gray-400">Plan:</div>
               <div class="font-medium text-white">{{ transaction.offer.data }}</div>
             </div>
@@ -49,7 +65,7 @@
       </div>
 
       <!-- Estado: Completada -->
-      <div v-else-if="transaction.status === 'completed'" class="text-center">
+      <div v-else-if="transaction.status === 'completed'" class="text-center bg-[#0b0b0b] rounded-2xl p-8 border border-white/5">
         <!-- Icono de éxito simple y claro -->
         <div class="mb-6 flex justify-center">
           <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center animate-bounce-in animate-pulse-success relative">
@@ -116,7 +132,23 @@
               </svg>
               <span class="text-gray-300 ml-2">Monto:</span>
             </div>
-            <span class="font-semibold text-green-400 text-right">${{ transaction.offer.priceUSDT }} USDT</span>
+            <div class="font-semibold text-green-400 flex items-center justify-end gap-2">
+              <span>{{ amountText }}</span>
+              <button
+                @click="toggleAmount"
+                class="p-1 rounded hover:bg-white/10 text-gray-300 hover:text-white transition-colors"
+                :title="showAmount ? 'Ocultar monto' : 'Mostrar monto'"
+                aria-label="Alternar visibilidad del monto"
+              >
+                <svg v-if="showAmount" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029M9.879 9.88a3 3 0 114.242 4.24M9.879 9.88L3 3m6.879 6.88L21 21"/>
+                </svg>
+                <svg v-else class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+              </button>
+            </div>
             
             <!-- Servicio/Oferta -->
             <div class="flex items-center">
@@ -162,7 +194,7 @@
       </div>
 
       <!-- Estado: Error -->
-      <div v-else-if="transaction.status === 'error'" class="text-center">
+      <div v-else-if="transaction.status === 'error'" class="text-center bg-[#0b0b0b] rounded-2xl p-8 border border-white/5">
         <!-- Icono de error -->
         <div class="relative mb-6">
           <div class="flex justify-center">
@@ -217,11 +249,12 @@
         </div>
       </div>
     </div>
-  </div>
+  </Modal>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
+import Modal from './Modal.vue'
 import type { RechargeTransaction } from '../composables/useRecharge'
 
 interface Props {
@@ -267,6 +300,17 @@ const formatTime = (timestamp: Date) => {
     minute: '2-digit',
     hour12: false
   }) + ' horas'
+}
+
+// Mostrar/ocultar monto (por defecto oculto)
+const showAmount = ref(false)
+const amountText = computed(() => {
+  const p = props.transaction?.offer?.priceUSDT
+  if (p === undefined || p === null) return '** USDT'
+  return showAmount.value ? `$${p} USDT` : '** USDT'
+})
+const toggleAmount = () => {
+  showAmount.value = !showAmount.value
 }
 </script>
 

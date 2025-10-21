@@ -3,7 +3,7 @@
     <Navbar />
     
 
-    <div class="pt-24 pb-12 px-4 sm:px-6 lg:px-8">
+    <div class="pt-28 md:pt-32 pb-12 px-4 sm:px-6 lg:px-8">
       <div class="max-w-6xl mx-auto">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
           

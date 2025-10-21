@@ -1,5 +1,6 @@
 <template>
-  <div class="login-background flex items-center justify-center min-h-screen bg-repeat bg-center relative overflow-hidden px-4 py-8">
+  <Navbar />
+  <div class="login-background flex items-center justify-center min-h-screen bg-repeat bg-center relative overflow-hidden px-4 py-8 pt-24 md:pt-28">
     <!-- Contenedor responsive -->
     <div class="login-content bg-[#1f1f1f]/95 p-6 sm:p-8 rounded-2xl shadow-xl w-full max-w-md mx-auto text-white">
       
@@ -260,6 +261,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
+import Navbar from '../components/Navbar.vue'
 
 const router = useRouter()
 

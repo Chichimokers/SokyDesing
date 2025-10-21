@@ -1,9 +1,9 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
+  <div class="min-h-screen bg-gray-900">
     <Navbar />
     
     <!-- Retail Plan Section -->
-    <div class="pt-24 pb-12 px-4 sm:px-6 lg:px-8">
+    <div class="pt-28 md:pt-32 pb-12 px-4 sm:px-6 lg:px-8">
       <div class="max-w-7xl mx-auto">
         <!-- Header -->
         <div class="mb-8">
@@ -191,37 +191,42 @@
           </div>
         </div>
 
-        <!-- Call to Action -->
+        <!-- Call to Action - Fondo sólido sin rayas del gradiente -->
         <div class="text-center">
-          <div class="bg-black/40 backdrop-blur-md rounded-3xl p-8 border border-white/10 shadow-2xl">
-            <div class="mb-6">
-              <h2 class="text-2xl font-bold text-white mb-4">¿Listo para Comenzar?</h2>
-              <p class="text-gray-400 mb-6">
-                Únete hoy y comienza a generar más ingresos con precios exclusivos
-              </p>
-            </div>
+          <div class="bg-gray-900 rounded-3xl p-8 border border-white/10 shadow-2xl relative overflow-hidden">
+            <!-- Fondo sólido para evitar interferencias del gradiente -->
+            <div class="absolute inset-0 bg-gray-900 z-0"></div>
             
-            <div class="mb-6">
-              <div class="inline-flex items-center gap-2 px-4 py-2 bg-yellow-500/20 border border-yellow-400/30 rounded-xl mb-4">
-                <svg class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
-                </svg>
-                <span class="text-yellow-400 font-semibold">Depósito mínimo: 100 USDT</span>
+            <div class="relative z-10">
+              <div class="mb-6">
+                <h2 class="text-2xl font-bold text-white mb-4">¿Listo para Comenzar?</h2>
+                <p class="text-gray-400 mb-6">
+                  Únete hoy y comienza a generar más ingresos con precios exclusivos
+                </p>
               </div>
-              <div class="inline-flex items-center gap-2 px-4 py-2 bg-green-500/20 border border-green-400/30 rounded-xl">
-                <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
-                <span class="text-green-400 font-semibold">Precio especial: 19.99 USDT por recarga</span>
+              
+              <div class="mb-6 space-y-3">
+                <div class="inline-flex items-center gap-2 px-4 py-2 bg-yellow-500/20 border border-yellow-400/30 rounded-xl backdrop-blur-sm">
+                  <svg class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+                  </svg>
+                  <span class="text-yellow-400 font-semibold">Depósito mínimo: 100 USDT</span>
+                </div>
+                <div class="inline-flex items-center gap-2 px-4 py-2 bg-green-500/20 border border-green-400/30 rounded-xl backdrop-blur-sm">
+                  <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                  <span class="text-green-400 font-semibold">Precio especial: 19.99 USDT por recarga</span>
+                </div>
               </div>
-            </div>
 
-            <button
-              @click="showApplicationPopup = true"
-              class="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-8 py-4 rounded-2xl font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
-            >
-              Solicitar Plan Retail
-            </button>
+              <button
+                @click="handleRetailApplication"
+                class="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-8 py-4 rounded-2xl font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 relative z-10"
+              >
+                Solicitar Plan Retail
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -229,54 +234,18 @@
 
     <!-- Footer -->
     <Footer />
-
-    <!-- Application Popup -->
-    <RetailApplicationPopup 
-      :show="showApplicationPopup" 
-      @close="showApplicationPopup = false"
-      @submit="handleApplicationSubmit"
-    />
-
-    <!-- Success Confirmation Popup -->
-    <div v-if="showSuccessPopup" class="fixed inset-0 z-50 flex items-center justify-center">
-      <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" @click="showSuccessPopup = false"></div>
-      <div class="relative bg-gradient-to-br from-green-600/90 to-emerald-600/90 backdrop-blur-xl rounded-3xl p-8 border border-green-400/30 shadow-2xl max-w-md w-full mx-4">
-        <div class="text-center">
-          <div class="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-6">
-            <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-            </svg>
-          </div>
-          <h3 class="text-2xl font-bold text-white mb-4">¡Aplicación Enviada!</h3>
-          <p class="text-green-100 mb-6 leading-relaxed">
-            Tu solicitud para el Plan Retail ha sido enviada exitosamente. 
-            Revisaremos tu información y te contactaremos pronto.
-          </p>
-          <button 
-            @click="showSuccessPopup = false"
-            class="bg-white/20 hover:bg-white/30 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300"
-          >
-            Entendido
-          </button>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import Navbar from '../components/Navbar.vue'
 import Footer from '../components/Footer.vue'
-import RetailApplicationPopup from '../components/RetailApplicationPopup.vue'
 
-const showApplicationPopup = ref(false)
-const showSuccessPopup = ref(false)
+const router = useRouter()
 
-const handleApplicationSubmit = (applicationData: any) => {
-  console.log('Retail application submitted:', applicationData)
-  showApplicationPopup.value = false
-  showSuccessPopup.value = true
+const handleRetailApplication = () => {
+  router.push('/retail-application')
 }
 </script>
 

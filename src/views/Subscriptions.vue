@@ -3,7 +3,7 @@
     <Navbar />
     
     <!-- Subscriptions Section -->
-    <div class="pt-24 pb-12 px-4 sm:px-6 lg:px-8">
+    <div class="pt-28 md:pt-32 pb-12 px-4 sm:px-6 lg:px-8">
       <div class="max-w-7xl mx-auto">
         
         <!-- Header -->
@@ -177,40 +177,7 @@
       @subscribe="handleSubscriptionSuccess"
     />
 
-    <!-- Success Confirmation Popup -->
-    <div v-if="showSuccessPopup" class="fixed inset-0 z-50 flex items-center justify-center">
-      <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" @click="showSuccessPopup = false"></div>
-      <div class="relative bg-gradient-to-br from-green-600/90 to-emerald-600/90 backdrop-blur-xl rounded-3xl p-8 border border-green-400/30 shadow-2xl max-w-md w-full mx-4">
-        <div class="text-center">
-          <div class="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-6">
-            <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-            </svg>
-          </div>
-          <h3 class="text-2xl font-bold text-white mb-4">¡Suscripción Activada!</h3>
-          <div v-if="lastSubscription" class="text-center mb-6">
-            <p class="text-green-100 mb-2">
-              <strong>{{ lastSubscription.name }}</strong>
-            </p>
-            <p class="text-green-100 text-sm mb-2">
-              Beneficiario: {{ lastSubscription.beneficiary }}
-            </p>
-            <p class="text-green-100 text-sm">
-              Próximo pago: {{ formatDate(lastSubscription.nextPayment) }}
-            </p>
-          </div>
-          <p class="text-green-100 mb-6 leading-relaxed">
-            Tu suscripción se ha creado exitosamente y está ahora activa.
-          </p>
-          <button 
-            @click="showSuccessPopup = false"
-            class="bg-white/20 hover:bg-white/30 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300"
-          >
-            Perfecto
-          </button>
-        </div>
-      </div>
-    </div>
+
 
     <!-- Transaction Status Popup -->
     <TransactionStatusPopup
@@ -222,6 +189,13 @@
       @retry="retrySubscription"
     />
 
+    <!-- Subscription Success Status (same as Recargas) -->
+    <RechargeStatus
+      :transaction="currentSubscriptionTransaction"
+      @close="handleCloseRechargeStatus"
+      @retry="handleRetrySubscription"
+    />
+
     <!-- Footer -->
     <Footer />
   </div>
@@ -229,17 +203,21 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import Navbar from '../components/Navbar.vue'
 import Footer from '../components/Footer.vue'
 import SubscriptionPopup from '../components/SubscriptionPopup.vue'
 import TransactionStatusPopup from '../components/TransactionStatusPopup.vue'
+import RechargeStatus from '../components/RechargeStatus.vue'
+
+const router = useRouter()
 
 // Show subscription popup
 const showSubscriptionPopup = ref(false)
-const showSuccessPopup = ref(false)
 const selectedPlan = ref<Plan | null>(null)
 const lastSubscription = ref<Subscription | null>(null)
 const showTransactionStatus = ref(false)
+const currentSubscriptionTransaction = ref<any>(null)
 
 // Transaction status for universal popup
 const transactionStatus = ref({
@@ -429,7 +407,8 @@ const closeSubscriptionPopup = () => {
 }
 
 const handleSubscriptionSuccess = (subscriptionData: any) => {
-  console.log('Subscription successful:', subscriptionData)
+  console.log('🎉 handleSubscriptionSuccess llamado!')
+  console.log('📥 Datos recibidos:', subscriptionData)
   
   // Add to active subscriptions
   const newSubscription = {
@@ -445,11 +424,23 @@ const handleSubscriptionSuccess = (subscriptionData: any) => {
   activeSubscriptions.value.push(newSubscription)
   lastSubscription.value = newSubscription
   
-  // Close popup
+  // Close subscription popup
   closeSubscriptionPopup()
   
-  // Show success popup instead of alert
-  showSuccessPopup.value = true
+  // Create transaction object for RechargeStatus (same format as recargas)
+  currentSubscriptionTransaction.value = {
+    id: Date.now(),
+    phoneNumber: subscriptionData.phoneNumber,
+    email: subscriptionData.nautaEmail || null,
+    offer: {
+      id: subscriptionData.plan.type,
+      data: subscriptionData.plan.name,
+      priceUSDT: subscriptionData.plan.price
+    },
+    status: 'completed',
+    timestamp: new Date(),
+    isSubscription: true
+  }
 }
 
 // Transaction status functions
@@ -460,6 +451,19 @@ const closeTransactionStatus = () => {
 const retrySubscription = () => {
   console.log('Retrying subscription...')
   closeTransactionStatus()
+}
+
+// RechargeStatus functions (same as in Recargas)
+const handleCloseRechargeStatus = () => {
+  currentSubscriptionTransaction.value = null
+}
+
+const handleRetrySubscription = () => {
+  currentSubscriptionTransaction.value = null
+  // Reopen the subscription popup with the same plan
+  if (selectedPlan.value) {
+    showSubscriptionPopup.value = true
+  }
 }
 </script>
 

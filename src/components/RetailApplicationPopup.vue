@@ -1,406 +1,329 @@
 <template>
-  <div v-if="show" class="fixed inset-0 z-50 flex items-center justify-center">
-    <!-- Backdrop -->
-    <div 
-      class="absolute inset-0 bg-black/70 backdrop-blur-sm"
-      @click="$emit('close')"
-    ></div>
-
-    <!-- Modal -->
-    <div class="relative bg-gray-900/95 backdrop-blur-xl rounded-3xl p-8 border border-white/10 shadow-2xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-      <!-- Header -->
-      <div class="text-center mb-8">
-        <div class="w-20 h-20 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-2xl">
-          <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+  <Modal :isOpen="show" @close="$emit('close')">
+    <template #header>
+      <div class="text-center">
+        <div class="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-2 sm:mb-3 shadow-2xl">
+          <svg class="w-6 h-6 sm:w-8 sm:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
           </svg>
         </div>
-        <h2 class="text-3xl font-bold text-white mb-2">Aplicar al Plan Retail</h2>
-        <p class="text-gray-300">Completa tu información para acceder a precios mayoristas</p>
+        <h2 class="text-xl sm:text-2xl font-bold text-white mb-1 sm:mb-2">Solicitud de Retail</h2>
+        <p class="text-xs sm:text-sm text-gray-300 mb-2">Únete a nuestra red de revendedores</p>
       </div>
+    </template>
 
-      <!-- Application Form -->
-      <form @submit.prevent="handleSubmit" class="space-y-6">
-        <!-- Personal Information -->
-        <div class="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
-          <h3 class="text-xl font-semibold text-white mb-4 flex items-center gap-2">
-            <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-            </svg>
-            Información Personal
-          </h3>
-          
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label class="block text-sm font-semibold text-gray-300 mb-2">
-                Nombre Completo *
-              </label>
-              <input
-                v-model="form.fullName"
-                type="text"
-                class="w-full px-4 py-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300"
-                placeholder="Tu nombre completo"
-                required
-              />
-            </div>
-
-            <div>
-              <label class="block text-sm font-semibold text-gray-300 mb-2">
-                Correo Electrónico *
-              </label>
-              <input
-                v-model="form.email"
-                type="email"
-                class="w-full px-4 py-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300"
-                placeholder="tu@email.com"
-                required
-              />
-            </div>
-
-            <div>
-              <label class="block text-sm font-semibold text-gray-300 mb-2">
-                Teléfono *
-              </label>
-              <input
-                v-model="form.phone"
-                type="tel"
-                class="w-full px-4 py-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300"
-                placeholder="+1 234 567 8900"
-                required
-              />
-            </div>
-
-            <div>
-              <label class="block text-sm font-semibold text-gray-300 mb-2">
-                País *
-              </label>
-              <select
-                v-model="form.country"
-                class="w-full px-4 py-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300"
-                required
-              >
-                <option value="" disabled class="bg-gray-800">Selecciona tu país</option>
-                <option value="Estados Unidos" class="bg-gray-800">Estados Unidos</option>
-                <option value="España" class="bg-gray-800">España</option>
-                <option value="México" class="bg-gray-800">México</option>
-                <option value="Argentina" class="bg-gray-800">Argentina</option>
-                <option value="Colombia" class="bg-gray-800">Colombia</option>
-                <option value="Cuba" class="bg-gray-800">Cuba</option>
-                <option value="Otro" class="bg-gray-800">Otro</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <!-- Business Information -->
-        <div class="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
-          <h3 class="text-xl font-semibold text-white mb-4 flex items-center gap-2">
-            <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-            </svg>
-            Información del Negocio
-          </h3>
-          
-          <div class="space-y-4">
-            <div>
-              <label class="block text-sm font-semibold text-gray-300 mb-2">
-                Nombre del Negocio/Empresa
-              </label>
-              <input
-                v-model="form.businessName"
-                type="text"
-                class="w-full px-4 py-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300"
-                placeholder="Nombre de tu empresa (opcional)"
-              />
-            </div>
-
-            <div>
-              <label class="block text-sm font-semibold text-gray-300 mb-2">
-                Tipo de Negocio *
-              </label>
-              <select
-                v-model="form.businessType"
-                class="w-full px-4 py-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300"
-                required
-              >
-                <option value="" disabled class="bg-gray-800">Selecciona el tipo</option>
-                <option value="individual" class="bg-gray-800">Emprendedor Individual</option>
-                <option value="pequena_empresa" class="bg-gray-800">Pequeña Empresa</option>
-                <option value="mediana_empresa" class="bg-gray-800">Mediana Empresa</option>
-                <option value="tienda_online" class="bg-gray-800">Tienda Online</option>
-                <option value="agente_local" class="bg-gray-800">Agente Local</option>
-                <option value="otro" class="bg-gray-800">Otro</option>
-              </select>
-            </div>
-
-            <div>
-              <label class="block text-sm font-semibold text-gray-300 mb-2">
-                Volumen Estimado de Recargas Mensual *
-              </label>
-              <select
-                v-model="form.monthlyVolume"
-                class="w-full px-4 py-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300"
-                required
-              >
-                <option value="" disabled class="bg-gray-800">Selecciona el volumen</option>
-                <option value="100-500" class="bg-gray-800">100 - 500 USDT</option>
-                <option value="500-1000" class="bg-gray-800">500 - 1,000 USDT</option>
-                <option value="1000-2500" class="bg-gray-800">1,000 - 2,500 USDT</option>
-                <option value="2500-5000" class="bg-gray-800">2,500 - 5,000 USDT</option>
-                <option value="5000+" class="bg-gray-800">Más de 5,000 USDT</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <!-- Experience & Platform -->
-        <div class="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
-          <h3 class="text-xl font-semibold text-white mb-4 flex items-center gap-2">
-            <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
-          </svg>
-          Experiencia y Plataforma
-          </h3>
-          
-          <div class="space-y-4">
-            <div>
-              <label class="block text-sm font-semibold text-gray-300 mb-2">
-                Experiencia en Recargas/Remesas *
-              </label>
-              <select
-                v-model="form.experience"
-                class="w-full px-4 py-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300"
-                required
-              >
-                <option value="" disabled class="bg-gray-800">Selecciona tu experiencia</option>
-                <option value="principiante" class="bg-gray-800">Principiante (menos de 6 meses)</option>
-                <option value="intermedio" class="bg-gray-800">Intermedio (6 meses - 2 años)</option>
-                <option value="avanzado" class="bg-gray-800">Avanzado (2+ años)</option>
-                <option value="experto" class="bg-gray-800">Experto (5+ años)</option>
-              </select>
-            </div>
-
-            <div class="space-y-3">
-              <label class="block text-sm font-semibold text-gray-300">
-                ¿Tienes plataforma propia? *
-              </label>
-              <div class="flex gap-6">
-                <label class="flex items-center gap-2 cursor-pointer">
-                  <input
-                    v-model="form.hasOwnPlatform"
-                    type="radio"
-                    value="yes"
-                    class="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600"
-                    required
-                  />
-                  <span class="text-white">Sí, tengo plataforma</span>
-                </label>
-                <label class="flex items-center gap-2 cursor-pointer">
-                  <input
-                    v-model="form.hasOwnPlatform"
-                    type="radio"
-                    value="no"
-                    class="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600"
-                    required
-                  />
-                  <span class="text-white">No, trabajo manual</span>
-                </label>
-              </div>
-            </div>
-
-            <div v-if="form.hasOwnPlatform === 'yes'">
-              <label class="block text-sm font-semibold text-gray-300 mb-2">
-                URL de tu Plataforma
-              </label>
-              <input
-                v-model="form.platformUrl"
-                type="url"
-                class="w-full px-4 py-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300"
-                placeholder="https://tudominio.com"
-              />
-            </div>
-          </div>
-        </div>
-
-        <!-- Additional Comments -->
+    <!-- Application Form Content -->
+    <div class="space-y-4">
+      <!-- Primera fila - Nombre y Teléfono -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Business Name -->
         <div>
           <label class="block text-sm font-semibold text-gray-300 mb-2">
-            Comentarios Adicionales
+            Nombre del Negocio *
           </label>
-          <textarea
-            v-model="form.comments"
-            rows="4"
-            class="w-full px-4 py-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300 resize-none"
-            placeholder="Cuéntanos más sobre tu negocio, objetivos o cualquier pregunta que tengas..."
-          ></textarea>
-        </div>
-
-        <!-- Terms & Conditions -->
-        <div class="flex items-start gap-3">
           <input
-            id="acceptTerms"
-            v-model="form.acceptTerms"
-            type="checkbox"
-            class="mt-1 w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500 focus:ring-2"
+            v-model="form.businessName"
+            type="text"
+            class="w-full px-4 py-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300"
+            placeholder="Mi Negocio S.A."
             required
           />
-          <label for="acceptTerms" class="text-sm text-gray-300">
-            Acepto los 
-            <button 
-              type="button"
-              @click="showTermsModal"
-              class="text-blue-400 hover:text-blue-300 underline"
-            >
-              términos y condiciones
-            </button>
-            del Plan Retail y entiendo que la aprobación está sujeta a revisión.
-          </label>
+          <p v-if="errors.businessName" class="text-red-400 text-sm mt-1">{{ errors.businessName }}</p>
         </div>
 
-        <!-- Action Buttons -->
-        <div class="flex flex-col sm:flex-row gap-4">
-          <button
-            type="submit"
-            :disabled="isLoading || !isFormValid"
-            class="flex-1 bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700 disabled:from-gray-600 disabled:to-gray-700 text-white px-6 py-4 rounded-xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none disabled:cursor-not-allowed flex items-center justify-center gap-2"
+        <!-- Contact Phone -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-300 mb-2">
+            Teléfono de Contacto *
+          </label>
+          <input
+            v-model="form.contactPhone"
+            type="tel"
+            class="w-full px-4 py-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300"
+            placeholder="+53 5812 6024"
+            required
+          />
+          <p v-if="errors.contactPhone" class="text-red-400 text-sm mt-1">{{ errors.contactPhone }}</p>
+        </div>
+      </div>
+
+      <!-- Business Address - Fila completa -->
+      <div>
+        <label class="block text-sm font-semibold text-gray-300 mb-2">
+          Dirección del Negocio *
+        </label>
+        <input
+          v-model="form.businessAddress"
+          type="text"
+          class="w-full px-4 py-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300"
+          placeholder="Calle 23 #456, Vedado, La Habana"
+          required
+        />
+        <p v-if="errors.businessAddress" class="text-red-400 text-sm mt-1">{{ errors.businessAddress }}</p>
+      </div>
+
+      <!-- Contact Email - Fila completa -->
+      <div>
+        <label class="block text-sm font-semibold text-gray-300 mb-2">
+          Correo Electrónico *
+        </label>
+        <input
+          v-model="form.contactEmail"
+          type="email"
+          class="w-full px-4 py-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300"
+          placeholder="contacto@minegocio.cu"
+          required
+        />
+        <p v-if="errors.contactEmail" class="text-red-400 text-sm mt-1">{{ errors.contactEmail }}</p>
+      </div>
+
+      <!-- Segunda fila - Tipo y Volumen -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Business Type -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-300 mb-2">
+            Tipo de Negocio *
+          </label>
+          <select
+            v-model="form.businessType"
+            class="w-full px-4 py-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300"
+            required
           >
-            <svg v-if="isLoading" class="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
+            <option value="" disabled class="bg-gray-800">Selecciona el tipo</option>
+            <option value="tienda" class="bg-gray-800">Tienda</option>
+            <option value="cafeteria" class="bg-gray-800">Cafetería</option>
+            <option value="restaurante" class="bg-gray-800">Restaurante</option>
+            <option value="farmacia" class="bg-gray-800">Farmacia</option>
+            <option value="centro_servicios" class="bg-gray-800">Centro de Servicios</option>
+            <option value="otro" class="bg-gray-800">Otro</option>
+          </select>
+          <p v-if="errors.businessType" class="text-red-400 text-sm mt-1">{{ errors.businessType }}</p>
+        </div>
+
+        <!-- Expected Volume -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-300 mb-2">
+            Volumen Mensual (USD)
+          </label>
+          <select
+            v-model="form.expectedVolume"
+            class="w-full px-4 py-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300"
+          >
+            <option value="" disabled class="bg-gray-800">Selecciona el volumen</option>
+            <option value="100-500" class="bg-gray-800">$100 - $500</option>
+            <option value="500-1000" class="bg-gray-800">$500 - $1,000</option>
+            <option value="1000-2500" class="bg-gray-800">$1,000 - $2,500</option>
+            <option value="2500-5000" class="bg-gray-800">$2,500 - $5,000</option>
+            <option value="5000+" class="bg-gray-800">Más de $5,000</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Additional Comments -->
+      <div>
+        <label class="block text-sm font-semibold text-gray-300 mb-2">
+          Comentarios Adicionales
+        </label>
+        <textarea
+          v-model="form.comments"
+          rows="3"
+          class="w-full px-4 py-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300 resize-none"
+          placeholder="Cuéntanos más sobre tu negocio y por qué quieres ser revendedor..."
+        ></textarea>
+      </div>
+
+      <!-- Terms Agreement -->
+      <div class="flex items-start space-x-3 p-4 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10">
+        <input
+          v-model="form.acceptTerms"
+          type="checkbox"
+          id="acceptRetailTerms"
+          class="mt-1 h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
+          required
+        />
+        <label for="acceptRetailTerms" class="text-sm text-gray-300 leading-relaxed">
+          Acepto los términos y condiciones del programa de revendedores y autorizo el procesamiento de mis datos para evaluar mi solicitud.
+        </label>
+      </div>
+    </div>
+
+    <template #footer>
+      <div class="flex gap-3 justify-end">
+        <button
+          type="button"
+          @click="$emit('close')"
+          class="border border-gray-500 text-gray-300 hover:bg-gray-500 hover:text-white px-4 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300"
+        >
+          Cancelar
+        </button>
+        
+        <button
+          type="button"
+          @click="handleSubmit"
+          :disabled="isLoading || !form.acceptTerms || !isFormValid"
+          class="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 disabled:from-gray-600 disabled:to-gray-600 text-white px-4 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300 disabled:cursor-not-allowed"
+        >
+          <span v-if="isLoading" class="flex items-center">
+            <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
               <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
-            {{ isLoading ? 'Enviando...' : 'Enviar Aplicación' }}
-          </button>
-          
-          <button
-            type="button"
-            @click="$emit('close')"
-            class="border border-gray-500 text-gray-300 hover:bg-gray-500 hover:text-white px-6 py-4 rounded-xl font-semibold transition-all duration-300"
-          >
-            Cancelar
-          </button>
-        </div>
-      </form>
-    </div>
-
-    <!-- Terms and Conditions Popup -->
-    <TermsAndConditionsPopup
-      :show="showTermsPopup"
-      @close="hideTerms"
-      @accept="acceptTermsAndClose"
-    />
-  </div>
+            Enviando...
+          </span>
+          <span v-else>Enviar Solicitud</span>
+        </button>
+      </div>
+    </template>
+  </Modal>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
-import { useTermsAndConditions } from '@/composables/useTermsAndConditions'
-import TermsAndConditionsPopup from './TermsAndConditionsPopup.vue'
+import Modal from './Modal.vue'
 
 interface Props {
   show: boolean
 }
 
-interface Emits {
-  (e: 'close'): void
-  (e: 'submit', data: any): void
-}
-
 const props = defineProps<Props>()
-const emit = defineEmits<Emits>()
-
-// Terms and conditions
-const { showTermsPopup, showTerms, hideTerms, acceptTerms } = useTermsAndConditions()
+const emit = defineEmits<{
+  close: []
+  submit: [data: any]
+}>()
 
 // Form state
 const form = ref({
-  fullName: '',
-  email: '',
-  phone: '',
-  country: '',
   businessName: '',
+  contactPhone: '',
+  businessAddress: '',
+  contactEmail: '',
   businessType: '',
-  monthlyVolume: '',
-  experience: '',
-  hasOwnPlatform: '',
-  platformUrl: '',
+  expectedVolume: '',
   comments: '',
   acceptTerms: false
 })
 
-// UI state
+const errors = ref({
+  businessName: '',
+  contactPhone: '',
+  businessAddress: '',
+  contactEmail: '',
+  businessType: ''
+})
+
 const isLoading = ref(false)
 
-// Form validation
+// Computed
 const isFormValid = computed(() => {
-  return form.value.fullName.length > 0 &&
-         form.value.email.length > 0 &&
-         form.value.phone.length > 0 &&
-         form.value.country.length > 0 &&
-         form.value.businessType.length > 0 &&
-         form.value.monthlyVolume.length > 0 &&
-         form.value.experience.length > 0 &&
-         form.value.hasOwnPlatform.length > 0 &&
+  return form.value.businessName.trim() &&
+         form.value.contactPhone.trim() &&
+         form.value.businessAddress.trim() &&
+         form.value.contactEmail.trim() &&
+         form.value.businessType &&
          form.value.acceptTerms
 })
 
-// Terms and conditions functions
-const showTermsModal = () => {
-  showTerms()
+// Methods
+const validateForm = () => {
+  errors.value = {
+    businessName: '',
+    contactPhone: '',
+    businessAddress: '',
+    contactEmail: '',
+    businessType: ''
+  }
+  let isValid = true
+
+  // Validate business name
+  if (!form.value.businessName.trim()) {
+    errors.value.businessName = 'El nombre del negocio es requerido'
+    isValid = false
+  }
+
+  // Validate phone
+  if (!form.value.contactPhone.trim()) {
+    errors.value.contactPhone = 'El teléfono de contacto es requerido'
+    isValid = false
+  } else if (!/^(\+53|53)?\s*[5-9]\d{7}$/.test(form.value.contactPhone.replace(/\s/g, ''))) {
+    errors.value.contactPhone = 'Número de teléfono cubano inválido'
+    isValid = false
+  }
+
+  // Validate address
+  if (!form.value.businessAddress.trim()) {
+    errors.value.businessAddress = 'La dirección del negocio es requerida'
+    isValid = false
+  }
+
+  // Validate email
+  if (!form.value.contactEmail.trim()) {
+    errors.value.contactEmail = 'El correo electrónico es requerido'
+    isValid = false
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.value.contactEmail)) {
+    errors.value.contactEmail = 'Formato de correo electrónico inválido'
+    isValid = false
+  }
+
+  // Validate business type
+  if (!form.value.businessType) {
+    errors.value.businessType = 'Debe seleccionar un tipo de negocio'
+    isValid = false
+  }
+
+  return isValid
 }
 
-const acceptTermsAndClose = () => {
-  acceptTerms()
-  form.value.acceptTerms = true
-}
-
-// Handle form submission
 const handleSubmit = async () => {
-  if (!isFormValid.value) return
+  if (!validateForm() || !form.value.acceptTerms) return
 
   isLoading.value = true
-
+  
   try {
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000))
+    const applicationData = {
+      businessName: form.value.businessName,
+      contactPhone: form.value.contactPhone,
+      businessAddress: form.value.businessAddress,
+      contactEmail: form.value.contactEmail,
+      businessType: form.value.businessType,
+      expectedVolume: form.value.expectedVolume || 'No especificado',
+      comments: form.value.comments || '',
+      acceptedTerms: true,
+      applicationDate: new Date().toISOString()
+    }
     
-    emit('submit', { ...form.value })
+    emit('submit', applicationData)
   } catch (error) {
-    console.error('Application error:', error)
+    console.error('Application submission error:', error)
   } finally {
     isLoading.value = false
   }
 }
 
-// Reset form when modal closes
-watch(() => props.show, (newValue) => {
-  if (!newValue) {
+// Reset form cuando se abre el popup
+watch(() => props.show, (isOpen) => {
+  if (isOpen) {
     form.value = {
-      fullName: '',
-      email: '',
-      phone: '',
-      country: '',
       businessName: '',
+      contactPhone: '',
+      businessAddress: '',
+      contactEmail: '',
       businessType: '',
-      monthlyVolume: '',
-      experience: '',
-      hasOwnPlatform: '',
-      platformUrl: '',
+      expectedVolume: '',
       comments: '',
       acceptTerms: false
+    }
+    errors.value = {
+      businessName: '',
+      contactPhone: '',
+      businessAddress: '',
+      contactEmail: '',
+      businessType: ''
     }
   }
 })
 </script>
 
 <style scoped>
-/* Glass morphism effects */
-@supports (backdrop-filter: blur(20px)) {
-  .bg-gray-900\/95 {
-    background: rgba(17, 24, 39, 0.95);
-    backdrop-filter: blur(20px);
-  }
-}
-
 /* Form focus animations */
 input:focus,
 select:focus,
@@ -413,10 +336,15 @@ button:not(:disabled):hover {
   transform: translateY(-2px);
 }
 
-/* Responsive improvements */
-@media (max-width: 640px) {
-  .max-w-2xl {
-    max-width: calc(100vw - 2rem);
-  }
+/* Checkbox custom styling */
+input[type="checkbox"]:checked {
+  background-color: #059669;
+  border-color: #059669;
+}
+
+/* Select styling for options */
+select option {
+  background-color: #1f2937;
+  color: white;
 }
 </style>

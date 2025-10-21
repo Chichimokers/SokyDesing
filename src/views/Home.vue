@@ -1,20 +1,14 @@
 <template>
   <div class="min-h-screen relative overflow-hidden">
-    <!-- Banner como fondo estático optimizado -->
+    <!-- Banner como fondo estático -->
     <div class="home-background-container">
-      <!-- Capa base desenfocada para rellenar bordes -->
-      <img 
-        :src="backgroundImage" 
-        alt="Soky Recargas Background blur"
-        class="home-background-blur"
-      >
-      <!-- Imagen nítida completa sin recortes -->
+      <!-- Imagen de fondo -->
       <img 
         :src="backgroundImage" 
         alt="Soky Recargas Background"
         class="home-background-image"
       >
-      <!-- Overlay para mejor legibilidad -->
+      <!-- Overlay sutil para legibilidad -->
       <div class="home-background-overlay"></div>
     </div>
 
@@ -23,7 +17,7 @@
       <Navbar />
       
       <!-- Hero Section con transparencia -->
-      <section class="pt-20 pb-16 px-4 sm:px-6 lg:px-8">
+      <section class="pt-24 md:pt-28 pb-16 px-4 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto">
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <!-- Text Content con fondo semitransparente -->

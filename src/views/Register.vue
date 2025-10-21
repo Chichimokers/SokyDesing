@@ -1,5 +1,6 @@
 <template>
-  <div class="login-background flex items-center justify-center min-h-screen relative overflow-hidden px-4 py-8" 
+  <Navbar />
+  <div class="login-background flex items-center justify-center min-h-screen relative overflow-hidden px-4 py-8 pt-24 md:pt-28" 
        style="transform: translate3d(0, 0, 0); backface-visibility: hidden; will-change: auto; contain: layout style paint;">
     <!-- Contenedor del registro responsive -->
     <div class="login-content bg-[#1f1f1f]/95 p-6 sm:p-8 rounded-2xl shadow-xl w-full max-w-md mx-auto text-white">
@@ -158,6 +159,7 @@
 import { ref, reactive } from 'vue'
 import { useTermsAndConditions } from '@/composables/useTermsAndConditions'
 import TermsAndConditionsPopup from '@/components/TermsAndConditionsPopup.vue'
+import Navbar from '../components/Navbar.vue'
 
 const form = reactive({
   fullName: '',

@@ -14,7 +14,7 @@
     <div class="relative z-10">
       <Navbar />
       
-      <div class="container mx-auto px-4 py-8">
+      <div class="container mx-auto px-4 pt-28 md:pt-32 pb-8">
         <!-- Header -->
         <div class="text-center mb-8">
           <button 

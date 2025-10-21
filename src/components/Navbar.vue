@@ -1,16 +1,19 @@
 <template>
-  <nav class="bg-gray-900 shadow-2xl border-b border-gray-800 sticky top-0 z-50">
+  <nav class="bg-gray-900/95 backdrop-blur-md shadow-2xl border-b border-gray-800 fixed top-0 left-0 right-0 w-full z-40">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-16 md:h-20">
         <!-- Logo - Responsive -->
         <div class="flex items-center">
           <router-link to="/" class="flex items-center space-x-2 md:space-x-3 group">
             <div class="h-10 w-10 md:h-16 md:w-16 p-1 rounded-xl md:rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 group-hover:from-blue-600 group-hover:to-purple-700 transition-all duration-300 shadow-lg">
-              <img 
-                src="@/assets/images/android-chrome-192x192.png" 
-                alt="Soky Recargas"
+              <video
+                src="@/assets/images/doc_2025-10-21_08-33-30.mp4"
+                autoplay
+                muted
+                loop
+                playsinline
                 class="w-full h-full object-contain rounded-lg md:rounded-xl"
-              >
+              ></video>
             </div>
             <div class="flex flex-col">
               <span class="font-special text-lg md:text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
@@ -72,13 +75,16 @@
         <div class="flex items-center space-x-2">
           <!-- User Avatar - Desktop (when logged in) -->
           <div v-if="isLoggedIn" class="hidden md:flex items-center space-x-3">
-            <!-- Avatar -->
-            <div class="flex items-center space-x-2 bg-gray-800/50 backdrop-blur-sm rounded-full px-3 py-2 border border-gray-600">
-              <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+            <!-- Avatar clicable que navega al perfil -->
+            <router-link 
+              to="/profile"
+              class="flex items-center space-x-2 bg-gray-800/50 backdrop-blur-sm rounded-full px-3 py-2 border border-gray-600 hover:bg-gray-700/50 hover:border-gray-500 transition-all duration-300 cursor-pointer group"
+            >
+              <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-sm group-hover:scale-105 transition-transform duration-300">
                 {{ getUserInitial }}
               </div>
-              <span class="text-sm text-gray-300 font-medium">{{ currentUser?.name?.split(' ')[0] || 'Usuario' }}</span>
-            </div>
+              <span class="text-sm text-gray-300 font-medium group-hover:text-white transition-colors duration-300">{{ currentUser?.name?.split(' ')[0] || 'Usuario' }}</span>
+            </router-link>
             
             <!-- Logout Button -->
             <button
@@ -126,40 +132,44 @@
       </div>
     </div>
 
-    <!-- Mobile Menu Overlay -->
-    <transition 
-      enter-active-class="transition-opacity duration-300"
-      leave-active-class="transition-opacity duration-300"
-      enter-from-class="opacity-0"
-      leave-to-class="opacity-0"
-    >
-      <div 
-        v-if="isMobileMenuOpen" 
-        class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden"
-        @click="closeMobileMenu"
-      ></div>
-    </transition>
-
-    <!-- Mobile Menu Panel -->
-    <transition 
-      enter-active-class="transition-transform duration-300 ease-out"
-      leave-active-class="transition-transform duration-300 ease-in"
-      enter-from-class="transform translate-x-full"
-      leave-to-class="transform translate-x-full"
-    >
-      <div 
-        v-if="isMobileMenuOpen" 
-        class="fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-gray-900 border-l border-gray-700 shadow-2xl z-50 lg:hidden"
+    <teleport to="body">
+      <!-- Mobile Menu Overlay -->
+      <transition 
+        enter-active-class="transition-opacity duration-300"
+        leave-active-class="transition-opacity duration-300"
+        enter-from-class="opacity-0"
+        leave-to-class="opacity-0"
       >
+        <div 
+          v-if="isMobileMenuOpen" 
+          class="fixed inset-0 bg-black/50 lg:hidden z-50"
+          @click="closeMobileMenu"
+        ></div>
+      </transition>
+
+      <!-- Mobile Menu Panel -->
+      <transition 
+        enter-active-class="transition-transform duration-300 ease-out"
+        leave-active-class="transition-transform duration-300 ease-in"
+        enter-from-class="transform translate-x-full"
+        leave-to-class="transform translate-x-full"
+      >
+        <div 
+          v-if="isMobileMenuOpen" 
+          class="fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-gray-900 mobile-menu-panel border-l border-gray-700 shadow-2xl lg:hidden z-[60]"
+        >
         <!-- Mobile Menu Header -->
         <div class="flex items-center justify-between p-4 border-b border-gray-700">
           <div class="flex items-center space-x-3">
             <div class="h-10 w-10 p-1 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 shadow-lg">
-              <img 
-                src="@/assets/images/android-chrome-192x192.png" 
-                alt="Soky Recargas"
+              <video
+                src="@/assets/images/doc_2025-10-21_08-33-30.mp4"
+                autoplay
+                muted
+                loop
+                playsinline
                 class="w-full h-full object-contain rounded-lg"
-              >
+              ></video>
             </div>
             <div>
               <span class="font-special text-lg font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
@@ -307,8 +317,9 @@
             © 2024 Soky Recargas. Todos los derechos reservados.
           </p>
         </div>
-      </div>
-    </transition>
+        </div>
+      </transition>
+    </teleport>
   </nav>
 </template>
 
@@ -334,9 +345,14 @@ const handleLogout = () => {
 
 const toggleMobileMenu = () => {
   isMobileMenuOpen.value = !isMobileMenuOpen.value
-  // Prevent body scroll when menu is open
+  // Prevent body scroll when menu is open and scroll to top
   if (isMobileMenuOpen.value) {
-    document.body.style.overflow = 'hidden'
+    // Scroll to top instantáneamente cuando se abre la sidebar
+    window.scrollTo({ top: 0, behavior: 'instant' })
+    // Pequeño delay para asegurar que el scroll se complete antes de bloquear el scroll
+    setTimeout(() => {
+      document.body.style.overflow = 'hidden'
+    }, 0)
   } else {
     document.body.style.overflow = 'unset'
   }
@@ -518,7 +534,8 @@ button {
 /* Glass morphism effect for mobile menu */
 /* Mobile menu with solid background for better contrast */
 .mobile-menu-panel {
-  background: rgb(17, 24, 39);
+  background: rgb(17, 24, 39) !important;
+  backdrop-filter: none !important;
 }
 
 /* Animation for mobile menu items */
@@ -554,4 +571,6 @@ button:active {
   0%, 100% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
 }
+
+/* Nota: el panel móvil se teleporta al body para evitar problemas de stacking y contener el fondo sólido correctamente */
 </style>

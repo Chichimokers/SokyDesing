@@ -22,7 +22,7 @@
     <div class="relative z-10">
       <Navbar />
       
-      <div class="container mx-auto px-4 py-8">
+      <div class="container mx-auto px-4 pt-24 md:pt-28 pb-8">
         <!-- Header -->
         <div class="text-center mb-12">
           <h1 class="text-4xl md:text-5xl font-bold mb-4">
