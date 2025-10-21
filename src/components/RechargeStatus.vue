@@ -4,7 +4,7 @@
       <div class="space-y-0">
       
       <!-- Estado: Procesando -->
-      <div v-if="transaction.status === 'processing'" class="text-center bg-[#0b0b0b] rounded-2xl p-8 border border-white/5">
+  <div v-if="transaction.status === 'processing'" class="text-center bg-[#0b0b0b] rounded-2xl p-8 border border-transparent">
         <!-- Animación de carga -->
         <div class="relative mb-6">
           <div class="flex justify-center">
@@ -33,7 +33,7 @@
     {{ isSubscription ? 'Tu suscripción está siendo procesada' : 'Tu recarga está siendo procesada' }}
   </p>
         
-          <div class="bg-[#0f1213] rounded-lg p-4 mb-6 border border-white/5 text-white">
+          <div class="bg-[#0f1213] rounded-lg p-4 mb-6 border border-transparent text-white">
             <div class="grid grid-cols-2 gap-y-2 text-sm">
               <div class="text-gray-400">Teléfono:</div>
               <div class="font-semibold text-white">{{ formatPhone(transaction.phoneNumber) }}</div>
@@ -66,7 +66,7 @@
       </div>
 
       <!-- Estado: Completada -->
-      <div v-else-if="transaction.status === 'completed'" class="text-center bg-[#0b0b0b] rounded-2xl p-8 border border-white/5">
+  <div v-else-if="transaction.status === 'completed'" class="text-center bg-[#0b0b0b] rounded-2xl p-8 border border-transparent">
         <!-- Icono de éxito simple y claro -->
         <div class="mb-6 flex justify-center">
           <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center animate-bounce-in animate-pulse-success relative">
@@ -195,7 +195,7 @@
       </div>
 
       <!-- Estado: Error -->
-      <div v-else-if="transaction.status === 'error'" class="text-center bg-[#0b0b0b] rounded-2xl p-8 border border-white/5">
+  <div v-else-if="transaction.status === 'error'" class="text-center bg-[#0b0b0b] rounded-2xl p-8 border border-transparent">
         <!-- Icono de error -->
         <div class="relative mb-6">
           <div class="flex justify-center">
