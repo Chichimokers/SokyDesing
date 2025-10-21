@@ -9,6 +9,7 @@ import Subscriptions from '@/views/Subscriptions.vue'
 
 import Code from '@/views/Code.vue'
 import Register from '@/views/Register.vue'
+import ForgotPassword from '@/views/ForgotPassword.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -22,6 +23,7 @@ const router = createRouter({
     { path: '/subscription', name: 'Subscriptions', component: Subscriptions },
     { path: '/code', name: 'Code', component: Code },
     { path: '/register', name: 'Register', component: Register },
+     { path: '/forgot-password', name: 'forgot-password', component: ForgotPassword },
   ],
 })
 

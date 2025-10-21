@@ -1,4 +1,4 @@
-/* En tu login.css */
+/* Fondo de autenticación */
 .login-background {
   background: 
     linear-gradient(135deg, 
@@ -11,4 +11,26 @@
     url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="waves" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse"><path d="M0 50 Q 25 30, 50 50 T 100 50" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2"/></pattern></defs><rect width="100" height="100" fill="url(%23waves)"/></svg>');
   background-size: cover, 200px 200px;
   background-blend-mode: overlay;
+  background-attachment: fixed;
+}
+
+/* Mejoras para móvil */
+@media (max-width: 640px) {
+  .login-background {
+    background-attachment: scroll;
+    background-size: cover, 150px 150px;
+  }
+  
+  .login-content {
+    margin: 0.5rem;
+    max-height: calc(100vh - 1rem);
+    overflow-y: auto;
+  }
+}
+
+/* Mejoras para pantallas muy pequeñas */
+@media (max-width: 375px) {
+  .login-content {
+    padding: 1rem !important;
+  }
 }
