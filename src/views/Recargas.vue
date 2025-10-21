@@ -180,12 +180,15 @@
 
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
 import Navbar from '@/components/Navbar.vue'
 import Footer from '@/components/Footer.vue'
 import PhoneNumberManager from '@/components/PhoneNumberManager.vue'
 import PlanSelector from '@/components/PlanSelector.vue'
 import RechargeStatus from '@/components/RechargeStatus.vue'
 import { useRecharge } from '@/composables/useRecharge'
+
+const router = useRouter()
 
 const {
   phoneNumbers,
@@ -252,7 +255,15 @@ const startRechargeProcess = async () => {
       return
     }
 
-    await processRecharge(firstPhone.number, email.value)
+    const transaction = await processRecharge(firstPhone.number, email.value)
+    
+    // Después de completar la recarga, redirigir al balance/historial
+    if (transaction.status === 'completed') {
+      // Pequeña pausa para mostrar el éxito antes de redirigir
+      setTimeout(() => {
+        router.push('/balance')
+      }, 1500)
+    }
   } catch (error) {
     console.error('Error processing recharge:', error)
   } finally {

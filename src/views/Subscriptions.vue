@@ -115,7 +115,10 @@
               </div>
 
               <!-- Plan Action -->
-              <button class="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white py-3 px-6 rounded-2xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
+              <button 
+                @click="handleSubscribe(plan)"
+                class="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white py-3 px-6 rounded-2xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+              >
                 Suscribirse
               </button>
               
@@ -162,12 +165,66 @@
         </div>
       </div>
     </div>
+
+    <!-- Subscription Popup -->
+    <SubscriptionPopup
+      :show="showSubscriptionPopup"
+      :plan="selectedPlan"
+      @close="closeSubscriptionPopup"
+      @subscribe="handleSubscriptionSuccess"
+    />
+
+    <!-- Success Confirmation Popup -->
+    <div v-if="showSuccessPopup" class="fixed inset-0 z-50 flex items-center justify-center">
+      <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" @click="showSuccessPopup = false"></div>
+      <div class="relative bg-gradient-to-br from-green-600/90 to-emerald-600/90 backdrop-blur-xl rounded-3xl p-8 border border-green-400/30 shadow-2xl max-w-md w-full mx-4">
+        <div class="text-center">
+          <div class="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+          </div>
+          <h3 class="text-2xl font-bold text-white mb-4">¡Suscripción Activada!</h3>
+          <div v-if="lastSubscription" class="text-center mb-6">
+            <p class="text-green-100 mb-2">
+              <strong>{{ lastSubscription.name }}</strong>
+            </p>
+            <p class="text-green-100 text-sm mb-2">
+              Beneficiario: {{ lastSubscription.beneficiary }}
+            </p>
+            <p class="text-green-100 text-sm">
+              Próximo pago: {{ formatDate(lastSubscription.nextPayment) }}
+            </p>
+          </div>
+          <p class="text-green-100 mb-6 leading-relaxed">
+            Tu suscripción se ha creado exitosamente y está ahora activa.
+          </p>
+          <button 
+            @click="showSuccessPopup = false"
+            class="bg-white/20 hover:bg-white/30 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300"
+          >
+            Perfecto
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <Footer />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 import Navbar from '../components/Navbar.vue'
+import Footer from '../components/Footer.vue'
+import SubscriptionPopup from '../components/SubscriptionPopup.vue'
+
+// Show subscription popup
+const showSubscriptionPopup = ref(false)
+const showSuccessPopup = ref(false)
+const selectedPlan = ref<Plan | null>(null)
+const lastSubscription = ref<Subscription | null>(null)
 
 interface Subscription {
   id: number
@@ -207,48 +264,108 @@ const activeSubscriptions = ref<Subscription[]>([
 const availablePlans = ref<Plan[]>([
   {
     id: 1,
-    name: 'Plan Básico',
-    type: 'recargas',
-    description: 'Ideal para uso personal',
-    price: 15.00,
+    name: 'Nauta Plus 15 días',
+    type: 'nauta_plus',
+    description: 'Internet móvil por 15 días',
+    price: 18.50,
     features: [
-      'Recargas automáticas mensuales',
-      '10% de descuento en recargas',
-      'Soporte por email',
-      'Hasta 2 números beneficiarios'
+      'Acceso a internet móvil',
+      'Duración: 15 días',
+      'Solo requiere número de teléfono',
+      'Activación automática',
+      'Soporte técnico incluido'
     ],
-    terms: 'Cancelable en cualquier momento'
+    terms: 'Suscripción mensual, cancelable'
   },
   {
     id: 2,
-    name: 'Plan Familia',
-    type: 'recargas',
-    description: 'Perfecto para la familia',
-    price: 25.00,
+    name: 'Nauta Plus 30 días',
+    type: 'nauta_plus',
+    description: 'Internet móvil por 30 días',
+    price: 35.00,
     features: [
-      'Recargas automáticas mensuales',
-      '15% de descuento en recargas',
-      'Soporte prioritario',
-      'Hasta 5 números beneficiarios',
-      'Reporte mensual de gastos'
+      'Acceso a internet móvil',
+      'Duración: 30 días',
+      'Solo requiere número de teléfono',
+      'Activación automática',
+      'Soporte técnico incluido'
     ],
-    terms: 'Cancelable en cualquier momento'
+    terms: 'Suscripción mensual, cancelable'
   },
   {
     id: 3,
-    name: 'Plan Premium',
-    type: 'nauta',
-    description: 'Acceso completo a servicios',
-    price: 35.00,
+    name: 'Nauta Hogar Plus 2MB',
+    type: 'nauta_hogar',
+    description: 'Internet residencial 2MB/s',
+    price: 25.00,
     features: [
-      'Recargas y Nauta automáticos',
-      '20% de descuento en todos los servicios',
-      'Soporte 24/7 prioritario',
-      'Números beneficiarios ilimitados',
-      'Reporte detallado mensual',
-      'Notificaciones en tiempo real'
+      'Velocidad: 2 Mbps',
+      'Duración: 30 días',
+      'Internet residencial',
+      'Requiere correo Nauta y teléfono',
+      'Instalación incluida'
     ],
-    terms: 'Primer mes gratis, cancelable en cualquier momento'
+    terms: 'Suscripción mensual de 30 días'
+  },
+  {
+    id: 4,
+    name: 'Nauta Hogar Plus 4MB',
+    type: 'nauta_hogar',
+    description: 'Internet residencial 4MB/s',
+    price: 45.00,
+    features: [
+      'Velocidad: 4 Mbps',
+      'Duración: 30 días',
+      'Internet residencial',
+      'Requiere correo Nauta y teléfono',
+      'Instalación incluida'
+    ],
+    terms: 'Suscripción mensual de 30 días'
+  },
+  {
+    id: 5,
+    name: 'Nauta Hogar Plus 6MB',
+    type: 'nauta_hogar',
+    description: 'Internet residencial 6MB/s',
+    price: 65.00,
+    features: [
+      'Velocidad: 6 Mbps',
+      'Duración: 30 días',
+      'Internet residencial',
+      'Requiere correo Nauta y teléfono',
+      'Instalación incluida'
+    ],
+    terms: 'Suscripción mensual de 30 días'
+  },
+  {
+    id: 6,
+    name: 'Nauta Hogar Plus 8MB',
+    type: 'nauta_hogar',
+    description: 'Internet residencial 8MB/s',
+    price: 85.00,
+    features: [
+      'Velocidad: 8 Mbps',
+      'Duración: 30 días',
+      'Internet residencial',
+      'Requiere correo Nauta y teléfono',
+      'Instalación incluida'
+    ],
+    terms: 'Suscripción mensual de 30 días'
+  },
+  {
+    id: 7,
+    name: 'Nauta Hogar Plus 10MB',
+    type: 'nauta_hogar',
+    description: 'Internet residencial 10MB/s',
+    price: 105.00,
+    features: [
+      'Velocidad: 10 Mbps',
+      'Duración: 30 días',
+      'Internet residencial',
+      'Requiere correo Nauta y teléfono',
+      'Instalación incluida'
+    ],
+    terms: 'Suscripción mensual de 30 días'
   }
 ])
 
@@ -256,9 +373,11 @@ const getSubscriptionIcon = (type: string) => {
   const icons: Record<string, string> = {
     recargas: 'M13 10V3L4 14h7v7l9-11h-7z',
     nauta: 'M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0',
+    nauta_plus: 'M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z',
+    nauta_hogar: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6',
     premium: 'M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z'
   }
-  return icons[type] || icons.recargas
+  return icons[type] || icons.nauta
 }
 
 const formatDate = (date: Date) => {
@@ -267,6 +386,40 @@ const formatDate = (date: Date) => {
     month: 'long', 
     year: 'numeric' 
   })
+}
+
+const handleSubscribe = (plan: Plan) => {
+  selectedPlan.value = plan
+  showSubscriptionPopup.value = true
+}
+
+const closeSubscriptionPopup = () => {
+  showSubscriptionPopup.value = false
+  selectedPlan.value = null
+}
+
+const handleSubscriptionSuccess = (subscriptionData: any) => {
+  console.log('Subscription successful:', subscriptionData)
+  
+  // Add to active subscriptions
+  const newSubscription = {
+    id: Date.now(),
+    name: subscriptionData.plan.name,
+    type: subscriptionData.plan.type,
+    price: subscriptionData.plan.price,
+    nextPayment: new Date(subscriptionData.billingDate),
+    beneficiary: subscriptionData.phoneNumber + (subscriptionData.nautaEmail ? ` • ${subscriptionData.nautaEmail}` : ''),
+    status: 'active' as const
+  }
+  
+  activeSubscriptions.value.push(newSubscription)
+  lastSubscription.value = newSubscription
+  
+  // Close popup
+  closeSubscriptionPopup()
+  
+  // Show success popup instead of alert
+  showSuccessPopup.value = true
 }
 </script>
 

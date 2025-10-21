@@ -12,6 +12,7 @@ import Register from '@/views/Register.vue'
 import ForgotPassword from '@/views/ForgotPassword.vue'
 import ChangePassword from '@/views/ChangePassword.vue'
 import EditProfile from '@/views/EditProfile.vue'
+import Retail from '@/views/Retail.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -28,6 +29,7 @@ const router = createRouter({
     { path: '/code', name: 'Code', component: Code },
     { path: '/register', name: 'Register', component: Register },
     { path: '/forgot-password', name: 'forgot-password', component: ForgotPassword },
+    { path: '/retail', name: 'Retail', component: Retail },
   ],
 })
 
