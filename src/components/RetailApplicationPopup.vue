@@ -246,7 +246,13 @@
           />
           <label for="acceptTerms" class="text-sm text-gray-300">
             Acepto los 
-            <a href="#" class="text-blue-400 hover:text-blue-300 underline">términos y condiciones</a>
+            <button 
+              type="button"
+              @click="showTermsModal"
+              class="text-blue-400 hover:text-blue-300 underline"
+            >
+              términos y condiciones
+            </button>
             del Plan Retail y entiendo que la aprobación está sujeta a revisión.
           </label>
         </div>
@@ -275,11 +281,20 @@
         </div>
       </form>
     </div>
+
+    <!-- Terms and Conditions Popup -->
+    <TermsAndConditionsPopup
+      :show="showTermsPopup"
+      @close="hideTerms"
+      @accept="acceptTermsAndClose"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
+import { useTermsAndConditions } from '@/composables/useTermsAndConditions'
+import TermsAndConditionsPopup from './TermsAndConditionsPopup.vue'
 
 interface Props {
   show: boolean
@@ -292,6 +307,9 @@ interface Emits {
 
 const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
+
+// Terms and conditions
+const { showTermsPopup, showTerms, hideTerms, acceptTerms } = useTermsAndConditions()
 
 // Form state
 const form = ref({
@@ -324,6 +342,16 @@ const isFormValid = computed(() => {
          form.value.hasOwnPlatform.length > 0 &&
          form.value.acceptTerms
 })
+
+// Terms and conditions functions
+const showTermsModal = () => {
+  showTerms()
+}
+
+const acceptTermsAndClose = () => {
+  acceptTerms()
+  form.value.acceptTerms = true
+}
 
 // Handle form submission
 const handleSubmit = async () => {

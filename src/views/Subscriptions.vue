@@ -209,6 +209,16 @@
       </div>
     </div>
 
+    <!-- Transaction Status Popup -->
+    <TransactionStatusPopup
+      :show="showTransactionStatus"
+      :status="transactionStatus.status"
+      :message="transactionStatus.message"
+      :details="transactionStatus.details"
+      @close="closeTransactionStatus"
+      @retry="retrySubscription"
+    />
+
     <!-- Footer -->
     <Footer />
   </div>
@@ -219,12 +229,21 @@ import { ref } from 'vue'
 import Navbar from '../components/Navbar.vue'
 import Footer from '../components/Footer.vue'
 import SubscriptionPopup from '../components/SubscriptionPopup.vue'
+import TransactionStatusPopup from '../components/TransactionStatusPopup.vue'
 
 // Show subscription popup
 const showSubscriptionPopup = ref(false)
 const showSuccessPopup = ref(false)
 const selectedPlan = ref<Plan | null>(null)
 const lastSubscription = ref<Subscription | null>(null)
+const showTransactionStatus = ref(false)
+
+// Transaction status for universal popup
+const transactionStatus = ref({
+  status: 'success' as 'success' | 'error' | 'pending',
+  message: '',
+  details: {}
+})
 
 interface Subscription {
   id: number
@@ -246,18 +265,26 @@ interface Plan {
   terms: string
 }
 
-// Active subscriptions (empty for new users)
+// Active subscriptions with sample data
 const activeSubscriptions = ref<Subscription[]>([
-  // Example of an active subscription:
-  // {
-  //   id: 1,
-  //   name: 'Plan Familia',
-  //   type: 'recargas',
-  //   price: 25.00,
-  //   nextPayment: new Date('2024-02-15'),
-  //   beneficiary: '+5358126024',
-  //   status: 'active'
-  // }
+  {
+    id: 1,
+    name: 'Nauta Plus 30 días',
+    type: 'nauta_plus',
+    price: 35.00,
+    nextPayment: new Date(Date.now() + 12 * 24 * 60 * 60 * 1000), // 12 días desde ahora
+    beneficiary: '+5352637415',
+    status: 'active'
+  },
+  {
+    id: 2,
+    name: 'Nauta Hogar Plus 4MB',
+    type: 'nauta_hogar',
+    price: 45.00,
+    nextPayment: new Date(Date.now() + 8 * 24 * 60 * 60 * 1000), // 8 días desde ahora
+    beneficiary: '+5358491726 • usuario@nauta.cu',
+    status: 'active'
+  }
 ])
 
 // Available subscription plans
@@ -420,6 +447,16 @@ const handleSubscriptionSuccess = (subscriptionData: any) => {
   
   // Show success popup instead of alert
   showSuccessPopup.value = true
+}
+
+// Transaction status functions
+const closeTransactionStatus = () => {
+  showTransactionStatus.value = false
+}
+
+const retrySubscription = () => {
+  console.log('Retrying subscription...')
+  closeTransactionStatus()
 }
 </script>
 

@@ -172,9 +172,11 @@
     <!-- Modal de estado de recarga -->
     <RechargeStatus
       :transaction="currentTransaction"
-      @close="resetTransaction"
+      @close="handleCloseRechargeStatus"
       @retry="handleRetry"
     />
+
+
   </div>
 </template>
 
@@ -257,13 +259,9 @@ const startRechargeProcess = async () => {
 
     const transaction = await processRecharge(firstPhone.number, email.value)
     
-    // Después de completar la recarga, redirigir al balance/historial
-    if (transaction.status === 'completed') {
-      // Pequeña pausa para mostrar el éxito antes de redirigir
-      setTimeout(() => {
-        router.push('/balance')
-      }, 1500)
-    }
+    // Tu popup original ya maneja el resultado
+    // No agregamos nada más aquí
+    
   } catch (error) {
     console.error('Error processing recharge:', error)
   } finally {
@@ -279,6 +277,20 @@ const handleRetry = async (transaction: any) => {
     startRechargeProcess()
   }, 500)
 }
+
+// Manejar cierre del popup de estado de recarga
+const handleCloseRechargeStatus = () => {
+  // Si la transacción fue exitosa, redirigir a profile
+  if (currentTransaction.value?.status === 'completed') {
+    resetTransaction()
+    router.push('/profile')
+  } else {
+    // Para otros estados (error, etc.), solo resetear
+    resetTransaction()
+  }
+}
+
+
 
 // Watch para actualizar el paso actual
 watch([validPhoneNumbers, selectedOffer], () => {

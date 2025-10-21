@@ -118,22 +118,37 @@
 
           <!-- Legal Links -->
           <div class="flex items-center space-x-6 text-sm">
-            <router-link to="/terms" class="text-gray-400 hover:text-white transition">
+            <button 
+              @click="showTerms" 
+              class="text-gray-400 hover:text-white transition cursor-pointer"
+            >
               Términos y condiciones
-            </router-link>
-            <router-link to="/privacy" class="text-gray-400 hover:text-white transition">
+            </button>
+            <button 
+              @click="showPrivacyPolicy" 
+              class="text-gray-400 hover:text-white transition cursor-pointer"
+            >
               Política de privacidad
-            </router-link>
+            </button>
             <span class="text-gray-400">© 2024 SOKY RECARGAS</span>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- Terms and Conditions Popup -->
+    <TermsAndConditionsPopup
+      :show="showTermsPopup"
+      @close="hideTerms"
+      @accept="acceptTerms"
+    />
   </footer>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useTermsAndConditions } from '@/composables/useTermsAndConditions'
+import TermsAndConditionsPopup from './TermsAndConditionsPopup.vue'
 
 // Social Media Icons as components
 const TelegramIcon = {
@@ -182,6 +197,14 @@ const socialMedia = ref([
   { name: 'Instagram', url: '#', icon: InstagramIcon },
   { name: 'Telegram', url: 'https://t.me/sokyrecargas', icon: TelegramIcon }
 ])
+
+// Terms and conditions functionality
+const { showTerms, showTermsPopup, hideTerms, acceptTerms } = useTermsAndConditions()
+
+// Privacy policy (placeholder for now)
+const showPrivacyPolicy = () => {
+  alert('Política de Privacidad - Próximamente disponible')
+}
 </script>
 
 <style scoped>

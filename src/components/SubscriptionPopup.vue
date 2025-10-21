@@ -119,7 +119,13 @@
           />
           <label for="acceptTerms" class="text-sm text-gray-300">
             Acepto los 
-            <a href="#" class="text-blue-400 hover:text-blue-300 underline">términos y condiciones</a>
+            <button 
+              type="button"
+              @click="showTermsModal"
+              class="text-blue-400 hover:text-blue-300 underline"
+            >
+              términos y condiciones
+            </button>
             y autorizo el cobro mensual automático de esta suscripción.
           </label>
         </div>
@@ -148,11 +154,20 @@
         </div>
       </form>
     </div>
+
+    <!-- Terms and Conditions Popup -->
+    <TermsAndConditionsPopup
+      :show="showTermsPopup"
+      @close="hideTerms"
+      @accept="acceptTermsAndClose"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
+import { useTermsAndConditions } from '@/composables/useTermsAndConditions'
+import TermsAndConditionsPopup from './TermsAndConditionsPopup.vue'
 
 interface Plan {
   id: number
@@ -176,6 +191,9 @@ interface Emits {
 
 const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
+
+// Terms and conditions
+const { showTermsPopup, showTerms, hideTerms, acceptTerms } = useTermsAndConditions()
 
 // Form state
 const form = ref({
@@ -214,6 +232,16 @@ const isFormValid = computed(() => {
          form.value.acceptTerms &&
          Object.values(errors.value).every(error => !error)
 })
+
+// Terms and conditions functions
+const showTermsModal = () => {
+  showTerms()
+}
+
+const acceptTermsAndClose = () => {
+  acceptTerms()
+  form.value.acceptTerms = true
+}
 
 // Get service icon
 const getServiceIcon = () => {

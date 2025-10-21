@@ -32,7 +32,53 @@ const selectedOffer = ref<RechargeOffer | null>(null)
 const currentTransaction = ref<RechargeTransaction | null>(null)
 const email = ref('')
 // Simple in-memory history of completed/failed transactions (would be persisted in real app)
-const transactionHistory = ref<RechargeTransaction[]>([])
+const transactionHistory = ref<RechargeTransaction[]>([
+  {
+    id: 'tx_001',
+    phoneNumber: '+5352637415',
+    offer: {
+      id: '2',
+      data: '14GB',
+      minutes: '115MIN',
+      sms: '120SMS',
+      price: 30.50,
+      priceUSDT: 30.50
+    },
+    status: 'completed',
+    timestamp: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), // 2 días atrás
+    email: 'usuario@ejemplo.com'
+  },
+  {
+    id: 'tx_002',
+    phoneNumber: '+5358491726',
+    offer: {
+      id: '1',
+      data: '9GB',
+      minutes: '75MIN',
+      sms: '80SMS',
+      price: 20.50,
+      priceUSDT: 20.50
+    },
+    status: 'completed',
+    timestamp: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), // 5 días atrás
+    email: 'usuario@ejemplo.com'
+  },
+  {
+    id: 'tx_003',
+    phoneNumber: '+5359847263',
+    offer: {
+      id: '3',
+      data: '20GB',
+      minutes: '165MIN',
+      sms: '160SMS',
+      price: 40.50,
+      priceUSDT: 40.50
+    },
+    status: 'error',
+    timestamp: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), // 7 días atrás
+    email: 'usuario@ejemplo.com'
+  }
+])
 
 // Ofertas disponibles con precios en USDT
 const availableOffers = ref<RechargeOffer[]>([

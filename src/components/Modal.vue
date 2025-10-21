@@ -1,20 +1,20 @@
 <template>
-  <div v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto px-4 py-8" @click="onOverlayClick">
+  <div v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto p-4 sm:p-6 lg:p-8" @click="onOverlayClick">
     <!-- Overlay -->
     <div class="fixed inset-0 bg-black/70 backdrop-blur-sm transition-opacity"></div>
 
-    <!-- Container -->
-    <div class="relative max-w-lg w-full my-auto">
-      <div @click.stop class="bg-[#1a1a1a] rounded-2xl border border-white/10 text-left overflow-hidden shadow-xl transform transition-all">
-        <header v-if="$slots.header" class="px-6 py-4 border-b border-white/5">
+    <!-- Container - Mobile first approach -->
+    <div class="relative w-full max-w-sm sm:max-w-md lg:max-w-lg xl:max-w-xl my-auto">
+      <div @click.stop class="bg-[#1a1a1a] rounded-xl sm:rounded-2xl border border-white/10 text-left overflow-hidden shadow-xl transform transition-all max-h-[90vh] flex flex-col">
+        <header v-if="$slots.header" class="px-4 sm:px-6 py-3 sm:py-4 border-b border-white/5 flex-shrink-0">
           <slot name="header"></slot>
         </header>
 
-        <div class="px-6 py-6">
+        <div class="px-4 sm:px-6 py-4 sm:py-6 flex-1 overflow-y-auto">
           <slot></slot>
         </div>
 
-        <footer v-if="$slots.footer" class="px-6 py-4 bg-[#2a2a2a] border-t border-white/5">
+        <footer v-if="$slots.footer" class="px-4 sm:px-6 py-3 sm:py-4 bg-[#2a2a2a] border-t border-white/5 flex-shrink-0">
           <slot name="footer"></slot>
         </footer>
       </div>

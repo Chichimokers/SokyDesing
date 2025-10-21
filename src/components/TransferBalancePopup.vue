@@ -13,53 +13,80 @@
     </template>
 
     <div>
-      <div class="mb-6">
+      <div class="mb-4 sm:mb-6">
         <label class="block text-sm text-gray-300 mb-2">Email del destinatario</label>
         <div class="relative">
-          <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"/></svg>
-          <input v-model="recipientEmail" type="email" placeholder="usuario@ejemplo.com" class="w-full bg-[#2a2a2a] border border-gray-600 rounded-lg pl-10 pr-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500" :class="{ 'border-red-500': emailError }" />
+          <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"/></svg>
+          <input v-model="recipientEmail" type="email" placeholder="usuario@ejemplo.com" class="w-full bg-[#2a2a2a] border border-gray-600 rounded-lg pl-9 sm:pl-10 pr-4 py-2.5 sm:py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm sm:text-base" :class="{ 'border-red-500': emailError }" />
         </div>
         <div v-if="emailError" class="text-red-400 text-xs mt-1">{{ emailError }}</div>
       </div>
 
-      <div class="mb-6">
+      <div class="mb-4 sm:mb-6">
         <label class="block text-sm text-gray-300 mb-2">Monto a transferir</label>
         <div class="relative">
           <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">$</span>
-          <input v-model="transferAmount" type="number" step="0.01" min="1" :max="availableBalance" placeholder="0.00" class="w-full bg-[#2a2a2a] border border-gray-600 rounded-lg pl-8 pr-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500" :class="{ 'border-red-500': amountError }" />
+          <input v-model="transferAmount" type="number" step="0.01" min="1" :max="availableBalance" placeholder="0.00" class="w-full bg-[#2a2a2a] border border-gray-600 rounded-lg pl-8 pr-4 py-2.5 sm:py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm sm:text-base" :class="{ 'border-red-500': amountError }" />
         </div>
-        <div class="flex justify-between items-center mt-1"><div v-if="amountError" class="text-red-400 text-xs">{{ amountError }}</div><div class="text-gray-500 text-xs ml-auto">Disponible: ${{ availableBalance.toFixed(2) }}</div></div>
-      </div>
-
-      <div class="mb-6">
-        <div class="text-sm text-gray-300 mb-3">Montos rápidos:</div>
-        <div class="grid grid-cols-4 gap-2">
-          <button v-for="amount in quickAmounts" :key="amount" @click="setAmount(amount)" :disabled="amount > availableBalance" class="p-2 rounded-lg border border-gray-600 bg-gray-700/50 hover:border-purple-500 hover:bg-purple-500/10 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 text-white text-sm">${{ amount }}</button>
+        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mt-1 gap-1 sm:gap-0">
+          <div v-if="amountError" class="text-red-400 text-xs order-2 sm:order-1">{{ amountError }}</div>
+          <div class="text-gray-500 text-xs order-1 sm:order-2 sm:ml-auto">Disponible: ${{ availableBalance.toFixed(2) }}</div>
         </div>
       </div>
 
-      <div class="mb-6">
+      <div class="mb-4 sm:mb-6">
+        <div class="text-sm text-gray-300 mb-2 sm:mb-3">Montos rápidos:</div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+          <button v-for="amount in quickAmounts" :key="amount" @click="setAmount(amount)" :disabled="amount > availableBalance" class="p-2 rounded-lg border border-gray-600 bg-gray-700/50 hover:border-purple-500 hover:bg-purple-500/10 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 text-white text-xs sm:text-sm">${{ amount }}</button>
+        </div>
+      </div>
+
+      <div class="mb-4 sm:mb-6">
         <label class="block text-sm text-gray-300 mb-2">Mensaje (opcional)</label>
-        <textarea v-model="transferMessage" placeholder="Descripción de la transferencia..." rows="3" maxlength="200" class="w-full bg-[#2a2a2a] border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none"></textarea>
+        <textarea v-model="transferMessage" placeholder="Descripción de la transferencia..." rows="3" maxlength="200" class="w-full bg-[#2a2a2a] border border-gray-600 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none text-sm sm:text-base"></textarea>
         <div class="text-gray-500 text-xs mt-1">{{ transferMessage.length }}/200</div>
       </div>
 
-      <div v-if="isValidTransfer" class="mb-6 p-4 bg-purple-900/20 border border-purple-700/50 rounded-lg">
+      <div v-if="isValidTransfer" class="mb-4 sm:mb-6 p-3 sm:p-4 bg-purple-900/20 border border-purple-700/50 rounded-lg">
         <div class="text-sm text-purple-300 font-medium mb-2">Resumen de transferencia:</div>
-        <div class="space-y-1 text-xs text-gray-300">
-          <div class="flex justify-between"><span>Para:</span><span>{{ recipientEmail }}</span></div>
-          <div class="flex justify-between"><span>Monto:</span><span class="font-medium">${{ transferAmount }}</span></div>
-          <div class="flex justify-between"><span>Comisión:</span><span>${{ transferFee.toFixed(2) }}</span></div>
-          <div class="border-t border-purple-700/30 pt-1 mt-2"><div class="flex justify-between font-medium"><span>Total a deducir:</span><span>${{ totalDeduction.toFixed(2) }}</span></div></div>
+        <div class="space-y-1 text-xs sm:text-sm text-gray-300">
+          <div class="flex justify-between items-start">
+            <span>Para:</span>
+            <span class="text-right break-all ml-2 max-w-[60%]">{{ recipientEmail }}</span>
+          </div>
+          <div class="flex justify-between">
+            <span>Monto:</span>
+            <span class="font-medium">${{ transferAmount }}</span>
+          </div>
+          <div class="flex justify-between">
+            <span>Comisión:</span>
+            <span>${{ transferFee.toFixed(2) }}</span>
+          </div>
+          <div class="border-t border-purple-700/30 pt-1 mt-2">
+            <div class="flex justify-between font-medium">
+              <span>Total a deducir:</span>
+              <span>${{ totalDeduction.toFixed(2) }}</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
     <template #footer>
-      <div class="flex space-x-3">
-        <button @click="initiateTransfer" :disabled="!isValidTransfer || isProcessing" class="flex-1 bg-purple-500 hover:bg-purple-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white py-3 rounded-lg font-semibold transition duration-300">
-          <span v-if="isProcessing" class="flex items-center justify-center space-x-2"><svg class="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="m4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><span>Procesando...</span></span>
-          <span v-else>Transferir ${{ transferAmount || 0 }}</span>
+      <div class="flex space-x-2 sm:space-x-3">
+        <button @click="initiateTransfer" :disabled="!isValidTransfer || isProcessing" class="flex-1 bg-purple-500 hover:bg-purple-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white py-2.5 sm:py-3 rounded-lg font-semibold transition duration-300 text-sm sm:text-base">
+          <span v-if="isProcessing" class="flex items-center justify-center space-x-2">
+            <svg class="animate-spin h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="m4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span class="hidden sm:inline">Procesando...</span>
+            <span class="sm:hidden">...</span>
+          </span>
+          <span v-else>
+            <span class="hidden sm:inline">Transferir ${{ transferAmount || 0 }}</span>
+            <span class="sm:hidden">Enviar ${{ transferAmount || 0 }}</span>
+          </span>
         </button>
       </div>
     </template>

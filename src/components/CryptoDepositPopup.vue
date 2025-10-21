@@ -19,20 +19,20 @@
       </div>
     </template>
 
-    <div class="min-h-[400px] flex flex-col">
-      <div v-if="currentStep === 1" class="space-y-3 max-w-md mx-auto w-full">
+    <div class="min-h-[300px] sm:min-h-[400px] flex flex-col">
+      <div v-if="currentStep === 1" class="space-y-2 sm:space-y-3 w-full">
         <div v-for="crypto in supportedCryptos" :key="crypto.id">
-          <button @click="selectCrypto(crypto)" class="w-full p-4 rounded-lg border border-gray-600 bg-gray-700/50 hover:border-blue-500 hover:bg-blue-500/10 transition-all duration-200 text-left">
-            <div class="flex items-center space-x-4">
-              <div class="w-10 h-10 rounded-full flex items-center justify-center overflow-hidden">
-                <img :src="crypto.icon" :alt="crypto.symbol" class="w-8 h-8">
+          <button @click="selectCrypto(crypto)" class="w-full p-3 sm:p-4 rounded-lg border border-gray-600 bg-gray-700/50 hover:border-blue-500 hover:bg-blue-500/10 transition-all duration-200 text-left">
+            <div class="flex items-center space-x-3 sm:space-x-4">
+              <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0">
+                <img :src="crypto.icon" :alt="crypto.symbol" class="w-6 h-6 sm:w-8 sm:h-8">
               </div>
-              <div class="flex-1">
-                <div class="text-white font-medium">{{ crypto.name }}</div>
-                <div class="text-gray-400 text-sm">{{ crypto.network }}</div>
+              <div class="flex-1 min-w-0">
+                <div class="text-white font-medium text-sm sm:text-base truncate">{{ crypto.name }}</div>
+                <div class="text-gray-400 text-xs sm:text-sm truncate">{{ crypto.network }}</div>
               </div>
-              <div class="text-gray-400">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div class="text-gray-400 flex-shrink-0">
+                <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                 </svg>
               </div>
@@ -41,20 +41,20 @@
         </div>
       </div>
 
-      <div v-else-if="currentStep === 2" class="max-w-md mx-auto">
-        <div class="mb-6">
+      <div v-else-if="currentStep === 2" class="w-full">
+        <div class="mb-4 sm:mb-6">
           <label class="block text-sm text-gray-300 mb-2">Monto en USD</label>
           <div class="relative">
             <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">$</span>
-            <input v-model="depositAmount" type="number" step="0.01" min="10" max="1000" placeholder="100.00" class="w-full bg-[#2a2a2a] border border-gray-600 rounded-lg pl-8 pr-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            <input v-model="depositAmount" type="number" step="0.01" min="10" max="1000" placeholder="100.00" class="w-full bg-[#2a2a2a] border border-gray-600 rounded-lg pl-8 pr-4 py-2.5 sm:py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base" />
           </div>
           <div class="text-xs text-gray-500 mt-1">Mínimo: $10.00 - Máximo: $1,000.00</div>
         </div>
 
         <!-- Desglose del fee y total -->
-        <div v-if="depositAmount && depositAmount > 0" class="mb-6 p-4 bg-gray-800/50 rounded-lg border border-gray-600">
+        <div v-if="depositAmount && depositAmount > 0" class="mb-4 sm:mb-6 p-3 sm:p-4 bg-gray-800/50 rounded-lg border border-gray-600">
           <div class="text-sm text-gray-300 mb-2">Resumen del pago:</div>
-          <div class="space-y-2 text-sm">
+          <div class="space-y-1.5 sm:space-y-2 text-xs sm:text-sm">
             <div class="flex justify-between">
               <span class="text-gray-400">Monto solicitado:</span>
               <span class="text-white">${{ depositAmount.toFixed(2) }}</span>
@@ -63,48 +63,49 @@
               <span class="text-gray-400">Fee (2.5% + $0.50):</span>
               <span class="text-orange-400">+${{ feeAmount.toFixed(2) }}</span>
             </div>
-            <div class="border-t border-gray-600 pt-2 flex justify-between font-medium">
+            <div class="border-t border-gray-600 pt-1.5 sm:pt-2 flex justify-between font-medium">
               <span class="text-gray-300">Total a transferir:</span>
-              <span class="text-green-400 text-lg">${{ totalAmount.toFixed(2) }}</span>
+              <span class="text-green-400 text-base sm:text-lg">${{ totalAmount.toFixed(2) }}</span>
             </div>
           </div>
         </div>
 
-        <div class="mb-6">
-          <div class="text-sm text-gray-300 mb-3">Montos populares:</div>
-          <div class="grid grid-cols-4 gap-2">
-            <button v-for="amount in popularAmounts" :key="amount" @click="setAmount(amount)" class="p-2 rounded-lg border border-gray-600 bg-gray-700/50 hover:border-blue-500 hover:bg-blue-500/10 transition-all duration-200 text-white text-sm">${{ amount }}</button>
+        <div class="mb-4 sm:mb-6">
+          <div class="text-sm text-gray-300 mb-2 sm:mb-3">Montos populares:</div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <button v-for="amount in popularAmounts" :key="amount" @click="setAmount(amount)" class="p-2 rounded-lg border border-gray-600 bg-gray-700/50 hover:border-blue-500 hover:bg-blue-500/10 transition-all duration-200 text-white text-xs sm:text-sm">${{ amount }}</button>
           </div>
         </div>
 
-        <button @click="generateQR" :disabled="!isValidAmount" class="w-full bg-blue-500 hover:bg-blue-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white py-3 rounded-lg font-semibold transition duration-300">Generar Código QR</button>
+        <button @click="generateQR" :disabled="!isValidAmount" class="w-full bg-blue-500 hover:bg-blue-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white py-2.5 sm:py-3 rounded-lg font-semibold transition duration-300 text-sm sm:text-base">Generar Código QR</button>
       </div>
 
-      <div v-else-if="currentStep === 3" class="flex flex-col items-center text-center max-w-md mx-auto">
+      <div v-else-if="currentStep === 3" class="flex flex-col items-center text-center w-full">
         <!-- QR Code Section -->
-        <div class="mb-6 w-full">
-          <div class="w-48 h-48 mx-auto bg-white rounded-xl p-4 mb-4 shadow-lg">
+        <div class="mb-4 sm:mb-6 w-full">
+          <div class="w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 mx-auto bg-white rounded-xl p-3 sm:p-4 mb-3 sm:mb-4 shadow-lg">
             <div class="w-full h-full bg-gray-200 rounded-lg flex items-center justify-center">
               <span class="text-gray-500 text-xs">QR Code</span>
             </div>
           </div>
           
-          <div class="text-white font-medium mb-3 text-center">Dirección de {{ selectedCrypto?.name }}</div>
+          <div class="text-white font-medium mb-2 sm:mb-3 text-center text-sm sm:text-base">Dirección de {{ selectedCrypto?.name }}</div>
           
-          <div class="bg-[#2a2a2a] rounded-lg p-3 mb-3 border border-gray-600 w-full">
-            <div class="text-xs text-gray-300 font-mono break-all text-center">{{ generatedAddress }}</div>
+          <div class="bg-[#2a2a2a] rounded-lg p-2 sm:p-3 mb-2 sm:mb-3 border border-gray-600 w-full">
+            <div class="text-xs text-gray-300 font-mono break-all text-center leading-relaxed">{{ generatedAddress }}</div>
           </div>
           
           <div class="flex justify-center">
-            <button @click="copyAddress" class="flex items-center justify-center gap-2 text-sm font-medium transition-all duration-300 px-3 py-1.5 rounded-lg border" :class="copied ? 'text-green-400 border-green-500/30 bg-green-500/10' : 'text-blue-400 hover:text-blue-300 border-blue-500/30 bg-blue-500/10 hover:bg-blue-500/20'">
+            <button @click="copyAddress" class="flex items-center justify-center gap-2 text-xs sm:text-sm font-medium transition-all duration-300 px-3 py-1.5 rounded-lg border" :class="copied ? 'text-green-400 border-green-500/30 bg-green-500/10' : 'text-blue-400 hover:text-blue-300 border-blue-500/30 bg-blue-500/10 hover:bg-blue-500/20'">
               <template v-if="!copied">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <svg width="14" height="14" class="sm:w-4 sm:h-4" viewBox="0 0 24 24" fill="none">
                   <path fill-rule="evenodd" clip-rule="evenodd" d="M19.5 16.5L19.5 4.5L18.75 3.75H9L8.25 4.5L8.25 7.5L5.25 7.5L4.5 8.25V20.25L5.25 21H15L15.75 20.25V17.25H18.75L19.5 16.5ZM15.75 15.75L15.75 8.25L15 7.5L9.75 7.5V5.25L18 5.25V15.75H15.75ZM6 9L14.25 9L14.25 19.5L6 19.5L6 9Z" fill="currentColor"/>
                 </svg>
-                Copiar dirección
+                <span class="hidden sm:inline">Copiar dirección</span>
+                <span class="sm:hidden">Copiar</span>
               </template>
               <template v-else>
-                <svg class="w-4 h-4 text-green-400 animate-check" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-400 animate-check" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
                 ¡Copiado!
@@ -114,18 +115,18 @@
         </div>
 
         <!-- Important Information Section -->
-        <div class="bg-yellow-900/20 border border-yellow-700/50 rounded-lg p-4 mb-6 w-full">
-          <div class="flex items-start space-x-3">
-            <svg class="w-5 h-5 text-yellow-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="bg-yellow-900/20 border border-yellow-700/50 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6 w-full">
+          <div class="flex items-start space-x-2 sm:space-x-3">
+            <svg class="w-4 h-4 sm:w-5 sm:h-5 text-yellow-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/>
             </svg>
-            <div class="text-sm flex-1">
+            <div class="text-xs sm:text-sm flex-1 min-w-0">
               <div class="text-yellow-300 font-medium mb-2 text-center">Importante:</div>
               
               <!-- Total Amount Box -->
-              <div class="bg-gray-800/50 p-3 rounded-lg border border-gray-600 mb-3 text-center">
+              <div class="bg-gray-800/50 p-2 sm:p-3 rounded-lg border border-gray-600 mb-3 text-center">
                 <div class="text-xs text-gray-400 mb-1">Monto total a transferir:</div>
-                <div class="text-lg font-bold text-green-400">${{ totalAmount.toFixed(2) }} USD</div>
+                <div class="text-base sm:text-lg font-bold text-green-400">${{ totalAmount.toFixed(2) }} USD</div>
                 <div class="text-xs text-gray-400 mt-1">
                   (Incluye ${{ depositAmount?.toFixed(2) }} + ${{ feeAmount.toFixed(2) }} fee)
                 </div>
@@ -145,10 +146,10 @@
     </div>
 
     <template #footer>
-      <div class="flex space-x-3">
-        <button v-if="currentStep !== 1" @click="goBack" class="flex-1 bg-gray-600 hover:bg-gray-500 text-white py-3 rounded-lg font-semibold transition duration-300">Atrás</button>
+      <div class="flex space-x-2 sm:space-x-3">
+        <button v-if="currentStep !== 1" @click="goBack" class="flex-1 bg-gray-600 hover:bg-gray-500 text-white py-2.5 sm:py-3 rounded-lg font-semibold transition duration-300 text-sm sm:text-base">Atrás</button>
         <!-- Only show confirmation after QR generated (step 3) -->
-        <button v-if="currentStep === 3" @click="confirmDeposit" class="flex-1 bg-green-500 hover:bg-green-600 text-white py-3 rounded-lg font-semibold transition duration-300">Ya Envié</button>
+        <button v-if="currentStep === 3" @click="confirmDeposit" class="flex-1 bg-green-500 hover:bg-green-600 text-white py-2.5 sm:py-3 rounded-lg font-semibold transition duration-300 text-sm sm:text-base">Ya Envié</button>
       </div>
     </template>
   </Modal>

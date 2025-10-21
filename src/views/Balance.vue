@@ -27,16 +27,16 @@
                 <p class="text-white/60 text-sm">Disponible para usar</p>
               </div>
 
-              <div class="space-y-3">
+              <div class="space-y-2 sm:space-y-3">
                 <button 
                   @click="openCryptoDepositPopup"
-                  class="w-full bg-blue-500 hover:bg-blue-600 text-white py-4 px-6 rounded-2xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+                  class="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 sm:py-4 px-4 sm:px-6 rounded-xl sm:rounded-2xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 text-sm sm:text-base"
                 >
                   Acreditar
                 </button>
                 <button 
                   @click="openTransferPopup"
-                  class="w-full bg-white/10 hover:bg-white/20 text-white py-4 px-6 rounded-2xl font-semibold transition-all duration-300 border border-white/20"
+                  class="w-full bg-white/10 hover:bg-white/20 text-white py-3 sm:py-4 px-4 sm:px-6 rounded-xl sm:rounded-2xl font-semibold transition-all duration-300 border border-white/20 text-sm sm:text-base"
                 >
                   Transferir
                 </button>
@@ -49,84 +49,84 @@
             
 
             <div>
-              <h2 class="text-2xl font-bold text-white mb-6">Estadísticas</h2>
-              <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <h2 class="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6">Estadísticas</h2>
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 
 
-                <div class="stats-card bg-gradient-to-br from-blue-500/20 to-blue-600/10 border border-blue-500/30 rounded-2xl p-6 text-center">
-                  <div class="w-16 h-16 bg-blue-500/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="stats-card bg-gradient-to-br from-blue-500/20 to-blue-600/10 border border-blue-500/30 rounded-xl sm:rounded-2xl p-4 sm:p-6 text-center">
+                  <div class="w-12 h-12 sm:w-16 sm:h-16 bg-blue-500/20 rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                    <svg class="w-6 h-6 sm:w-8 sm:h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
                     </svg>
                   </div>
-                  <h3 class="text-blue-300 text-sm font-medium mb-1">Recargas</h3>
-                  <p class="text-3xl font-bold text-white">{{ stats.recharges }}</p>
+                  <h3 class="text-blue-300 text-xs sm:text-sm font-medium mb-1">Recargas</h3>
+                  <p class="text-2xl sm:text-3xl font-bold text-white">{{ stats.recharges }}</p>
                 </div>
 
 
-                <div class="stats-card bg-gradient-to-br from-green-500/20 to-green-600/10 border border-green-500/30 rounded-2xl p-6 text-center">
-                  <div class="w-16 h-16 bg-green-500/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    <svg class="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="stats-card bg-gradient-to-br from-green-500/20 to-green-600/10 border border-green-500/30 rounded-xl sm:rounded-2xl p-4 sm:p-6 text-center">
+                  <div class="w-12 h-12 sm:w-16 sm:h-16 bg-green-500/20 rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                    <svg class="w-6 h-6 sm:w-8 sm:h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                   </div>
-                  <h3 class="text-green-300 text-sm font-medium mb-1">Acreditaciones</h3>
-                  <p class="text-3xl font-bold text-white">{{ stats.credits }}</p>
+                  <h3 class="text-green-300 text-xs sm:text-sm font-medium mb-1">Acreditaciones</h3>
+                  <p class="text-2xl sm:text-3xl font-bold text-white">{{ stats.credits }}</p>
                 </div>
 
 
-                <div class="stats-card bg-gradient-to-br from-purple-500/20 to-purple-600/10 border border-purple-500/30 rounded-2xl p-6 text-center">
-                  <div class="w-16 h-16 bg-purple-500/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    <svg class="w-8 h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="stats-card bg-gradient-to-br from-purple-500/20 to-purple-600/10 border border-purple-500/30 rounded-xl sm:rounded-2xl p-4 sm:p-6 text-center">
+                  <div class="w-12 h-12 sm:w-16 sm:h-16 bg-purple-500/20 rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                    <svg class="w-6 h-6 sm:w-8 sm:h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/>
                     </svg>
                   </div>
-                  <h3 class="text-purple-300 text-sm font-medium mb-1">Transacciones</h3>
-                  <p class="text-3xl font-bold text-white">{{ stats.transactions }}</p>
+                  <h3 class="text-purple-300 text-xs sm:text-sm font-medium mb-1">Transacciones</h3>
+                  <p class="text-2xl sm:text-3xl font-bold text-white">{{ stats.transactions }}</p>
                 </div>
               </div>
             </div>
 
 
-            <div class="bg-black/40 backdrop-blur-md rounded-3xl p-8 border border-white/10 shadow-2xl">
-              <div class="flex items-center justify-between mb-6">
-                <h2 class="text-2xl font-bold text-white flex items-center gap-3">
-                  <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="bg-black/40 backdrop-blur-md rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 border border-white/10 shadow-2xl">
+              <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6 gap-3 sm:gap-0">
+                <h2 class="text-xl sm:text-2xl font-bold text-white flex items-center gap-2 sm:gap-3">
+                  <svg class="w-5 h-5 sm:w-6 sm:h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
                   </svg>
                   Historial
                 </h2>
-                <div class="flex items-center gap-2">
-                  <span class="text-green-400 text-sm font-medium">Depósito</span>
-                  <span class="text-green-400 text-lg font-bold">${{ pendingDeposit.amount }}</span>
-                  <span class="text-gray-400 text-xs">Pendiente {{ pendingDeposit.time }}</span>
-                  <button class="bg-green-500/20 text-green-400 px-3 py-1 rounded-lg text-xs font-medium border border-green-500/30 hover:bg-green-500/30 transition-all">
+                <div class="flex flex-wrap items-center gap-1 sm:gap-2 text-xs sm:text-sm">
+                  <span class="text-green-400 font-medium">Depósito</span>
+                  <span class="text-green-400 font-bold">${{ pendingDeposit.amount }}</span>
+                  <span class="text-gray-400">Pendiente {{ pendingDeposit.time }}</span>
+                  <button class="bg-green-500/20 text-green-400 px-2 sm:px-3 py-1 rounded-lg font-medium border border-green-500/30 hover:bg-green-500/30 transition-all">
                     Detalles
                   </button>
                 </div>
               </div>
               
-              <div class="space-y-3">
+              <div class="space-y-2 sm:space-y-3">
                 <div v-for="transaction in transactions" :key="transaction.id" 
-                     class="transaction-item flex items-center justify-between p-4 bg-white/5 hover:bg-white/10 rounded-xl transition-all duration-300">
-                  <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-full flex items-center justify-center" 
+                     class="transaction-item flex items-center justify-between p-3 sm:p-4 bg-white/5 hover:bg-white/10 rounded-lg sm:rounded-xl transition-all duration-300">
+                  <div class="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center flex-shrink-0" 
                          :class="getTransactionIcon(transaction.type).bgClass">
-                      <svg class="w-6 h-6" :class="getTransactionIcon(transaction.type).iconClass" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg class="w-5 h-5 sm:w-6 sm:h-6" :class="getTransactionIcon(transaction.type).iconClass" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="getTransactionIcon(transaction.type).path"/>
                       </svg>
                     </div>
-                    <div>
-                      <h4 class="text-white font-semibold">{{ transaction.title }}</h4>
-                      <p class="text-gray-400 text-sm">{{ transaction.description }}</p>
+                    <div class="min-w-0 flex-1">
+                      <h4 class="text-white font-semibold text-sm sm:text-base truncate">{{ transaction.title }}</h4>
+                      <p class="text-gray-400 text-xs sm:text-sm truncate">{{ transaction.description }}</p>
                       <p class="text-gray-500 text-xs">{{ formatDate(transaction.date) }}</p>
                     </div>
                   </div>
-                  <div class="text-right">
-                    <p class="font-semibold" :class="transaction.type === 'credit' ? 'text-green-400' : 'text-red-400'">
+                  <div class="text-right flex-shrink-0">
+                    <p class="font-semibold text-sm sm:text-base" :class="transaction.type === 'credit' ? 'text-green-400' : 'text-red-400'">
                       {{ transaction.type === 'credit' ? '+' : '-' }}${{ Math.abs(transaction.amount).toFixed(2) }}
                     </p>
-                    <p class="text-gray-500 text-sm">{{ transaction.status }}</p>
+                    <p class="text-gray-500 text-xs sm:text-sm">{{ transaction.status }}</p>
                   </div>
                 </div>
               </div>
@@ -158,6 +158,7 @@
     />
 
     <!-- Balance Status Popup -->
+    <!-- Balance Status Popup -->
     <BalanceStatusPopup 
       :isOpen="showStatusPopup"
       :status="statusData.status"
@@ -166,6 +167,16 @@
       :primaryAction="statusData.primaryAction"
       @close="closeStatusPopup"
       @statusChecked="handleStatusCheck"
+    />
+
+    <!-- Transaction Status Popup -->
+    <TransactionStatusPopup
+      :show="showTransactionStatusPopup"
+      :status="transactionStatus.status"
+      :message="transactionStatus.message"
+      :details="transactionStatus.details"
+      @close="closeTransactionStatusPopup"
+      @retry="retryTransaction"
     />
   </div>
 </template>
@@ -176,6 +187,7 @@ import Navbar from '../components/Navbar.vue'
 import CryptoDepositPopup from '../components/CryptoDepositPopup.vue'
 import TransferBalancePopup from '../components/TransferBalancePopup.vue'
 import BalanceStatusPopup from '../components/BalanceStatusPopup.vue'
+import TransactionStatusPopup from '../components/TransactionStatusPopup.vue'
 
 interface Transaction {
   id: number
@@ -216,10 +228,18 @@ interface IconConfig {
 const showCryptoDepositPopup = ref(false)
 const showTransferPopup = ref(false)
 const showStatusPopup = ref(false)
+const showTransactionStatusPopup = ref(false)
 
 // Status popup data
 const statusData = ref<StatusData>({
   status: 'pending'
+})
+
+// Transaction status popup data
+const transactionStatus = ref({
+  status: 'success' as 'success' | 'error' | 'pending',
+  message: '',
+  details: {}
 })
 
 // Balance data
@@ -247,6 +267,15 @@ const closeTransferPopup = () => {
 
 const closeStatusPopup = () => {
   showStatusPopup.value = false
+}
+
+const closeTransactionStatusPopup = () => {
+  showTransactionStatusPopup.value = false
+}
+
+const retryTransaction = () => {
+  console.log('Retrying transaction...')
+  closeTransactionStatusPopup()
 }
 
 // Operation handlers

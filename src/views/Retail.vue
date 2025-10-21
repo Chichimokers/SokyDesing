@@ -46,7 +46,7 @@
               </div>
               <div class="flex-1">
                 <p class="text-white text-lg leading-relaxed">
-                  Para acceder al precio especial de <span class="font-bold text-yellow-400">19.99 USDT por recarga</span>, 
+                 
                   es necesario realizar un depósito mínimo de <span class="font-bold text-green-400">100 USDT</span> 
                   en nuestra web cada vez que desees recargar saldo en tu cuenta.
                 </p>

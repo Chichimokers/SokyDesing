@@ -108,6 +108,28 @@
           </div>
         </div>
 
+        <!-- Términos y Condiciones -->
+        <div class="flex items-start gap-3 mt-4">
+          <input
+            id="acceptTerms"
+            v-model="form.acceptTerms"
+            type="checkbox"
+            class="mt-1 w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500 focus:ring-2"
+            required
+          />
+          <label for="acceptTerms" class="text-xs sm:text-sm text-gray-300">
+            Acepto los 
+            <button 
+              type="button"
+              @click="showTermsModal"
+              class="text-blue-400 hover:text-blue-300 underline"
+            >
+              términos y condiciones
+            </button>
+            y la política de privacidad de Soky Recargas.
+          </label>
+        </div>
+
         <!-- Botón registrar -->
         <button
           type="submit"
@@ -121,22 +143,45 @@
         <router-link to="/login" class="text-blue-400 hover:text-blue-300 hover:underline transition-colors ml-1">Inicia sesión</router-link>
       </p>
     </div>
+
+    <!-- Terms and Conditions Popup -->
+    <TermsAndConditionsPopup
+      :show="showTermsPopup"
+      @close="hideTerms"
+      @accept="acceptTermsAndClose"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
+import { useTermsAndConditions } from '@/composables/useTermsAndConditions'
+import TermsAndConditionsPopup from '@/components/TermsAndConditionsPopup.vue'
 
 const form = reactive({
   fullName: '',
   email: '',
   phone: '',
   password: '',
-  confirmPassword: ''
+  confirmPassword: '',
+  acceptTerms: false
 })
 
 const showPassword = ref(false)
 const showConfirmPassword = ref(false)
+
+// Terms and conditions
+const { showTermsPopup, showTerms, hideTerms, acceptTerms } = useTermsAndConditions()
+
+// Terms and conditions functions
+const showTermsModal = () => {
+  showTerms()
+}
+
+const acceptTermsAndClose = () => {
+  acceptTerms()
+  form.acceptTerms = true
+}
 
 
 const register = () => {
