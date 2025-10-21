@@ -256,6 +256,7 @@ const startProgressAnimation = () => {
   }
 }
 
+
 onMounted(() => {
   if (props.isOpen && props.status === 'pending') {
     startProgressAnimation()
