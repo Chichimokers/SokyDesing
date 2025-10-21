@@ -18,7 +18,7 @@
           <slot name="header"></slot>
         </header>
 
-        <div class="px-3 sm:px-4 md:px-6 py-2.5 sm:py-3 md:py-4 flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800">
+        <div class="px-6 py-2.5 sm:py-3 md:py-4 flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800">
           <slot></slot>
         </div>
 

@@ -96,6 +96,7 @@
           </div>
           
           <div class="flex justify-center">
+           
             <button @click="copyAddress" class="flex items-center justify-center gap-2 text-xs sm:text-sm font-medium transition-all duration-300 px-3 py-1.5 rounded-lg border" :class="copied ? 'text-green-400 border-green-500/30 bg-green-500/10' : 'text-blue-400 hover:text-blue-300 border-blue-500/30 bg-blue-500/10 hover:bg-blue-500/20'">
               <template v-if="!copied">
                 <svg width="14" height="14" class="sm:w-4 sm:h-4" viewBox="0 0 24 24" fill="none">
@@ -111,6 +112,7 @@
                 ¡Copiado!
               </template>
             </button>
+            
           </div>
         </div>
 
@@ -126,12 +128,39 @@
               <!-- Total Amount Box -->
               <div class="bg-gray-800/50 p-2 sm:p-3 rounded-lg border border-gray-600 mb-3 text-center">
                 <div class="text-xs text-gray-400 mb-1">Monto total a transferir:</div>
-                <div class="text-base sm:text-lg font-bold text-green-400">${{ totalAmount.toFixed(2) }} USD</div>
+
+                <div class="flex items-center justify-center gap-2">
+                  <div class="text-base sm:text-lg font-bold text-green-400">${{ totalAmount.toFixed(2) }} USD</div>
+
+                  <!-- Botón discreto para copiar el monto, pegado al monto -->
+                  <button
+                    @click="copyTotalAmount"
+                    class="ml-1 p-1 rounded text-gray-300 hover:text-white/90 transition flex items-center justify-center"
+                    aria-label="Copiar monto"
+                    title="Copiar monto"
+                  >
+                    <template v-if="!copiedm">
+                      <!-- icono discreto de copiar -->
+                      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none">
+                        <path d="M16 4H8a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <rect x="9" y="2" width="6" height="4" rx="1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </template>
+                    <template v-else>
+                      <!-- icono de check cuando se copió -->
+                      <svg class="w-4 h-4 text-green-400 animate-check" viewBox="0 0 24 24" fill="none">
+                        <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </template>
+                  </button>
+                </div>
+
                 <div class="text-xs text-gray-400 mt-1">
                   (Incluye ${{ depositAmount?.toFixed(2) }} + ${{ feeAmount.toFixed(2) }} fee)
                 </div>
               </div>
-              
+
+           
               <!-- Instructions List -->
               <ul class="text-yellow-200 space-y-1 text-xs text-left">
                 <li>• Envía exactamente <span class="font-bold text-green-300">${{ totalAmount.toFixed(2) }} USD</span> en {{ selectedCrypto?.symbol }}</li>
@@ -166,6 +195,7 @@ import ethIcon from '@/assets/images/crypto/eth.svg'
 import bnbIcon from '@/assets/images/crypto/bnb.svg'
 
 const copied = ref(false)
+const copiedm = ref(false)
 interface Crypto {
   id: string
   name: string
@@ -293,6 +323,16 @@ const copyAddress = async () => {
     setTimeout(() => (copied.value = false), 2000)
   } catch (error) {
     console.error('Error copiando dirección:', error)
+  }
+}
+
+const copyTotalAmount = async () => {
+  try {
+    await navigator.clipboard.writeText(totalAmount.value.toFixed(2))
+    copiedm.value = true
+    setTimeout(() => (copied.value = false), 1500)
+  } catch (error) {
+    console.error('Error copiando monto:', error)
   }
 }
 
