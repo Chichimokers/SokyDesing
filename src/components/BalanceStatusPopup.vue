@@ -172,7 +172,7 @@ const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
 const progressPercentage = ref(0)
-let progressInterval: NodeJS.Timeout | null = null
+let progressInterval: ReturnType<typeof setInterval> | null = null;
 
 const statusTitle = computed(() => {
   switch (props.status) {
