@@ -1,6 +1,7 @@
 <template>
-  <Modal :isOpen="!!transaction" @close="$emit('close')">
-    <div class="space-y-0">
+  <Modal :isOpen="!!props.transaction" @close="$emit('close')">
+    <template v-if="transaction">
+      <div class="space-y-0">
       
       <!-- Estado: Procesando -->
       <div v-if="transaction.status === 'processing'" class="text-center bg-[#0b0b0b] rounded-2xl p-8 border border-white/5">
@@ -248,7 +249,8 @@
           </button>
         </div>
       </div>
-    </div>
+      </div>
+    </template>
   </Modal>
 </template>
 
