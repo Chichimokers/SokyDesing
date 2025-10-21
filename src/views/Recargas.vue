@@ -275,7 +275,7 @@ watch([validPhoneNumbers, selectedOffer], () => {
 })
 </script>
 
-<style src="@/assets/Home.css"></style>
+<style src="@/assets/home.css"></style>
 <style scoped>
 /* Estilos adicionales específicos para Recargas */
 .animated-gradient {
