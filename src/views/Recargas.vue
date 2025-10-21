@@ -298,4 +298,5 @@ watch([validPhoneNumbers, selectedOffer], () => {
   50% { background-position: 100% 50%; }
 }
 </style>
+
 <style src="@/assets/home.css"></style>
