@@ -13,17 +13,30 @@
       
               <div class="flex items-center justify-between mb-6">
                 <h2 class="text-white/80 text-lg font-medium">Saldo</h2>
-                <div class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center">
+                <button 
+                  @click="toggleBalanceVisibility"
+                  class="w-8 h-8 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-all duration-300"
+                  :title="isBalanceVisible ? 'Ocultar saldo' : 'Mostrar saldo'"
+                >
                   <svg class="w-4 h-4 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                    <!-- Ojo abierto cuando el saldo está visible -->
+                    <template v-if="isBalanceVisible">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                    </template>
+                    <!-- Ojo cerrado cuando el saldo está oculto -->
+                    <template v-else>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"/>
+                    </template>
                   </svg>
-                </div>
+                </button>
               </div>
 
 
               <div class="mb-8">
-                <h1 class="text-5xl font-bold text-white mb-2">${{ balance.current.toFixed(2) }}</h1>
+                <h1 class="text-5xl font-bold text-white mb-2">
+                  {{ isBalanceVisible ? `$${balance.current.toFixed(2)}` : '$***.**' }}
+                </h1>
                 <p class="text-white/60 text-sm">Disponible para usar</p>
               </div>
 
@@ -247,6 +260,13 @@ const balance = ref({
   current: 125.50,
   pending: 22.00
 })
+
+// Balance visibility
+const isBalanceVisible = ref(true)
+
+const toggleBalanceVisibility = () => {
+  isBalanceVisible.value = !isBalanceVisible.value
+}
 
 // Popup handlers
 const openCryptoDepositPopup = () => {
