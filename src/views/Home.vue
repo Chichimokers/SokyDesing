@@ -1,14 +1,15 @@
 <template>
-  <div class="min-h-screen relative">
+  <div class="min-h-screen relative overflow-hidden">
     <!-- Banner como fondo -->
-    <div class="fixed inset-0 z-0">
-      <img
-        src="@/assets/images/offer_phpqvu0b1h9ad7g92AMXgY_1760792874.webp"
-        alt="Soky Recargas - Recargas a Cuba"
-        class="object-cover"
+   <div class="fixed inset-0 z-0">
+      <img 
+        :src="backgroundImage" 
+        alt="Soky Recargas Background"
+        class="w-full h-full object-cover"
+        style="transform: translate3d(0, 0, 0); backface-visibility: hidden; will-change: auto;"
       >
       <!-- Overlay para mejor legibilidad -->
-      <div class="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
+      <div class="absolute inset-0 bg-black/60"></div>
     </div>
 
     <!-- Contenido sobre el banner -->
@@ -69,6 +70,21 @@
                 <div class="flex items-center justify-between p-4 bg-white/10 rounded-lg">
                   <span class="text-gray-200">Soporte 24/7</span>
                   <span class="text-yellow-300 font-semibold">Activo</span>
+                </div>
+              </div>
+
+              <!-- Test Login Button (temporal) -->
+              <div class="mt-6 pt-4 border-t border-white/20">
+                <button
+                  v-if="!isLoggedIn"
+                  @click="simulateLogin"
+                  class="w-full bg-green-500/20 hover:bg-green-500/30 border border-green-500/30 text-green-400 hover:text-green-300 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300"
+                >
+                  🧪 Simular Login (Prueba)
+                </button>
+                <div v-else class="text-center">
+                  <p class="text-green-400 text-sm">✅ Usuario logueado</p>
+                  <p class="text-gray-400 text-xs">{{ currentUser?.name }}</p>
                 </div>
               </div>
             </div>
@@ -214,6 +230,7 @@ import PhoneNumberPopup from '../components/PhoneNumberPopup.vue'
 import RechargeStatus from '../components/RechargeStatus.vue'
 import { LightningIcon, ShieldIcon, CurrencyIcon, SupportIcon } from '../components/icon'
 import { useRecharge, type RechargeOffer, type PhoneNumber } from '../composables/useRecharge'
+import { useAuth } from '../composables/useAuth'
 import backgroundImage from '@/assets/images/offer_phpqvu0b1h9ad7g92AMXgY_1760792874.webp'
 import bannerImage from '@/assets/images/offer_phpqvu0b1h9ad7g92AMXgY_1760792874.webp'
 import rechargeImage from '@/assets/images/offer_phpqvu0b1h9ad7g92AMXgY_1760792874.webp'
@@ -225,6 +242,9 @@ import multipleImage from '@/assets/images/offer_phph1je9vurekis8bYDwm3_17597295
 
 const router = useRouter()
 const { availableOffers, minPrice, selectOffer, resetTransaction, processRecharge, currentTransaction } = useRecharge()
+
+// Auth state
+const { isLoggedIn, currentUser, simulateLogin } = useAuth()
 
 // Estado del popup
 const showPopup = ref(false)

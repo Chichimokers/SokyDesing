@@ -77,14 +77,19 @@ html {
   }
 }
 
-/* Prevenir saltos durante el scroll */
 .min-h-screen {
-  /* Crear contexto de apilamiento estable */
-  position: relative;
+  /* Forzar aceleración por hardware */
   transform: translateZ(0);
   backface-visibility: hidden;
+  perspective: 1000px;
 }
-
+* Optimizar overlays */
+.bg-black\/40,
+.bg-black\/60 {
+  /* Usar compositing optimizado */
+  transform: translateZ(0);
+  will-change: auto;
+}
 /* Optimizar elementos con overlay */
 .bg-black\/40,
 .bg-black\/60 {

@@ -1,18 +1,15 @@
 <template>
   <div class="min-h-screen bg-[#0f0f0f] text-white relative overflow-hidden">
     <!-- Banner como fondo estabilizado -->
-    <div class="fixed inset-0 z-0"
-         :style="{
-           backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${backgroundImage})`,
-           backgroundSize: 'cover',
-           backgroundPosition: 'center center',
-           backgroundRepeat: 'no-repeat',
-           backgroundAttachment: 'fixed',
-           transform: 'translate3d(0, 0, 0)',
-           backfaceVisibility: 'hidden',
-           willChange: 'auto',
-           contain: 'layout style paint'
-         }">
+    <div class="fixed inset-0 z-0">
+      <img 
+        :src="backgroundImage" 
+        alt="Soky Recargas Background"
+        class="w-full h-full object-cover"
+        style="transform: translate3d(0, 0, 0); backface-visibility: hidden; will-change: auto;"
+      >
+      <!-- Overlay para mejor legibilidad -->
+      <div class="absolute inset-0 bg-black/60"></div>
     </div>
 
     <!-- Contenido principal -->
