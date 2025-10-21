@@ -84,7 +84,7 @@
            <FeatureCard
           title="Recarga internacional"
           :description="`Desde ${minPrice} USDT - Recargas rápidas y seguras`"
-          img="bannerImage"
+          :img="bannerImage"
           :button-text="`Desde ${minPrice} USDT`"
           :offer="cardOffers.recharge"
           color="blue"
@@ -94,7 +94,7 @@
          <FeatureCard
           title="Nauta hogar plus"
           :description="`Desde ${minPrice} USDT - Internet a mayor velocidad`"
-          img="nautaImage"
+          :img="nautaImage"
           :button-text="`Desde ${minPrice} USDT`"
           :offer="cardOffers.nauta"
           color="blue"
@@ -103,7 +103,7 @@
         <FeatureCard
           title="Nauta Plus"
           :description="`Desde ${minPrice} USDT - Conexión rápida y estable`"
-          img="nautaPlusImage"
+          :img="nautaPlusImage"
           :button-text="`Desde ${minPrice} USDT`"
           :offer="cardOffers.nauta_plus"
           color="green"
@@ -112,7 +112,7 @@
            <FeatureCard
           title="Planes de datos"
           :description="`Desde ${minPrice} USDT - Procesamiento en 2-5 minutos las 24 horas del día`"
-          img="dataImage"
+          :img="dataImage"
           :button-text="`Desde ${minPrice} USDT`"
           :offer="cardOffers.data"
           color="green"
@@ -121,7 +121,7 @@
           <FeatureCard
           title="Ofertas especiales"
           :description="`Desde ${minPrice} USDT - Los mejores precios del mercado`"
-          img="specialImage"
+          :img="specialImage"
           :button-text="`Desde ${minPrice} USDT`"
           :offer="cardOffers.special"
           color="blue"
@@ -130,7 +130,7 @@
              <FeatureCard
           title="Recargas múltiples"
           :description="`Desde ${minPrice} USDT - Hasta 5 números a la vez`"
-          img="multipleImage"
+          :img="multipleImage"
           :button-text="`Desde ${minPrice} USDT`"
           :offer="cardOffers.multiple"
           color="blue"
@@ -204,13 +204,6 @@
 </template>
 
 <script setup lang="ts">
-import bannerImage from '@/assets/images/offer_phpqvu0b1h9ad7g92AMXgY_1760792874.webp'
-import rechargeImage from '@/assets/images/offer_phpqvu0b1h9ad7g92AMXgY_1760792874.webp'
-import nautaImage from '@/assets/images/offer_phpvAETPl_1752334228.webp'
-import nautaPlusImage from '@/assets/images/offer_phpvs6t513o1seq2HjVWek_1759183674.webp'
-import dataImage from '@/assets/images/offer_phpsm6RzF_1750409890.webp'
-import specialImage from '@/assets/images/offer_phpsgr4K8_1754776835.webp'
-import multipleImage from '@/assets/images/offer_phph1je9vurekis8bYDwm3_1759729559.jpg'
 
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -221,6 +214,13 @@ import PhoneNumberPopup from '../components/PhoneNumberPopup.vue'
 import RechargeStatus from '../components/RechargeStatus.vue'
 import { LightningIcon, ShieldIcon, CurrencyIcon, SupportIcon } from '../components/icon'
 import { useRecharge, type RechargeOffer, type PhoneNumber } from '../composables/useRecharge'
+import bannerImage from '@/assets/images/offer_phpqvu0b1h9ad7g92AMXgY_1760792874.webp'
+import rechargeImage from '@/assets/images/offer_phpqvu0b1h9ad7g92AMXgY_1760792874.webp'
+import nautaImage from '@/assets/images/offer_phpvAETPl_1752334228.webp'
+import nautaPlusImage from '@/assets/images/offer_phpvs6t513o1seq2HjVWek_1759183674.webp'
+import dataImage from '@/assets/images/offer_phpsm6RzF_1750409890.webp'
+import specialImage from '@/assets/images/offer_phpsgr4K8_1754776835.webp'
+import multipleImage from '@/assets/images/offer_phph1je9vurekis8bYDwm3_1759729559.jpg'
 
 const router = useRouter()
 const { availableOffers, minPrice, selectOffer, resetTransaction, processRecharge, currentTransaction } = useRecharge()
