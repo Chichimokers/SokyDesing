@@ -1,10 +1,10 @@
 <template>
   <Modal :isOpen="!!props.transaction" @close="$emit('close')">
     <template v-if="transaction">
-      <div class="space-y-0">
+      <div class=" space-y-0">
       
       <!-- Estado: Procesando -->
-  <div v-if="transaction.status === 'processing'" class="text-center bg-[#0b0b0b] rounded-2xl p-8 border border-transparent">
+   <div v-if="transaction.status === 'processing'" class="text-center bg-[#0b0b0b] rounded-2xl p-8 border border-transparent">
         <!-- Animación de carga -->
         <div class="relative mb-6">
           <div class="flex justify-center">
@@ -66,7 +66,7 @@
       </div>
 
       <!-- Estado: Completada -->
-  <div v-else-if="transaction.status === 'completed'" class="text-center bg-[#0b0b0b] rounded-2xl p-8 border border-transparent">
+   <div v-else-if="transaction.status === 'completed'" class=" text-center bg-[#0b0b0b] rounded-2xl p-10 border border-transparent">
         <!-- Icono de éxito simple y claro -->
         <div class="mb-6 flex justify-center">
           <div class="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center animate-bounce-in animate-pulse-success relative">

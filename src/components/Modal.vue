@@ -2,7 +2,7 @@
   <teleport to="body">
     <div v-if="isOpen" class="fixed inset-0 z-[999999] flex items-center justify-center p-2 sm:p-4 md:p-6" @click="onOverlayClick" style="z-index: 999999 !important;">
       <!-- Overlay - Cobertura completa de pantalla -->
-      <div class="fixed inset-0 bg-transparent backdrop-blur-sm transition-opacity duration-300" style="z-index: 999998 !important;"></div>
+      <div class="fixed inset-0 bg-black/70 backdrop-blur-sm transition-opacity duration-300" style="z-index: 999998 !important;"></div>
 
       <!-- Container - Perfecto centrado responsive -->
       <div class="relative w-full max-w-[95vw] sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl mx-auto" style="z-index: 999999 !important;">
@@ -18,8 +18,9 @@
           <slot name="header"></slot>
         </header>
 
-        <slot></slot>
-      
+        <div class="px-3 sm:px-4 md:px-6 py-2.5 sm:py-3 md:py-4 flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800">
+          <slot></slot>
+        </div>
 
         <footer v-if="$slots.footer" class="px-3 sm:px-4 md:px-6 py-2 sm:py-2.5 md:py-3 bg-[#2a2a2a] border-t border-white/5 flex-shrink-0">
           <slot name="footer"></slot>
