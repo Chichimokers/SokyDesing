@@ -16,6 +16,7 @@ import EditProfile from '@/views/EditProfile.vue'
 import Retail from '@/views/Retail.vue'
 import SubscriptionForm from '@/views/SubscriptionForm.vue'
 import RetailApplication from '@/views/RetailApplication.vue'
+import Cubacel from '@/views/Cubacel.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -37,6 +38,7 @@ const router = createRouter({
     { path: '/retail', name: 'Retail', component: Retail },
     { path: '/subscription-form/:planId', name: 'SubscriptionForm', component: SubscriptionForm },
     { path: '/retail-application', name: 'RetailApplication', component: RetailApplication },
+    { path: '/cubacel', name: 'Cubacel', component: Cubacel },
   ],
 })
 

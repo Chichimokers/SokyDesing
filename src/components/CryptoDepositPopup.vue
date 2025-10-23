@@ -177,8 +177,7 @@
     <template #footer>
       <div class="flex space-x-2 sm:space-x-3">
         <button v-if="currentStep !== 1" @click="goBack" class="flex-1 bg-gray-600 hover:bg-gray-500 text-white py-2.5 sm:py-3 rounded-lg font-semibold transition duration-300 text-sm sm:text-base">Atrás</button>
-        <!-- Only show confirmation after QR generated (step 3) -->
-        <button v-if="currentStep === 3" @click="confirmDeposit" class="flex-1 bg-green-500 hover:bg-green-600 text-white py-2.5 sm:py-3 rounded-lg font-semibold transition duration-300 text-sm sm:text-base">Ya Envié</button>
+        <!-- Sin botón de confirmación; el proceso es automático -->
       </div>
     </template>
   </Modal>
@@ -308,6 +307,8 @@ const generateQR = () => {
   
   generatedAddress.value = selectedCrypto.value.address
   currentStep.value = 3
+  // Emitir inicio automáticamente para que el padre comience la verificación
+  emit('depositInitiated', selectedCrypto.value.symbol, depositAmount.value!, generatedAddress.value)
 }
 
 const goBack = () => {
@@ -336,13 +337,7 @@ const copyTotalAmount = async () => {
   }
 }
 
-const confirmDeposit = () => {
-  if (selectedCrypto.value && depositAmount.value) {
-    // emit simple symbol + amount + address so Balance.vue can handle
-    emit('depositInitiated', selectedCrypto.value.symbol, depositAmount.value, generatedAddress.value)
-    closePopup()
-  }
-}
+// Confirmación manual eliminada: el evento se emite en generateQR()
 
 const closePopup = () => {
   currentStep.value = 1

@@ -128,7 +128,7 @@
       </div>
     </div>
 
-    <!-- Recent Activity Section -->
+    <!-- Historial de Recargas -->
     <div class="pb-16 px-4 sm:px-6 lg:px-8">
       <div class="max-w-4xl mx-auto">
         <div class="bg-black/40 backdrop-blur-md rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-white/10 shadow-2xl">
@@ -136,46 +136,62 @@
             <svg class="w-5 h-5 sm:w-6 sm:h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
-            Actividad Reciente
+            Historial de Recargas
           </h2>
-          
-          <div class="space-y-3 sm:space-y-4">
-            <div v-for="activity in combinedRecent" :key="activity.id" class="activity-item flex items-center justify-between p-3 sm:p-4 bg-white/5 hover:bg-white/10 rounded-xl transition-all duration-300">
+
+          <div v-if="history.length" class="space-y-3 sm:space-y-4">
+            <button
+              v-for="tx in history"
+              :key="tx.id"
+              type="button"
+              class="w-full text-left activity-item flex items-center justify-between p-3 sm:p-4 bg-white/5 hover:bg-white/10 rounded-xl transition-all duration-300"
+              @click="openDetail(tx)"
+            >
               <div class="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
-                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center flex-shrink-0" 
-                     :class="getActivityIcon(activity.type).bgClass">
-                  <svg class="w-5 h-5 sm:w-6 sm:h-6" :class="getActivityIcon(activity.type).iconClass" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="getActivityIcon(activity.type).path"/>
+                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center flex-shrink-0"
+                     :class="tx.status === 'completed' ? 'bg-green-500/20' : tx.status === 'processing' ? 'bg-yellow-500/20' : 'bg-red-500/20'">
+                  <svg class="w-5 h-5 sm:w-6 sm:h-6" :class="tx.status === 'completed' ? 'text-green-400' : tx.status === 'processing' ? 'text-yellow-400' : 'text-red-400'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="tx.status === 'completed' ? 'M5 13l4 4L19 7' : tx.status === 'processing' ? 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' : 'M6 18L18 6M6 6l12 12'"/>
                   </svg>
                 </div>
                 <div class="min-w-0 flex-1">
-                  <h4 class="text-white font-semibold text-sm sm:text-base truncate">{{ activity.title }}</h4>
-                  <p class="text-gray-400 text-xs sm:text-sm truncate">{{ activity.description }}</p>
-                </div>
+                    <h4 class="text-white font-semibold text-sm sm:text-base truncate">{{ itemTitle(tx) }}</h4>
+                    <p class="text-gray-400 text-xs sm:text-sm truncate">
+                      <template v-if="tx.kind === 'sim'">
+                        {{ tx.offer.title || 'SIM' }} • {{ tx.phoneNumber }}
+                      </template>
+                      <template v-else>
+                        {{ tx.offer.data }} • {{ tx.phoneNumber }}
+                      </template>
+                    </p>
+                  </div>
               </div>
               <div class="text-right flex-shrink-0">
-                <p class="text-gray-300 font-semibold text-sm sm:text-base">{{ activity.amount }}</p>
-                <p class="text-gray-500 text-xs sm:text-sm">{{ formatDate(activity.date) }}</p>
+                <p class="text-gray-300 font-semibold text-sm sm:text-base">${{ tx.offer.priceUSDT.toFixed(2) }}</p>
+                <p class="text-gray-500 text-xs sm:text-sm">{{ formatDate(tx.timestamp) }}</p>
               </div>
-            </div>
-          </div>
-          
-          <div class="mt-6 text-center">
-            <button class="text-blue-400 hover:text-blue-300 font-semibold transition-colors duration-300">
-              Ver Historial Completo →
             </button>
           </div>
+          <div v-else class="text-gray-400 text-center py-8">Aún no tienes recargas en tu historial.</div>
         </div>
       </div>
     </div>
+
+    <RechargeDetailPopup
+      :transaction="selectedTx"
+      @close="selectedTx = null"
+      @edit="handleEdit"
+      @cancel="handleCancel"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useRecharge } from '../composables/useRecharge'
 import Navbar from '../components/Navbar.vue'
+import RechargeDetailPopup from '../components/RechargeDetailPopup.vue'
 
 const route = useRoute()
 const showSuccessMessage = ref(false)
@@ -252,50 +268,21 @@ const user = ref({
   ]
 })
 
-// Mostrar últimas 3 recargas desde el history compartido
-const { getHistory } = useRecharge()
-const recentFromHistory = getHistory(3)
-
-// Mapea el history a la estructura de recentActivity para mostrar en el perfil
-const historyActivities = recentFromHistory.map((tx, idx) => {
-  // Determinar el tipo de recarga según el ID de la oferta
-  let type = 'recharge'
-  let title = 'Recarga Completada'
-  
-  if (tx.offer.id === 'nauta') {
-    type = 'nauta_hogar'
-    title = 'Nauta Hogar Plus'
-  } else if (tx.offer.id === 'nauta_plus') {
-    type = 'nauta_plus'
-    title = 'Nauta Plus'
-  } else {
-    type = 'mobile_recharge'
-    title = 'Recarga Móvil'
+// Historial completo desde el composable
+const { transactionHistory, editTransactionNumber, cancelRecharge } = useRecharge()
+const history = computed(() => transactionHistory.value)
+const selectedTx = ref(null as any)
+const openDetail = (tx: any) => { selectedTx.value = tx }
+const handleEdit = (id: string, newNumber: string) => {
+  const ok = editTransactionNumber(id, newNumber)
+  if (ok && selectedTx.value) selectedTx.value.phoneNumber = newNumber
+}
+const handleCancel = (id: string) => {
+  const ok = cancelRecharge(id)
+  if (ok && selectedTx.value && selectedTx.value.id === id) {
+    selectedTx.value.status = 'error'
   }
-  
-  // Ajustar título según el status
-  if (tx.status === 'error') {
-    title = tx.offer.id === 'nauta' ? 'Nauta Hogar Fallida' : 
-            tx.offer.id === 'nauta_plus' ? 'Nauta Plus Fallida' : 
-            'Recarga Móvil Fallida'
-  } else if (tx.status === 'processing') {
-    title = tx.offer.id === 'nauta' ? 'Procesando Nauta Hogar' : 
-            tx.offer.id === 'nauta_plus' ? 'Procesando Nauta Plus' : 
-            'Procesando Recarga'
-  }
-
-  return {
-    id: `h-${tx.id}-${idx}`,
-    type: type,
-    title: title,
-    description: `${tx.offer.data} • ${tx.phoneNumber}${tx.email ? ` • ${tx.email}` : ''}`,
-    amount: `$${tx.offer.priceUSDT.toFixed(2)}`,
-    date: tx.timestamp
-  }
-})
-
-// Prepend history activities to the existing recentActivity (without mutating original data)
-const combinedRecent = [...historyActivities, ...user.value.recentActivity].slice(0, 6)
+}
 
 interface IconConfig {
   bgClass: string
@@ -347,6 +334,17 @@ const formatDate = (date: Date) => {
     month: 'short', 
     year: 'numeric' 
   })
+}
+
+const itemTitle = (tx: any) => {
+  if (tx.kind === 'sim') {
+    if (tx.status === 'error') return 'Compra SIM Fallida'
+    if (tx.status === 'processing') return 'Compra SIM Pendiente'
+    return 'Compra SIM Completada'
+  }
+  if (tx.status === 'error') return 'Recarga Fallida'
+  if (tx.status === 'processing') return 'Recarga Pendiente'
+  return 'Recarga Completada'
 }
 </script>
 

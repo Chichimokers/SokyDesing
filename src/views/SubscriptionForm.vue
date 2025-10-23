@@ -81,7 +81,7 @@
                   v-model="form.nautaEmail"
                   type="email"
                   class="w-full px-4 py-4 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300"
-                  placeholder="usuario@nauta.cu"
+                  placeholder="usuario@nauta.com.cu"
                   :required="isNautaHogar"
                 />
                 <p v-if="errors.nautaEmail" class="text-red-400 text-sm mt-2">{{ errors.nautaEmail }}</p>
@@ -302,13 +302,13 @@ const validateForm = () => {
     isValid = false
   }
 
-  // Validar email para Nauta Hogar
+  // Validar email para Nauta Hogar (solo dominios @nauta.com.cu)
   if (isNautaHogar.value) {
     if (!form.value.nautaEmail.trim()) {
       errors.value.nautaEmail = 'El correo Nauta es requerido para Nauta Hogar'
       isValid = false
-    } else if (!/^[a-zA-Z0-9._%+-]+@nauta\.cu$/.test(form.value.nautaEmail)) {
-      errors.value.nautaEmail = 'Debe ser un correo @nauta.cu válido'
+    } else if (!/^[a-zA-Z0-9._%+-]+@nauta\.com\.cu$/i.test(form.value.nautaEmail.trim())) {
+      errors.value.nautaEmail = 'Debe ser un correo @nauta.com.cu válido'
       isValid = false
     }
   }

@@ -263,7 +263,7 @@ const activeSubscriptions = ref<Subscription[]>([
     type: 'nauta_hogar',
     price: 45.00,
     nextPayment: new Date(Date.now() + 8 * 24 * 60 * 60 * 1000), // 8 días desde ahora
-    beneficiary: '+5358491726 • usuario@nauta.cu',
+  beneficiary: '+5358491726 • usuario@nauta.com.cu',
     status: 'active'
   }
 ])

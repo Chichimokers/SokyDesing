@@ -41,6 +41,13 @@
             Recargas
           </router-link>
           <router-link 
+            to="/cubacel" 
+            class="nav-link px-3 py-2 rounded-xl transition-all duration-300"
+            :class="{ 'nav-link-active': $route.path === '/cubacel' }"
+          >
+            SIM
+          </router-link>
+          <router-link 
             to="/subscription" 
             class="nav-link px-3 py-2 rounded-xl transition-all duration-300"
             :class="{ 'nav-link-active': $route.path === '/subscription' }"
@@ -214,6 +221,18 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
               </svg>
               Recargas
+            </router-link>
+            
+            <router-link 
+              to="/cubacel" 
+              @click="closeMobileMenu"
+              class="mobile-nav-link flex items-center px-4 py-3 rounded-xl transition-all duration-300"
+              :class="{ 'mobile-nav-link-active': $route.path === '/cubacel' }"
+            >
+              <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7v10M9 7v10M4 8h16M4 16h16"/>
+              </svg>
+              SIM
             </router-link>
             
             <router-link 

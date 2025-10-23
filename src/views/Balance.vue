@@ -122,8 +122,10 @@
               </div>
               
               <div class="space-y-2 sm:space-y-3">
-                <div v-for="transaction in transactions" :key="transaction.id" 
-                     class="transaction-item flex items-center justify-between p-3 sm:p-4 bg-white/5 hover:bg-white/10 rounded-lg sm:rounded-xl transition-all duration-300">
+       <div v-for="transaction in transactions" :key="transaction.id" 
+         class="transaction-item flex items-center justify-between p-3 sm:p-4 rounded-lg sm:rounded-xl transition-all duration-300 cursor-pointer border-l-4"
+         :class="getStatusRowClasses(transaction.status)"
+                     @click="openDepositDetail(transaction)">
                   <div class="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
                     <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center flex-shrink-0" 
                          :class="getTransactionIcon(transaction.type).bgClass">
@@ -141,7 +143,9 @@
                     <p class="font-semibold text-sm sm:text-base" :class="transaction.type === 'credit' ? 'text-green-400' : 'text-red-400'">
                       {{ transaction.type === 'credit' ? '+' : '-' }}{{ isBalanceVisible ? `$${Math.abs(transaction.amount).toFixed(2)}` : '$**.**' }}
                     </p>
-                    <p class="text-gray-500 text-xs sm:text-sm">{{ transaction.status }}</p>
+                    <div class="flex items-center justify-end mt-1">
+                      <span :class="getStatusBadgeClasses(transaction.status)">{{ transaction.status }}</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -159,7 +163,7 @@
 
     <!-- Crypto Deposit Popup -->
     <CryptoDepositPopup 
-      :isOpen="showCryptoDepositPopup"
+      :isOpen="activeModal === 'qr'"
       @close="closeCryptoDepositPopup"
       @depositInitiated="handleDepositInitiated"
     />
@@ -175,7 +179,8 @@
     <!-- Balance Status Popup -->
     <!-- Balance Status Popup -->
     <BalanceStatusPopup 
-      :isOpen="showStatusPopup"
+      :isOpen="activeModal === 'verifying' || activeModal === 'result'"
+      :key="statusData.status"
       :status="statusData.status"
       :operationDetails="statusData.operationDetails"
       :errorDetails="statusData.errorDetails"
@@ -193,6 +198,13 @@
       @close="closeTransactionStatusPopup"
       @retry="retryTransaction"
     />
+
+    <!-- Deposit Detail Modal from history -->
+    <DepositDetailModal
+      :isOpen="showDepositDetail"
+      :transaction="selectedTransaction"
+      @close="showDepositDetail = false"
+    />
   </div>
 </template>
 
@@ -203,6 +215,7 @@ import CryptoDepositPopup from '../components/CryptoDepositPopup.vue'
 import TransferBalancePopup from '../components/TransferBalancePopup.vue'
 import BalanceStatusPopup from '../components/BalanceStatusPopup.vue'
 import TransactionStatusPopup from '../components/TransactionStatusPopup.vue'
+import DepositDetailModal from '../components/DepositDetailModal.vue'
 
 interface Transaction {
   id: number
@@ -212,6 +225,13 @@ interface Transaction {
   amount: number
   status: string
   date: Date
+  // Metadata for deposits
+  cryptoSymbol?: string
+  address?: string
+  expectedAmount?: number
+  receivedAmount?: number
+  transactionId?: string
+  startedAt?: Date
 }
 
 interface OperationDetails {
@@ -221,10 +241,11 @@ interface OperationDetails {
   cryptocurrency?: string
   transactionId?: string
   timestamp?: Date
+  receivedAmount?: number
 }
 
 interface StatusData {
-  status: 'success' | 'pending' | 'error'
+  status: 'success' | 'pending' | 'error' | 'partial'
   operationDetails?: OperationDetails
   errorDetails?: string
   primaryAction?: {
@@ -240,15 +261,14 @@ interface IconConfig {
 }
 
 // Popup states
-const showCryptoDepositPopup = ref(false)
+const activeModal = ref<'none' | 'qr' | 'verifying' | 'result'>('none')
 const showTransferPopup = ref(false)
-const showStatusPopup = ref(false)
 const showTransactionStatusPopup = ref(false)
+const showDepositDetail = ref(false)
+const selectedTransaction = ref<Transaction | null>(null)
 
 // Status popup data
-const statusData = ref<StatusData>({
-  status: 'pending'
-})
+const statusData = ref<StatusData>({ status: 'pending' })
 
 // Transaction status popup data
 const transactionStatus = ref({
@@ -272,11 +292,11 @@ const toggleBalanceVisibility = () => {
 
 // Popup handlers
 const openCryptoDepositPopup = () => {
-  showCryptoDepositPopup.value = true
+  activeModal.value = 'qr'
 }
 
 const closeCryptoDepositPopup = () => {
-  showCryptoDepositPopup.value = false
+  activeModal.value = 'none'
 }
 
 const openTransferPopup = () => {
@@ -288,7 +308,7 @@ const closeTransferPopup = () => {
 }
 
 const closeStatusPopup = () => {
-  showStatusPopup.value = false
+  activeModal.value = 'none'
 }
 
 const closeTransactionStatusPopup = () => {
@@ -301,46 +321,107 @@ const retryTransaction = () => {
 }
 
 // Operation handlers
+let verifyInterval: any = null
+let verificationStartAt: number | null = null
+
 const handleDepositInitiated = (cryptocurrency: string, amount: number, qrData: string) => {
-  // Simulate pending deposit
+  // Cerrar el popup de QR para evitar bloqueos visuales si se desea
+  // Mantenerlo abierto también es válido; aquí lo dejamos abierto para que el usuario vea el QR
+
+  const txnId = generateTransactionId()
   statusData.value = {
     status: 'pending',
     operationDetails: {
       type: 'deposit',
-      amount: amount,
-      cryptocurrency: cryptocurrency,
-      transactionId: generateTransactionId(),
+      amount,
+      cryptocurrency,
+      transactionId: txnId,
       timestamp: new Date()
     }
   }
-  
-  showStatusPopup.value = true
-  
-  // Add to transactions
+  // Cambiar a modal de verificación y cerrar QR
+  activeModal.value = 'verifying'
+  verificationStartAt = Date.now()
+
+  // Insertar en historial como pendiente
   transactions.value.unshift({
     id: Date.now(),
     type: 'credit',
-    title: `Depósito ${cryptocurrency.toUpperCase()}`,
-    description: `Depósito pendiente de confirmación`,
+    title: `Acreditación de ${amount.toFixed(2)} USD - En proceso`,
+    description: `Método: QR ${cryptocurrency.toUpperCase()} • Pendiente de confirmación`,
     amount: amount,
-    status: 'Pendiente',
-    date: new Date()
+    status: 'En espera',
+    date: new Date(),
+    cryptoSymbol: cryptocurrency,
+    address: qrData,
+    expectedAmount: amount,
+    transactionId: txnId,
+    startedAt: new Date()
   })
-  
-  // Simulate confirmation after delay
-  setTimeout(() => {
-    if (statusData.value.operationDetails) {
+
+  // Iniciar verificación periódica cada 5s
+  if (verifyInterval) clearInterval(verifyInterval)
+  verifyInterval = setInterval(async () => {
+    const result = await mockCheckPayment(txnId)
+    if (result.status === 'waiting') {
+      statusData.value.status = 'pending'
+      return
+    }
+
+    // Detener verificación
+    clearInterval(verifyInterval)
+
+    const latest = transactions.value[0]
+    if (!latest) return
+
+    if (result.status === 'success') {
       statusData.value.status = 'success'
       balance.value.current += amount
-      
-      // Update transaction status
-      const latestTransaction = transactions.value[0]
-      if (latestTransaction && latestTransaction.id) {
-        latestTransaction.status = 'Completado'
-        latestTransaction.description = `Depósito confirmado via ${cryptocurrency.toUpperCase()}`
+      latest.status = 'Completado'
+      latest.title = `Acreditación de ${amount.toFixed(2)} USD - Confirmada`
+      latest.description = `Método: QR ${cryptocurrency.toUpperCase()} • Recibido: $${amount.toFixed(2)}`
+      // Cambiar a modal de resultado
+      activeModal.value = 'result'
+    } else if (result.status === 'failed') {
+      statusData.value.status = 'error'
+      latest.status = 'Fallido'
+      latest.title = `Acreditación de ${amount.toFixed(2)} USD - Fallida`
+      latest.description = `Método: QR ${cryptocurrency.toUpperCase()} • No recibido`
+      activeModal.value = 'result'
+    } else if (result.status === 'partial') {
+      statusData.value.status = 'partial'
+      const received = result.receivedAmount ?? Math.max(0, amount - 5)
+      statusData.value.operationDetails = {
+        type: statusData.value.operationDetails?.type || 'deposit',
+        amount: statusData.value.operationDetails?.amount,
+        recipient: statusData.value.operationDetails?.recipient,
+        cryptocurrency: statusData.value.operationDetails?.cryptocurrency,
+        transactionId: statusData.value.operationDetails?.transactionId,
+        timestamp: statusData.value.operationDetails?.timestamp,
+        receivedAmount: received
       }
+      latest.status = 'Parcial'
+      latest.title = `Acreditación de ${amount.toFixed(2)} USD - Parcialmente pagada`
+      latest.description = `Método: QR ${cryptocurrency.toUpperCase()} • Recibido $${received.toFixed(2)} (esperado $${amount.toFixed(2)})`
+      latest.receivedAmount = received
+      activeModal.value = 'result'
     }
-  }, 5000)
+  }, 2000)
+}
+
+// Simulación de API de verificación
+const mockCheckPayment = async (id: string): Promise<{ status: 'success' | 'failed' | 'partial' | 'waiting'; receivedAmount?: number }> => {
+  // Esperar al menos 6 segundos desde el inicio para simular pago
+  if (!verificationStartAt || (Date.now() - verificationStartAt) < 6000) {
+    return { status: 'waiting' }
+  }
+  const outcomes = ['success', 'failed', 'partial'] as const
+  const pick = outcomes[Math.floor(Math.random() * outcomes.length)]
+  if (pick === 'partial') {
+    const received = Math.max(5, (statusData.value.operationDetails?.amount || 0) * 0.6)
+    return { status: 'partial', receivedAmount: parseFloat(received.toFixed(2)) }
+  }
+  return { status: pick as 'success' | 'failed' | 'partial' }
 }
 
 const handleTransferInitiated = (recipient: string, amount: number, message: string, fee: number) => {
@@ -356,7 +437,7 @@ const handleTransferInitiated = (recipient: string, amount: number, message: str
       },
       errorDetails: 'Saldo insuficiente para completar la transferencia'
     }
-    showStatusPopup.value = true
+    activeModal.value = 'result'
     return
   }
   
@@ -373,8 +454,7 @@ const handleTransferInitiated = (recipient: string, amount: number, message: str
       timestamp: new Date()
     }
   }
-  
-  showStatusPopup.value = true
+  activeModal.value = 'result'
   
   // Add to transactions
   transactions.value.unshift({
@@ -409,6 +489,43 @@ const stats = ref({
 })
 
 const transactions = ref<Transaction[]>([
+  // Ejemplos requeridos
+  {
+    id: 1001,
+    type: 'credit',
+    title: 'Acreditación de 25 USD - Confirmada',
+    description: 'Método: QR Cubapay • Recibido: $25.00',
+    amount: 25.00,
+    status: 'Exitoso',
+    date: new Date()
+  },
+  {
+    id: 1002,
+    type: 'credit',
+    title: 'Acreditación de 20 USD - En proceso',
+    description: 'Método: QR Cubapay • Pendiente de confirmación',
+    amount: 20.00,
+    status: 'En espera',
+    date: new Date()
+  },
+  {
+    id: 1003,
+    type: 'credit',
+    title: 'Acreditación de 15 USD - Fallida',
+    description: 'Método: QR Cubapay • No recibido',
+    amount: 15.00,
+    status: 'Fallido',
+    date: new Date()
+  },
+  {
+    id: 1004,
+    type: 'credit',
+    title: 'Acreditación de 30 USD - Parcialmente pagada',
+    description: 'Método: QR Cubapay • Recibido $20.00 (esperado $30.00)',
+    amount: 20.00,
+    status: 'Parcial',
+    date: new Date()
+  },
   {
     id: 1,
     type: 'credit',
@@ -476,6 +593,28 @@ const formatDate = (date: Date) => {
     month: 'short', 
     year: 'numeric' 
   })
+}
+
+const getStatusBadgeClasses = (status: string) => {
+  const base = 'inline-flex items-center px-2 py-0.5 rounded text-[10px] sm:text-xs font-medium border'
+  const s = status.toLowerCase()
+  if (s.includes('parcial')) return `${base} bg-yellow-500/15 text-yellow-300 border-yellow-500/30`
+  if (s.includes('fall') || s.includes('error')) return `${base} bg-red-500/15 text-red-300 border-red-500/30`
+  if (s.includes('complet') || s.includes('exitos')) return `${base} bg-green-500/15 text-green-300 border-green-500/30`
+  return `${base} bg-blue-500/15 text-blue-300 border-blue-500/30`
+}
+
+const getStatusRowClasses = (status: string) => {
+  const s = status.toLowerCase()
+  if (s.includes('parcial')) return 'border-yellow-500/60 bg-yellow-500/10 hover:bg-yellow-500/15'
+  if (s.includes('fall') || s.includes('error')) return 'border-red-500/60 bg-red-500/10 hover:bg-red-500/15'
+  if (s.includes('complet') || s.includes('exitos')) return 'border-green-500/60 bg-green-500/10 hover:bg-green-500/15'
+  return 'border-blue-500/60 bg-white/5 hover:bg-white/10'
+}
+
+const openDepositDetail = (tx: Transaction) => {
+  selectedTransaction.value = tx
+  showDepositDetail.value = true
 }
 
 </script>

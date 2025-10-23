@@ -13,6 +13,11 @@
             <path class="opacity-75" fill="currentColor" d="m4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
           </svg>
         </div>
+        <div v-else-if="status === 'partial'" class="w-14 h-14 bg-orange-500/20 rounded-full flex items-center justify-center">
+          <svg class="w-8 h-8 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M21 12A9 9 0 113 12a9 9 0 0118 0z"/>
+          </svg>
+        </div>
         <div v-else-if="status === 'error'" class="w-14 h-14 bg-red-500/20 rounded-full flex items-center justify-center">
           <svg class="w-8 h-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
@@ -29,7 +34,7 @@
 
       <div v-if="operationDetails" class="mb-6 p-4 bg-gray-800/50 rounded-lg border border-gray-700">
         <div class="text-sm text-gray-300 font-medium mb-3">Detalles de la operación:</div>
-        <div class="grid grid-cols-2 gap-y-2 text-xs text-gray-400">
+  <div class="grid grid-cols-2 gap-y-2 text-xs text-gray-400">
           <template v-if="operationDetails.type">
             <div class="text-gray-300">Tipo:</div>
             <div class="text-white capitalize">{{ operationTypeLabel }}</div>
@@ -49,6 +54,10 @@
           <template v-if="operationDetails.transactionId">
             <div class="text-gray-300">ID Transacción:</div>
             <div class="text-white font-mono text-xs">{{ operationDetails.transactionId }}</div>
+          </template>
+          <template v-if="operationDetails.receivedAmount !== undefined">
+            <div class="text-gray-300">Recibido:</div>
+            <div class="text-orange-400 font-medium">${{ operationDetails.receivedAmount?.toFixed(2) }}</div>
           </template>
           <template v-if="operationDetails.timestamp">
             <div class="text-gray-300">Fecha:</div>
@@ -93,6 +102,7 @@ interface OperationDetails {
   cryptocurrency?: string
   transactionId?: string
   timestamp?: Date
+  receivedAmount?: number
 }
 
 interface PrimaryAction {
@@ -102,7 +112,7 @@ interface PrimaryAction {
 
 interface Props {
   isOpen: boolean
-  status: 'success' | 'pending' | 'error'
+  status: 'success' | 'pending' | 'error' | 'partial'
   operationDetails?: OperationDetails
   errorDetails?: string
   primaryAction?: PrimaryAction
@@ -125,6 +135,8 @@ const statusTitle = computed(() => {
       return props.operationDetails?.type === 'deposit' ? 'Depósito Exitoso' : 'Transferencia Exitosa'
     case 'pending':
       return props.operationDetails?.type === 'deposit' ? 'Procesando Depósito' : 'Procesando Transferencia'
+    case 'partial':
+      return 'Acreditación Parcial'
     case 'error':
       return props.operationDetails?.type === 'deposit' ? 'Error en Depósito' : 'Error en Transferencia'
     default:
@@ -139,9 +151,9 @@ const statusMessage = computed(() => {
         ? 'Tu depósito ha sido confirmado y tu saldo ha sido actualizado.'
         : 'La transferencia se ha completado exitosamente.'
     case 'pending':
-      return props.operationDetails?.type === 'deposit'
-        ? 'Tu depósito está siendo procesado. Te notificaremos cuando se confirme.'
-        : 'Tu transferencia está siendo procesada.'
+      return 'Esperando confirmación de tu pago…'
+    case 'partial':
+      return 'El monto enviado no coincide con el total esperado. Tu pago se registró como parcial.'
     case 'error':
       return 'Ha ocurrido un error durante la operación. Por favor, inténtalo de nuevo.'
     default:
