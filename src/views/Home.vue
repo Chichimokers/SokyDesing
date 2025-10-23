@@ -200,8 +200,7 @@
     </section>
    
 
-    <Footer />
-    
+   
     <!-- Phone Number Popup -->
     <PhoneNumberPopup 
       :is-open="showPopup"

@@ -196,8 +196,7 @@
       @retry="handleRetrySubscription"
     />
 
-    <!-- Footer -->
-    <Footer />
+
   </div>
 </template>
 

@@ -174,7 +174,7 @@
         </div>
       </div>
 
-      <Footer />
+    
     </div>
 
     <!-- Modal de estado de recarga -->
