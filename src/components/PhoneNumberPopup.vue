@@ -17,7 +17,7 @@
         <label class="block text-sm text-gray-300 mb-2">Email</label>
         <div class="flex items-center space-x-3">
           <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12H8m8 0l-4 4m4-4l-4-4"/></svg>
-          <input v-model="email" type="email" placeholder="correo@nauta.cu" class="w-full bg-[#1a1a1a] border border-white/10 rounded-md px-3 py-2 text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          <input v-model="email" type="email" placeholder="correo@nauta.com.cu" class="w-full bg-[#1a1a1a] border border-white/10 rounded-md px-3 py-2 text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500" />
         </div>
       </div>
 
@@ -30,21 +30,52 @@
 
     <template #footer>
       <div class="flex items-center justify-between">
-        <div class="text-sm text-gray-400"><span v-if="validPhoneCount > 0">{{ validPhoneCount }} número{{ validPhoneCount !== 1 ? 's' : '' }} válido{{ validPhoneCount !== 1 ? 's' : '' }}</span><span v-else>Sin números válidos</span></div>
+        <div class="text-sm text-gray-400">
+          <div>
+        <span v-if="validPhoneCount > 0">{{ validPhoneCount }} número{{ validPhoneCount !== 1 ? 's' : '' }} válido{{ validPhoneCount !== 1 ? 's' : '' }}</span>
+        <span v-else>Sin números válidos</span>
+          </div>
+
+          <!-- Mostrar estado del correo sólo para nauta -->
+          <div v-if="selectedOffer && selectedOffer.id === 'nauta'" class="mt-1">
+        <span v-if="!email" class="text-yellow-300 text-xs">Correo requerido (debe ser @nauta.com.cu)</span>
+        <span v-else-if="!/@nauta\.com\.cu$/i.test(email)" class="text-red-400 text-xs">El correo debe terminar en @nauta.com.cu</span>
+        <span v-else class="text-green-400 text-xs">Correo válido</span>
+          </div>
+        </div>
+
         <div class="flex space-x-3">
           <button @click="closePopup" class="px-4 py-2 text-gray-400 hover:text-white transition-colors">Cancelar</button>
 
           <template v-if="selectedOffer && selectedOffer.id === 'nauta'">
-            <button @click="proceedToSubscribe" :disabled="validPhoneCount === 0 || !email || !selectedPlan" class="bg-green-500 hover:bg-green-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white px-5 py-2 rounded-lg font-semibold transition duration-300">Suscribirse</button>
-            <button @click="proceedToRecharge" :disabled="validPhoneCount === 0 || !email || !selectedPlan" class="bg-blue-500 hover:bg-blue-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white px-6 py-2 rounded-lg font-semibold transition duration-300">Recargar ({{ totalPrice.toFixed(2) }} USDT)</button>
+
+        <button
+          @click="proceedToRecharge"
+          :disabled="validPhoneCount === 0 || !/@nauta\.com\.cu$/i.test(email) || !selectedPlan"
+          class="bg-blue-500 hover:bg-blue-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white px-6 py-2 rounded-lg font-semibold transition duration-300"
+        >
+          Recargar ({{ totalPrice.toFixed(2) }} USDT)
+        </button>
           </template>
 
           <template v-else-if="selectedOffer && selectedOffer.id === 'nauta_plus'">
-            <button @click="proceedToSubscribe" :disabled="validPhoneCount === 0 || !selectedPlan" class="bg-green-500 hover:bg-green-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white px-6 py-2 rounded-lg font-semibold transition duration-300">Suscribirse</button>
+        <button
+          @click="proceedToSubscribe"
+          :disabled="validPhoneCount === 0 || !selectedPlan"
+          class="bg-green-500 hover:bg-green-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white px-6 py-2 rounded-lg font-semibold transition duration-300"
+        >
+          Suscribirse
+        </button>
           </template>
 
           <template v-else>
-            <button @click="proceedToRecharge" :disabled="validPhoneCount === 0 || !selectedPlan" class="bg-blue-500 hover:bg-blue-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white px-6 py-2 rounded-lg font-semibold transition duration-300">Continuar ({{ totalPrice.toFixed(2) }} USDT)</button>
+        <button
+          @click="proceedToRecharge"
+          :disabled="validPhoneCount === 0 || !selectedPlan"
+          class="bg-blue-500 hover:bg-blue-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white px-6 py-2 rounded-lg font-semibold transition duration-300"
+        >
+          Continuar ({{ totalPrice.toFixed(2) }} USDT)
+        </button>
           </template>
         </div>
       </div>

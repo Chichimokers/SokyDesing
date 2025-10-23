@@ -62,7 +62,11 @@
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label class="block text-sm font-semibold text-gray-300 mb-2">Nacionalidad</label>
-                  <input v-model="turForm.nationality" type="text" class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20" placeholder="Ej: Española" required />
+                  <select v-model="turForm.nationality" class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20" required>
+                    <option disabled value="">Selecciona tu nacionalidad</option>
+                    <option v-for="n in nationalities" :key="n" :value="n">{{ n }}</option>
+                  </select>
+
                 </div>
                 <div>
                   <label class="block text-sm font-semibold text-gray-300 mb-2">Carnet o Pasaporte</label>
@@ -101,6 +105,7 @@
                   <h2 class="text-2xl font-bold text-white">SIM Cubacel Permanente</h2>
                   <span class="px-2.5 py-1 rounded-lg bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-sm">$45 USD</span>
                 </div>
+                <p class="text-gray-300 mt-1">Incluye 250 CUP de saldo inicial</p>
                 <button type="button" @click="openInfo('perm')" class="text-blue-400 hover:text-blue-300 text-sm inline-flex items-center gap-1 mt-1">
                   Más info
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h6m0 0v6m0-6L10 16"/></svg>
@@ -112,7 +117,10 @@
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label class="block text-sm font-semibold text-gray-300 mb-2">Nacionalidad</label>
-                  <input v-model="permForm.nationality" type="text" class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20" placeholder="Ej: Cubana" required />
+                  <select v-model="permForm.nationality" class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20" required>
+                    <option disabled value="">Selecciona tu nacionalidad</option>
+                    <option v-for="n in nationalities" :key="n" :value="n">{{ n }}</option>
+                  </select>
                 </div>
                 <div>
                   <label class="block text-sm font-semibold text-gray-300 mb-2">Carnet o Pasaporte</label>
@@ -162,6 +170,10 @@
                   <h2 class="text-2xl font-bold text-white">Módem ETECSA</h2>
                   <span class="px-2.5 py-1 rounded-lg bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 text-sm">$99.99 USD</span>
                 </div>
+                <div class="mt-2 p-3 rounded-xl text-gray-300">
+                  <span class="font-medium text-white">Incluye:</span>
+                  <span class="ml-1">Módem Huawei B311-221 + SIM de Datos + 100GB</span>
+                </div>
                 <button type="button" @click="openInfo('modem')" class="text-blue-400 hover:text-blue-300 text-sm inline-flex items-center gap-1 mt-1">
                   Más info
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h6m0 0v6m0-6L10 16"/></svg>
@@ -176,12 +188,49 @@
               </div>
             </div>
 
-            <div class="mb-6 p-3 bg-white/5 border border-white/10 rounded-xl text-gray-300">
-              <span class="font-medium text-white">Incluye:</span>
-              <span class="ml-1">Módem Huawei B311-221 + SIM de Datos + 100GB</span>
-            </div>
+            <!-- Modem Form -->
+            <form ref="modemFormEl" @submit.prevent="handleModemClick" class="space-y-4">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-            <button type="button" @click="handleModemClick" class="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white py-3 rounded-xl font-semibold transition-all shadow-lg hover:shadow-xl">Comprar Módem — $99.99</button>
+              <div>
+                  <label class="block text-sm font-semibold text-gray-300 mb-2">Nacionalidad</label>
+                  <select v-model="modemForm.nationality" class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20" required>
+                    <option disabled value="">Selecciona tu nacionalidad</option>
+                    <option v-for="n in nationalities" :key="n" :value="n">{{ n }}</option>
+                  </select>
+
+                </div>
+                <div>
+                  <label class="block text-sm font-semibold text-gray-300 mb-2">Carnet o Pasaporte</label>
+                  <input v-model="modemForm.idCard" type="text" class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20" placeholder="Número de identificación" required />
+                </div>
+                <div>
+                  <label class="block text-sm font-semibold text-gray-300 mb-2">Nombre</label>
+                  <input v-model="modemForm.firstName" type="text" class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20" placeholder="Nombre" required />
+                </div>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-sm font-semibold text-gray-300 mb-2">Primer Apellido</label>
+                  <input v-model="modemForm.lastName1" type="text" class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20" placeholder="Primer apellido" required />
+                </div>
+                <div>
+                  <label class="block text-sm font-semibold text-gray-300 mb-2">Segundo Apellido (Opcional)</label>
+                  <input v-model="modemForm.lastName2" type="text" class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20" placeholder="Segundo apellido" />
+                </div>
+              </div>
+                 <select v-model="modemForm.pickupOffice" class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20" required>
+                  <option disabled value="">Selecciona una oficina</option>
+                  <option value="ETECSA Centro Habana">ETECSA Centro Habana</option>
+                  <option value="ETECSA Vedado">ETECSA Vedado</option>
+                  <option value="ETECSA Playa">ETECSA Playa</option>
+                  <option value="ETECSA Santiago de Cuba">ETECSA Santiago de Cuba</option>
+                </select>
+          
+            
+
+              <button type="button" @click="handleModemClick" class="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white py-3 rounded-xl font-semibold transition-all shadow-lg hover:shadow-xl">Comprar Módem — $99.99</button>
+            </form>
           </div>
         </div>
       </div>
@@ -253,6 +302,19 @@ import SimPurchaseConfirmation from '@/components/SimPurchaseConfirmation.vue'
 import ProductPurchaseConfirmation from '@/components/ProductPurchaseConfirmation.vue'
 import InfoModal from '@/components/InfoModal.vue'
 
+const nationalities = [
+  'Cubana',
+  'Española',
+  'Estadounidense',
+  'Mexicana',
+  'Venezolana',
+  'Colombiana',
+  'Argentina',
+  'Chilena',
+  'Peruana',
+  'Otra'
+]
+
 const turForm = ref({
   nationality: '',
   idCard: '',
@@ -272,7 +334,7 @@ const permForm = ref({
 
 const showConfirm = ref(false)
 const confirmDetails = ref({ fullName: '', idCard: '', pickupOffice: '', code: '' })
-const { addSimPurchase } = useRecharge()
+const { addSimPurchase, addModemPurchase } = useRecharge()
 const turFormEl = ref<HTMLFormElement | null>(null)
 const permFormEl = ref<HTMLFormElement | null>(null)
 
@@ -280,6 +342,17 @@ const permFormEl = ref<HTMLFormElement | null>(null)
 const showModemConfirm = ref(false)
 interface ProductDetails { productName: string; price: number; orderId: string }
 const modemDetails = ref<ProductDetails>({ productName: 'Módem ETECSA (Huawei B311-221)', price: 99.99, orderId: '' })
+
+// Modem form state
+const modemForm = ref({
+  nationality: '',
+  idCard: '',
+  firstName: '',
+  lastName1: '',
+  lastName2: '',
+  pickupOffice: ''
+})
+const modemFormEl = ref<HTMLFormElement | null>(null)
 
 const generateCode = () => Math.floor(100000000000 + Math.random() * 900000000000).toString()
 const generateOrderId = (): string => {
@@ -330,7 +403,18 @@ const handlePermanentClick = () => {
 }
 
 const handleModemClick = () => {
+  if (modemFormEl.value && !modemFormEl.value.reportValidity()) return
   modemDetails.value.orderId = generateOrderId()
+  const fullName = [modemForm.value.firstName, modemForm.value.lastName1, modemForm.value.lastName2].filter(Boolean).join(' ')
+  // Registrar en historial
+  addModemPurchase({
+    fullName,
+    idCard: modemForm.value.idCard,
+    pickupOffice: modemForm.value.pickupOffice,
+    productName: modemDetails.value.productName,
+    priceUSDT: modemDetails.value.price,
+    orderId: modemDetails.value.orderId
+  })
   showModemConfirm.value = true
 }
 
@@ -359,10 +443,14 @@ Cada recarga adicional extiende la vigencia de la línea según el paquete adqui
 
 Paquete Plus: Extiende 30 días por recarga, hasta un máximo de 90 días.
 La vigencia total no puede superar los 90 días.`,
-  perm: `Exclusivo para beneficiarios mayores de 18 años.
+  perm: `Incluye 250 CUP de saldo inicial.
+
+Exclusivo para beneficiarios mayores de 18 años.
 
 Servicio de ETECSA para residentes que viven en Cuba por un largo período de tiempo. Ahora con esta tarjeta, los residentes en Cuba pueden tener una línea móvil permanente válida por 360 días (después de cada recarga), el crédito inicial incluido con la tarjeta es de 250 CUP, puede retirar la tarjeta Cubacel en la Oficina Comercial de Etecsa seleccionada. Después de obtener su tarjeta SIM en Cuba, puede recargar el saldo en nuestra página, debe recargar el número asignado a la línea (53XXXXXXXX).`,
-  modem: `Descubre el MODEM de Etecsa, una opción práctica para conectar a internet en Cuba. Ideal para hogares y oficinas, y una alternativa especialmente valiosa en zonas donde Nauta Hogar no está disponible. Este paquete incluye el Módem Huawei B311-221 y una uSIM de Datos especializada, diseñada para planes especiales de datos, acompañada de 100GB de datos para empezar a navegar.
+  modem: `Incluye: Módem Huawei B311-221 + SIM de Datos + 100GB.
+
+Descubre el MODEM de Etecsa, una opción práctica para conectar a internet en Cuba. Ideal para hogares y oficinas, y una alternativa especialmente valiosa en zonas donde Nauta Hogar no está disponible. Este paquete incluye el Módem Huawei B311-221 y una uSIM de Datos especializada, diseñada para planes especiales de datos, acompañada de 100GB de datos para empezar a navegar.
 Exclusivo para beneficiarios mayores de 18 años.
 
 Precio: 99.99 USD

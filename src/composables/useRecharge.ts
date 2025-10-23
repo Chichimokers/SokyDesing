@@ -25,7 +25,7 @@ export interface RechargeTransaction {
   timestamp: Date
   email?: string
   // Tipo opcional para mostrar en historial (ej: 'mobile', 'nauta', 'nauta_plus')
-  kind?: 'mobile' | 'nauta' | 'nauta_plus' | 'sim' | 'other'
+  kind?: 'mobile' | 'nauta' | 'nauta_plus' | 'sim' | 'modem' | 'other'
 }
 
 // Module-scoped state so the composable behaves like a singleton across the app
@@ -266,6 +266,31 @@ const availableOffers = ref<RechargeOffer[]>([
     return tx
   }
 
+  // Registrar compra de MÓDEM en historial
+  const addModemPurchase = (params: { fullName: string; idCard: string; pickupOffice: string; email?: string; productName?: string; priceUSDT?: number; orderId?: string }) => {
+    const offer: RechargeOffer = {
+      id: 'modem_huawei_b311',
+      title: params.productName || 'Módem ETECSA (Huawei B311-221)',
+      data: 'Módem ETECSA',
+      minutes: '-',
+      sms: '-',
+      price: params.priceUSDT ?? 99.99,
+      priceUSDT: params.priceUSDT ?? 99.99
+    }
+
+    const tx: RechargeTransaction = {
+      id: params.orderId || Date.now().toString(),
+      phoneNumber: params.idCard, // referencia del beneficiario
+      offer,
+      status: 'completed',
+      timestamp: new Date(),
+      email: params.email || '',
+      kind: 'modem'
+    }
+    upsertHistory(tx)
+    return tx
+  }
+
   // Procesar recarga
   const processRecharge = (phoneNumber: string, userEmail: string = ''): Promise<RechargeTransaction> => {
     if (!selectedOffer.value) return Promise.reject(new Error('No hay oferta seleccionada'))
@@ -368,6 +393,7 @@ export function useRecharge() {
     cancelRecharge,
     getAllHistory,
     addSimPurchase,
+    addModemPurchase,
     getHistory,
     validateCubanPhone,
     resetTransaction

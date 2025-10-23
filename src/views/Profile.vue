@@ -160,6 +160,9 @@
                       <template v-if="tx.kind === 'sim'">
                         {{ tx.offer.title || 'SIM' }} • {{ tx.phoneNumber }}
                       </template>
+                      <template v-else-if="tx.kind === 'modem'">
+                        {{ tx.offer.title || 'Módem ETECSA' }} • {{ tx.phoneNumber }}
+                      </template>
                       <template v-else>
                         {{ tx.offer.data }} • {{ tx.phoneNumber }}
                       </template>
@@ -341,6 +344,11 @@ const itemTitle = (tx: any) => {
     if (tx.status === 'error') return 'Compra SIM Fallida'
     if (tx.status === 'processing') return 'Compra SIM Pendiente'
     return 'Compra SIM Completada'
+  }
+  if (tx.kind === 'modem') {
+    if (tx.status === 'error') return 'Compra Módem Fallida'
+    if (tx.status === 'processing') return 'Compra Módem Pendiente'
+    return 'Compra Módem Completada'
   }
   if (tx.status === 'error') return 'Recarga Fallida'
   if (tx.status === 'processing') return 'Recarga Pendiente'
