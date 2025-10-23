@@ -14,6 +14,7 @@
         <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-6">
           <a href="#tur-plus" class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-gray-200 hover:bg-white/10 transition">Tarjeta SIM Cubacel Turista</a>
           <a href="#permanente" class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-gray-200 hover:bg-white/10 transition">Tarjeta SIM Cubacel Regular</a>
+            <a href="#modem" class="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-gray-200 hover:bg-white/10 transition">Modem</a>
         </div>
 
         <!-- Important notes -->
@@ -181,11 +182,11 @@
               </div>
             </div>
 
-            <div class="mb-4">
+            <div id="modem" class="rounded-3xl mb-4">
               <!-- Imagen representativa del módem -->
-              <div class="w-full aspect-video bg-white/5 border border-white/10 rounded-xl flex items-center justify-center text-gray-400">
-               <img src="@/assets/images/offer_phph1je9vurekis8bYDwm3_1759729559.jpg"></img>
-              </div>
+            
+               <img class="rounded-3xl" src="@/assets/images/offer_phph1je9vurekis8bYDwm3_1759729559.jpg"></img>
+              
             </div>
 
             <!-- Modem Form -->

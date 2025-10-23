@@ -11,8 +11,7 @@
     </template>
 
     <div>
-      <div class="mb-6"><p class="text-gray-300 text-sm">Agrega hasta 5 números de teléfono para esta recarga. Todos los números recibirán la misma oferta.</p></div>
-
+    
       <div v-if="selectedOffer && selectedOffer.id === 'nauta'" class="mb-4">
         <label class="block text-sm text-gray-300 mb-2">Email</label>
         <div class="flex items-center space-x-3">

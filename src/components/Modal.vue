@@ -5,11 +5,11 @@
       <div class="fixed inset-0 bg-black/70 backdrop-blur-sm transition-opacity duration-300" style="z-index: 999998 !important;"></div>
 
       <!-- Container - Perfecto centrado responsive -->
-      <div class="relative w-full max-w-[95vw] sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl mx-auto" style="z-index: 999999 !important;">
+      <div class="relative w-35 max-w-[95vw] sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl mx-auto" style="z-index: 999999 !important;">
         <div 
           ref="modalRef"
           @click.stop 
-          class="bg-[#1a1a1a] rounded-lg sm:rounded-xl border border-white/10 text-left overflow-hidden shadow-2xl transform transition-all w-full flex flex-col max-h-[95vh] sm:max-h-[90vh] md:max-h-[85vh]"
+          class="bg-black/70 rounded-lg sm:rounded-xl border border-white/10 text-left overflow-hidden shadow-2xl transform transition-all w-full flex flex-col max-h-[95vh] sm:max-h-[90vh] md:max-h-[85vh]"
           role="dialog"
           aria-modal="true"
           style="z-index: 999999 !important;"
