@@ -6,7 +6,7 @@
       <div class="max-w-7xl mx-auto">
         <!-- Header -->
         <div class="mb-8 text-center">
-          <h1 class="text-3xl md:text-4xl font-bold text-white">Compra Celulares o Líneas Cubacel y Turista</h1>
+          <h1 class="text-3xl md:text-4xl font-bold text-white">Compra Líneas Cubacel y Turista</h1>
           <p class="text-gray-400 mt-2">Elige el plan que mejor se adapte a ti</p>
         </div>
 
@@ -28,8 +28,8 @@
           </div>
         </div>
 
-        <!-- Two-column responsive layout -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+  <!-- Responsive layout -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
           <!-- Tur Plus Card -->
           <div id="tur-plus" class="bg-black/40 backdrop-blur-md rounded-3xl p-6 border border-white/10 shadow-2xl">
             <div class="flex items-start gap-4 mb-4">
@@ -39,12 +39,15 @@
                 </svg>
               </div>
               <div class="flex-1">
-                <h2 class="text-2xl font-bold text-white">SIM Cubacel Tur Plus</h2>
+                <div class="flex flex-wrap items-center gap-2">
+                  <h2 class="text-2xl font-bold text-white">SIM Cubacel Tur Plus</h2>
+                  <span class="px-2.5 py-1 rounded-lg bg-blue-500/15 text-blue-300 border border-blue-500/30 text-sm">$35 USD</span>
+                </div>
                 <p class="text-gray-300 mt-1">Incluye 10GB, 100 minutos, 100 SMS + WhatsApp y Facebook ilimitados por 30 días</p>
-                <a href="https://suenacuba.com/tourist_sim_card_cuba_buy" target="_blank" class="text-blue-400 hover:text-blue-300 text-sm inline-flex items-center gap-1 mt-1">
+                <button type="button" @click="openInfo('tur')" class="text-blue-400 hover:text-blue-300 text-sm inline-flex items-center gap-1 mt-1">
                   Más info
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h6m0 0v6m0-6L10 16"/></svg>
-                </a>
+                </button>
               </div>
             </div>
 
@@ -81,35 +84,7 @@
                 </div>
               </div>
 
-              <!-- Optional extensions -->
-              <div>
-                <label class="block text-sm font-semibold text-white mb-2">Extensiones opcionales (máx. 3 meses)</label>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 cursor-pointer">
-                    <input type="checkbox" v-model="turForm.addons" value="Data 10 GB – 23.62" class="form-checkbox text-blue-500 rounded" />
-                    <span class="text-gray-200">Data 10 GB – 23.62 USD</span>
-                  </label>
-                  <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 cursor-pointer">
-                    <input type="checkbox" v-model="turForm.addons" value="Data 20 GB – 35.43" class="form-checkbox text-blue-500 rounded" />
-                    <span class="text-gray-200">Data 20 GB – 35.43 USD</span>
-                  </label>
-                  <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 cursor-pointer">
-                    <input type="checkbox" v-model="turForm.addons" value="Data 50 GB – 70.85" class="form-checkbox text-blue-500 rounded" />
-                    <span class="text-gray-200">Data 50 GB – 70.85 USD</span>
-                  </label>
-                  <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 cursor-pointer">
-                    <input type="checkbox" v-model="turForm.addons" value="Voice 20 Minutes – 12.50" class="form-checkbox text-blue-500 rounded" />
-                    <span class="text-gray-200">Voice Recharge 20 Minutes – 12.50 USD</span>
-                  </label>
-                  <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 cursor-pointer">
-                    <input type="checkbox" v-model="turForm.addons" value="Voice 30 Minutes – 18.40" class="form-checkbox text-blue-500 rounded" />
-                    <span class="text-gray-2 00">Voice Recharge 30 Minutes – 18.40 USD</span>
-                  </label>
-                </div>
-                <p v-if="turForm.addons.length > 0" class="text-xs text-gray-400 mt-2">Seleccionadas: {{ turForm.addons.join(', ') }}</p>
-              </div>
-
-              <button type="button" @click="handleTurPlusClick" class="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white py-3 rounded-xl font-semibold transition-all shadow-lg hover:shadow-xl">Solicitar Tur Plus</button>
+              <button type="button" @click="handleTurPlusClick" class="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white py-3 rounded-xl font-semibold transition-all shadow-lg hover:shadow-xl">Solicitar Tur Plus — $35</button>
             </form>
           </div>
 
@@ -122,11 +97,14 @@
                 </svg>
               </div>
               <div class="flex-1">
-                <h2 class="text-2xl font-bold text-white">SIM Cubacel Permanente</h2>
-                <a href="https://suenacuba.com/phone?card=cubacel" target="_blank" class="text-blue-400 hover:text-blue-300 text-sm inline-flex items-center gap-1 mt-1">
+                <div class="flex flex-wrap items-center gap-2">
+                  <h2 class="text-2xl font-bold text-white">SIM Cubacel Permanente</h2>
+                  <span class="px-2.5 py-1 rounded-lg bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-sm">$45 USD</span>
+                </div>
+                <button type="button" @click="openInfo('perm')" class="text-blue-400 hover:text-blue-300 text-sm inline-flex items-center gap-1 mt-1">
                   Más info
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h6m0 0v6m0-6L10 16"/></svg>
-                </a>
+                </button>
               </div>
             </div>
 
@@ -167,8 +145,43 @@
                 </select>
               </div>
 
-              <button type="button" @click="handlePermanentClick" class="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white py-3 rounded-xl font-semibold transition-all shadow-lg hover:shadow-xl">Solicitar Permanente</button>
+              <button type="button" @click="handlePermanentClick" class="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white py-3 rounded-xl font-semibold transition-all shadow-lg hover:shadow-xl">Solicitar Permanente — $45</button>
             </form>
+          </div>
+
+          <!-- Módem ETECSA Card -->
+          <div id="modem" class="bg-black/40 backdrop-blur-md rounded-3xl p-6 border border-white/10 shadow-2xl">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-14 h-14 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center flex-shrink-0">
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M5 11h14M7 15h10M9 19h6"/>
+                </svg>
+              </div>
+              <div class="flex-1">
+                <div class="flex flex-wrap items-center gap-2">
+                  <h2 class="text-2xl font-bold text-white">Módem ETECSA</h2>
+                  <span class="px-2.5 py-1 rounded-lg bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 text-sm">$99.99 USD</span>
+                </div>
+                <button type="button" @click="openInfo('modem')" class="text-blue-400 hover:text-blue-300 text-sm inline-flex items-center gap-1 mt-1">
+                  Más info
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h6m0 0v6m0-6L10 16"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <!-- Imagen representativa del módem -->
+              <div class="w-full aspect-video bg-white/5 border border-white/10 rounded-xl flex items-center justify-center text-gray-400">
+               <img src="@/assets/images/offer_phph1je9vurekis8bYDwm3_1759729559.jpg"></img>
+              </div>
+            </div>
+
+            <div class="mb-6 p-3 bg-white/5 border border-white/10 rounded-xl text-gray-300">
+              <span class="font-medium text-white">Incluye:</span>
+              <span class="ml-1">Módem Huawei B311-221 + SIM de Datos + 100GB</span>
+            </div>
+
+            <button type="button" @click="handleModemClick" class="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white py-3 rounded-xl font-semibold transition-all shadow-lg hover:shadow-xl">Comprar Módem — $99.99</button>
           </div>
         </div>
       </div>
@@ -178,6 +191,15 @@
       :isOpen="showConfirm"
       :details="confirmDetails"
       @close="showConfirm = false"
+    />
+
+    <!-- Generic Product Confirmation for Modem -->
+    <ProductPurchaseConfirmation
+      :isOpen="showModemConfirm"
+      :productName="modemDetails.productName"
+      :price="modemDetails.price"
+      :orderId="modemDetails.orderId"
+      @close="showModemConfirm = false"
     />
 
     <!-- Info sections -->
@@ -215,6 +237,11 @@
         </div>
       </div>
     </div>
+
+    <!-- Info Modals -->
+    <InfoModal :isOpen="showInfo.tur" title="Cubacel Tur" :body="infoBodies.tur" @close="closeInfo" />
+    <InfoModal :isOpen="showInfo.perm" title="Cubacel Permanente" :body="infoBodies.perm" @close="closeInfo" />
+    <InfoModal :isOpen="showInfo.modem" title="Módem ETECSA" :body="infoBodies.modem" @close="closeInfo" />
   </div>
 </template>
 
@@ -223,14 +250,15 @@ import { ref } from 'vue'
 import { useRecharge } from '@/composables/useRecharge'
 import Navbar from '@/components/Navbar.vue'
 import SimPurchaseConfirmation from '@/components/SimPurchaseConfirmation.vue'
+import ProductPurchaseConfirmation from '@/components/ProductPurchaseConfirmation.vue'
+import InfoModal from '@/components/InfoModal.vue'
 
 const turForm = ref({
   nationality: '',
   idCard: '',
   firstName: '',
   lastName1: '',
-  lastName2: '',
-  addons: [] as string[]
+  lastName2: ''
 })
 
 const permForm = ref({
@@ -248,7 +276,21 @@ const { addSimPurchase } = useRecharge()
 const turFormEl = ref<HTMLFormElement | null>(null)
 const permFormEl = ref<HTMLFormElement | null>(null)
 
+// Modem purchase state
+const showModemConfirm = ref(false)
+interface ProductDetails { productName: string; price: number; orderId: string }
+const modemDetails = ref<ProductDetails>({ productName: 'Módem ETECSA (Huawei B311-221)', price: 99.99, orderId: '' })
+
 const generateCode = () => Math.floor(100000000000 + Math.random() * 900000000000).toString()
+const generateOrderId = (): string => {
+  const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+  const alnum = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+  let id: string = letters.charAt(Math.floor(Math.random() * letters.length))
+  for (let i = 0; i < 11; i++) {
+    id += alnum.charAt(Math.floor(Math.random() * alnum.length))
+  }
+  return id
+}
 
 const submitTurPlus = () => {
   const fullName = [turForm.value.firstName, turForm.value.lastName1, turForm.value.lastName2].filter(Boolean).join(' ')
@@ -286,4 +328,70 @@ const handlePermanentClick = () => {
   if (permFormEl.value && !permFormEl.value.reportValidity()) return
   submitPermanent()
 }
+
+const handleModemClick = () => {
+  modemDetails.value.orderId = generateOrderId()
+  showModemConfirm.value = true
+}
+
+// Info modals
+const showInfo = ref({ tur: false, perm: false, modem: false })
+const infoBodies = {
+  tur: `Esta es una tarjeta SIM física, no una eSIM.
+
+Está disponible para cubanos y turistas.
+
+Máximo 3 líneas Cubacel Tur por beneficiario (según pasaporte o carnet cubano). Un usuario puede comprar tantas líneas como desee, siempre que cada beneficiario no exceda el límite.
+
+Exclusivo para beneficiarios mayores de 18 años.
+
+Puede retirar la tarjeta en los Aeropuertos de La Habana (José Martí), Varadero, Cayo Coco, Camagüey, Holguín y Santiago de Cuba, o en cualquier oficina comercial de Etecsa.
+
+La línea Cubacel Tur de ETECSA está orientada a personas que visitan Cuba por un corto periodo de tiempo. Ahora puede elegir entre dos opciones según sus necesidades:
+
+Cubacel Tur Plus: Una línea móvil temporal válida por 30 días, que incluye 10GB + 100 Min + 100 SMS. Incluye servicios ilimitados de WhatsApp y Facebook durante su vigencia.
+
+A su llegada a Cuba, puede recoger su tarjeta Cubacel Tur en los stands de ETECSA ubicados en los aeropuertos José Martí en La Habana, Camagüey, Holguín, Varadero, Cayo Coco y Santiago de Cuba. También puede optar por cualquier Oficina Comercial de ETECSA a lo largo del país. El servicio en los aeropuertos está disponible las 24 horas del día.
+
+Una vez adquirida su línea turista, puede recargar planes de datos y minutos adicionales en nuestra página web, utilizando el número asignado a su línea (53XXXXXXXX).
+
+Cada recarga adicional extiende la vigencia de la línea según el paquete adquirido:
+
+Paquete Plus: Extiende 30 días por recarga, hasta un máximo de 90 días.
+La vigencia total no puede superar los 90 días.`,
+  perm: `Exclusivo para beneficiarios mayores de 18 años.
+
+Servicio de ETECSA para residentes que viven en Cuba por un largo período de tiempo. Ahora con esta tarjeta, los residentes en Cuba pueden tener una línea móvil permanente válida por 360 días (después de cada recarga), el crédito inicial incluido con la tarjeta es de 250 CUP, puede retirar la tarjeta Cubacel en la Oficina Comercial de Etecsa seleccionada. Después de obtener su tarjeta SIM en Cuba, puede recargar el saldo en nuestra página, debe recargar el número asignado a la línea (53XXXXXXXX).`,
+  modem: `Descubre el MODEM de Etecsa, una opción práctica para conectar a internet en Cuba. Ideal para hogares y oficinas, y una alternativa especialmente valiosa en zonas donde Nauta Hogar no está disponible. Este paquete incluye el Módem Huawei B311-221 y una uSIM de Datos especializada, diseñada para planes especiales de datos, acompañada de 100GB de datos para empezar a navegar.
+Exclusivo para beneficiarios mayores de 18 años.
+
+Precio: 99.99 USD
+
+¿Qué incluye?
+Módem Huawei B311-221: Conéctate con un dispositivo moderno y versátil, diseñado para facilitar tu acceso a internet.
+
+uSIM de Datos: Una tarjeta SIM especializada para acceso a datos (Solo acepta planes especiales de datos).
+
+100GB de Datos Gratis: Un regalo para que explores más de internet.
+
+Planes de Recarga Disponibles:
+10GB
+50GB
+100GB
+Vigencia de la oferta de datos: 3 meses.
+
+Características Destacadas:
+Público Objetivo: Personas naturales mayores de 18 años en Cuba.
+
+Conectividad: Cualquier lugar en Cuba con cobertura de la red móvil.
+
+Ciclo de Vida de la Línea Móvil: 330 días desde la activación, y se extiende por 330 días adicionales desde la fecha de la última recarga.
+
+Planes de Navegación Adicionales: Opciones de 10GB, 50GB y 100GB disponibles.
+
+Garantía: 3 meses.
+Nota Importante: Retire su pedido en 30 días o este expirará sin reembolso.`
+}
+const openInfo = (which: 'tur' | 'perm' | 'modem') => { showInfo.value[which] = true }
+const closeInfo = () => { showInfo.value = { tur: false, perm: false, modem: false } }
 </script>
