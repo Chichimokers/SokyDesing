@@ -81,6 +81,14 @@
       </div>
 
       <div v-else-if="currentStep === 3" class="flex flex-col items-center text-center w-full">
+        <!-- Countdown -->
+        <div class="mb-3 sm:mb-4 w-full">
+          <div class="text-xs sm:text-sm text-gray-300 text-center">
+            Tienes
+            <span class="font-semibold text-white">{{ countdown }}</span>
+            para transferir el monto.
+          </div>
+        </div>
         <!-- QR Code Section -->
         <div class="mb-4 sm:mb-6 w-full">
           <div class="w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 mx-auto bg-white rounded-xl p-3 sm:p-4 mb-3 sm:mb-4 shadow-lg">
@@ -184,7 +192,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import Modal from './Modal.vue'
 // Importar iconos de criptomonedas
 import usdtIcon from '@/assets/images/crypto/usdt.svg'
@@ -222,6 +230,9 @@ const currentStep = ref(1)
 const selectedCrypto = ref<Crypto | null>(null)
 const depositAmount = ref<number | null>(null)
 const generatedAddress = ref('')
+const startedAt = ref<number | null>(null)
+const remaining = ref(0)
+let timer: any = null
 
 const popularAmounts = [25, 50, 100, 200]
 
@@ -307,6 +318,8 @@ const generateQR = () => {
   
   generatedAddress.value = selectedCrypto.value.address
   currentStep.value = 3
+  // Start 20-minute countdown
+  startCountdown()
   // Emitir inicio automáticamente para que el padre comience la verificación
   emit('depositInitiated', selectedCrypto.value.symbol, depositAmount.value!, generatedAddress.value)
 }
@@ -314,6 +327,7 @@ const generateQR = () => {
 const goBack = () => {
   if (currentStep.value > 1) {
     currentStep.value--
+    if (currentStep.value < 3) clearInterval(timer)
   }
 }
 
@@ -344,7 +358,42 @@ const closePopup = () => {
   selectedCrypto.value = null
   depositAmount.value = null
   generatedAddress.value = ''
+  clearInterval(timer)
   emit('close')
+}
+
+// Resetear estado interno cuando el popup se cierra externamente
+watch(() => props.isOpen, (open) => {
+  if (!open) {
+    currentStep.value = 1
+    selectedCrypto.value = null
+    depositAmount.value = null
+    generatedAddress.value = ''
+    copied.value = false
+    copiedm.value = false
+    clearInterval(timer)
+    startedAt.value = null
+    remaining.value = 0
+  }
+})
+
+const countdown = computed(() => {
+  const sec = Math.max(0, remaining.value)
+  const m = Math.floor(sec / 60).toString().padStart(2, '0')
+  const s = Math.floor(sec % 60).toString().padStart(2, '0')
+  return `${m}:${s}`
+})
+
+const startCountdown = () => {
+  clearInterval(timer)
+  startedAt.value = Date.now()
+  const endAt = startedAt.value + 20 * 60 * 1000
+  const tick = () => {
+    remaining.value = Math.max(0, Math.floor((endAt - Date.now()) / 1000))
+    if (remaining.value <= 0) clearInterval(timer)
+  }
+  tick()
+  timer = setInterval(tick, 1000)
 }
 </script>
 

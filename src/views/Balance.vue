@@ -128,9 +128,9 @@
                      @click="openDepositDetail(transaction)">
                   <div class="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
                     <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center flex-shrink-0" 
-                         :class="getTransactionIcon(transaction.type).bgClass">
-                      <svg class="w-5 h-5 sm:w-6 sm:h-6" :class="getTransactionIcon(transaction.type).iconClass" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="getTransactionIcon(transaction.type).path"/>
+                         :class="getStatusIconConfig(transaction.status).bgClass">
+                      <svg class="w-5 h-5 sm:w-6 sm:h-6" :class="getStatusIconConfig(transaction.status).iconClass" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="getStatusIconConfig(transaction.status).path"/>
                       </svg>
                     </div>
                     <div class="min-w-0 flex-1">
@@ -323,6 +323,7 @@ const retryTransaction = () => {
 // Operation handlers
 let verifyInterval: any = null
 let verificationStartAt: number | null = null
+let verificationModalTimeout: any = null
 
 const handleDepositInitiated = (cryptocurrency: string, amount: number, qrData: string) => {
   // Cerrar el popup de QR para evitar bloqueos visuales si se desea
@@ -339,8 +340,11 @@ const handleDepositInitiated = (cryptocurrency: string, amount: number, qrData: 
       timestamp: new Date()
     }
   }
-  // Cambiar a modal de verificación y cerrar QR
-  activeModal.value = 'verifying'
+  // Mantener QR visible por 6s para que se note la transición a "verificando"
+  clearTimeout(verificationModalTimeout)
+  verificationModalTimeout = setTimeout(() => {
+    activeModal.value = 'verifying'
+  }, 6000)
   verificationStartAt = Date.now()
 
   // Insertar en historial como pendiente
@@ -564,27 +568,18 @@ const transactions = ref<Transaction[]>([
   }
 ])
 
-const getTransactionIcon = (type: string): IconConfig => {
-  const defaultIcon: IconConfig = {
-    bgClass: 'bg-blue-500/20',
-    iconClass: 'text-blue-400',
-    path: 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
+const getStatusIconConfig = (status: string): IconConfig => {
+  const s = status.toLowerCase()
+  if (s.includes('parcial')) {
+    return { bgClass: 'bg-yellow-500/20', iconClass: 'text-yellow-400', path: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' }
   }
-  
-  const icons: Record<string, IconConfig> = {
-    credit: {
-      bgClass: 'bg-green-500/20',
-      iconClass: 'text-green-400',
-      path: 'M12 6v6m0 0v6m0-6h6m-6 0H6'
-    },
-    debit: {
-      bgClass: 'bg-red-500/20',
-      iconClass: 'text-red-400',
-      path: 'M20 12H4'
-    }
+  if (s.includes('fall') || s.includes('error')) {
+    return { bgClass: 'bg-red-500/20', iconClass: 'text-red-400', path: 'M6 18L18 6M6 6l12 12' }
   }
-  
-  return icons[type] ?? defaultIcon
+  if (s.includes('complet') || s.includes('exitos')) {
+    return { bgClass: 'bg-green-500/20', iconClass: 'text-green-400', path: 'M5 13l4 4L19 7' }
+  }
+  return { bgClass: 'bg-blue-500/20', iconClass: 'text-blue-400', path: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' }
 }
 
 const formatDate = (date: Date) => {
