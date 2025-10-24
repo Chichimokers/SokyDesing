@@ -181,13 +181,5 @@ const proceedToSubscribe = () => {
 </script>
 
 <style scoped>
-/* Animaciones para el modal */
-.modal-enter-active, .modal-leave-active {
-  transition: all 0.3s ease;
-}
-
-.modal-enter-from, .modal-leave-to {
-  opacity: 0;
-  transform: scale(0.9);
-}
+/* Removed modal animations to prevent navbar z-index issues */
 </style>

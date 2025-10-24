@@ -9,7 +9,7 @@
         <div 
           ref="modalRef"
           @click.stop 
-          class="bg-black/70 rounded-lg sm:rounded-xl border border-white/10 text-left overflow-hidden shadow-2xl transform transition-all w-full flex flex-col max-h-[95vh] sm:max-h-[90vh] md:max-h-[85vh]"
+          class="bg-black/70 rounded-lg sm:rounded-xl border border-white/10 text-left overflow-hidden shadow-2xl w-full flex flex-col max-h-[95vh] sm:max-h-[90vh] md:max-h-[85vh]"
           role="dialog"
           aria-modal="true"
           
@@ -84,15 +84,22 @@ watch(() => props.isOpen, async (isOpen) => {
     }, 100)
     
   } else {
-    // Restaurar scroll del body
+    // Restaurar scroll del body de forma inmediata sin transiciones
+    const scrollY = previousScrollPosition
+    
+    // Remover estilos de bloqueo
     document.body.style.overflow = ''
     document.body.style.position = ''
     document.body.style.top = ''
     document.body.style.width = ''
     document.body.style.paddingRight = ''
     
-    // Restaurar posición de scroll inmediatamente
-    window.scrollTo(0, previousScrollPosition)
+    // Restaurar posición de scroll de forma inmediata y forzada
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: scrollY, behavior: 'instant' })
+      // Forzar repaint para asegurar que la navbar se renderice correctamente
+      document.body.offsetHeight
+    })
     
     // Restaurar foco
     if (previousActiveElement) {
