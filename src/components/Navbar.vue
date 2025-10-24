@@ -1,5 +1,5 @@
 <template>
-  <nav class="bg-gray-900/95 backdrop-blur-md shadow-2xl border-b border-gray-800 fixed top-0 left-0 right-0 w-full z-[60]">
+  <nav class="bg-gray-900/95 backdrop-blur-md shadow-2xl border-b border-gray-800 z-[60]">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-16 md:h-20">
         <!-- Logo - Responsive -->
@@ -343,8 +343,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
-import { useAuth } from '@/composables/useAuth'
+import {onMounted, onUnmounted, ref} from 'vue'
+import {useAuth} from '@/composables/useAuth'
+// Close menu on route change
+import {useRouter} from 'vue-router'
 
 const isMobileMenuOpen = ref(false)
 
@@ -382,8 +384,6 @@ const closeMobileMenu = () => {
   document.body.style.overflow = 'unset'
 }
 
-// Close menu on route change
-import { useRouter } from 'vue-router'
 const router = useRouter()
 
 onMounted(() => {

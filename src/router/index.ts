@@ -1,4 +1,5 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import {createRouter, createWebHistory} from 'vue-router'
+
 import Login from '@/views/Login.vue'
 import Home from '@/views/Home.vue'
 import Recargas from '@/views/Recargas.vue'
@@ -9,19 +10,31 @@ import Subscriptions from '@/views/Subscriptions.vue'
 import ManageSubscription from '@/views/ManageSubscription.vue'
 
 import Code from '@/views/Code.vue'
-import Register from '@/views/Register.vue'
-import ForgotPassword from '@/views/ForgotPassword.vue'
-import ChangePassword from '@/views/ChangePassword.vue'
-import EditProfile from '@/views/EditProfile.vue'
+import Register from '@/views/Register.vue' // TODO async import
+import ForgotPassword from '@/views/ForgotPassword.vue' // TODO async import
+import ChangePassword from '@/views/ChangePassword.vue' // TODO async import
+import EditProfile from '@/views/EditProfile.vue' // TODO async import
 import Retail from '@/views/Retail.vue'
-import SubscriptionForm from '@/views/SubscriptionForm.vue'
+import SubscriptionForm from '@/views/SubscriptionForm.vue' // TODO async import
 import RetailApplication from '@/views/RetailApplication.vue'
 import Cubacel from '@/views/Cubacel.vue'
+import {RouteNames} from "@/router/names.ts";
+import MainLayout from "@/layouts/MainLayout.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    { path: '/', name: 'Home', component: Home },
+      {
+          path: '/',
+          component: MainLayout,
+          children: [
+              {
+                  path: '',
+                  name: RouteNames.HOME,
+                  component: Home
+              },
+          ]
+      },
     { path: '/login', name: 'Login', component: Login },
     { path: '/recargas', name: 'Recargas', component: Recargas },
     { path: '/multiple-recharge/:phoneNumbers/:offer', name: 'MultipleRecharge', component: MultipleRecharge },
