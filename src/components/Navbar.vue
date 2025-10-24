@@ -1,5 +1,5 @@
 <template>
-  <nav class="bg-gray-900/95 backdrop-blur-md shadow-2xl border-b border-gray-800 z-[60]">
+  <nav class="bg-gray-900/95 backdrop-blur-md shadow-2xl border-b border-gray-800 z-[60] nav-animate">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-16 md:h-20">
         <!-- Logo - Responsive -->
@@ -12,6 +12,7 @@
                 muted
                 loop
                 playsinline
+                preload="auto"
                 class="w-full h-full object-contain rounded-lg md:rounded-xl"
               ></video>
             </div>
@@ -148,7 +149,7 @@
         leave-to-class="opacity-0"
       >
         <div 
-          v-if="isMobileMenuOpen" 
+          v-show="isMobileMenuOpen" 
           class="fixed inset-0 bg-black/50 lg:hidden z-50"
           @click="closeMobileMenu"
         ></div>
@@ -162,7 +163,7 @@
         leave-to-class="transform translate-x-full"
       >
         <div 
-          v-if="isMobileMenuOpen" 
+          v-show="isMobileMenuOpen" 
           class="fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-gray-900 mobile-menu-panel border-l border-gray-700 shadow-2xl lg:hidden z-[60]"
         >
         <!-- Mobile Menu Header -->
@@ -175,6 +176,7 @@
                 muted
                 loop
                 playsinline
+                preload="auto"
                 class="w-full h-full object-contain rounded-lg"
               ></video>
             </div>
@@ -593,4 +595,19 @@ button:active {
 }
 
 /* Nota: el panel móvil se teleporta al body para evitar problemas de stacking y contener el fondo sólido correctamente */
+
+/* Navbar appear animation */
+.nav-animate {
+  animation: navEnter 380ms ease-out both;
+}
+@keyframes navEnter {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 </style>

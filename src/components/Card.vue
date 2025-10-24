@@ -9,6 +9,7 @@
         :src="img" 
         :alt="title" 
         class="w-full h-full object-scale-down  group-hover:scale-110 transition duration-300"
+        ref="imgRef"
       >
     </div>
     
@@ -20,7 +21,7 @@
       <!-- Botón fijo en la parte inferior -->
       <button 
         class="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 rounded-lg font-semibold transition duration-300 mt-auto"
-        @click="$emit('select', offer)"
+        @click="handleSelect"
       >
         {{ buttonText }}
       </button>
@@ -46,8 +47,8 @@ const props = withDefaults(defineProps<Props>(), {
   offer: null
 })
 
-defineEmits<{
-  select: [offer: RechargeOffer | null]
+const emit = defineEmits<{
+  select: [offer: RechargeOffer | null, originRect?: { left: number; top: number; width: number; height: number }]
 }>()
 
 const colorConfig = {
@@ -66,4 +67,17 @@ const colorConfig = {
 }
 
 const cardClasses = colorConfig[props.color].card
+
+// Get image rect and emit with offer
+import { ref } from 'vue'
+const imgRef = ref<HTMLImageElement | null>(null)
+
+const handleSelect = () => {
+  let rect
+  if (imgRef.value) {
+    const r = imgRef.value.getBoundingClientRect()
+    rect = { left: r.left, top: r.top, width: r.width, height: r.height }
+  }
+  emit('select', props.offer, rect)
+}
 </script>

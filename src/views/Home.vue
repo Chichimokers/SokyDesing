@@ -19,7 +19,7 @@
         <div class="max-w-7xl mx-auto">
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <!-- Text Content con fondo semitransparente -->
-          <div class="bg-black/50 backdrop-blur-md rounded-2xl p-8 border border-white/10">
+          <div class="bg-black/50 backdrop-blur-md rounded-2xl p-8 border border-white/10 text-center md:text-left">
             <h1 class="text-4xl md:text-6xl font-bold text-white mb-6">
                 Recargas a 
                 <span class="animated-gradient  ">Cuba</span> 
@@ -203,6 +203,7 @@
     <PhoneNumberPopup 
       :is-open="showPopup"
       :selected-offer="selectedOffer"
+      :origin-rect="popupOriginRect"
       @close="closePopup"
       @proceed="proceedToRecharge"
       @subscribe="proceedToRecharge"
@@ -243,6 +244,7 @@ const { isLoggedIn, currentUser, simulateLogin } = useAuth()
 // Estado del popup
 const showPopup = ref(false)
 const selectedOffer = ref<RechargeOffer | null>(null)
+const popupOriginRect = ref<null | { left: number; top: number; width: number; height: number }>(null)
 
 // Crear ofertas específicas para cada card
 const cardOffers = computed(() => ({
@@ -302,10 +304,11 @@ const cardOffers = computed(() => ({
   } as RechargeOffer
 }))
 
-const handleCardSelect = (offer: RechargeOffer | null) => {
+const handleCardSelect = (offer: RechargeOffer | null, originRect?: { left: number; top: number; width: number; height: number }) => {
   if (offer) {
     selectedOffer.value = offer
     showPopup.value = true
+    popupOriginRect.value = originRect || null
     resetTransaction() // Reset any previous transaction state
   }
 }

@@ -1,4 +1,4 @@
-<template>
+Ejemplo al salir de me ocurre una animación top jaja, que se valla el poup así para dentro de la foto de la oferta y se desaparezca  top<template>
   <div class="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
     <!-- Manage Subscription Section -->
     <div class="pt-28 md:pt-32 pb-12 px-4 sm:px-6 lg:px-8">

@@ -1,9 +1,9 @@
 <template>
   <teleport to="body">
-    <transition name="modal-fade">
+  <transition name="modal-fade" @leave="handleLeave" @after-leave="handleAfterLeave">
       <div v-if="isOpen" class="fixed inset-0 z-[55] flex items-center justify-center p-2 sm:p-4 md:p-6" @click="onOverlayClick">
         <!-- Overlay - Cobertura completa de pantalla (por debajo de la barra) -->
-        <div class="fixed inset-0 bg-black/70 backdrop-blur-sm z-[45]"></div>
+        <div ref="overlayRef" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-[45]"></div>
 
         <!-- Container - Perfecto centrado responsive (por encima de la barra) -->
         <div class="relative w-35 max-w-[95vw] sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl mx-auto z-[60]">
@@ -34,11 +34,17 @@
 
 <script setup lang="ts">
 import { defineProps, defineEmits, watch, onMounted, onUnmounted, nextTick, ref } from 'vue'
+import type { PropType } from 'vue'
 
-const props = defineProps({ isOpen: Boolean, closeOnOverlay: { type: Boolean, default: true } })
+const props = defineProps({ 
+  isOpen: Boolean, 
+  closeOnOverlay: { type: Boolean, default: true },
+  originRect: { type: Object as PropType<{ left: number; top: number; width: number; height: number } | null>, default: null }
+})
 const emit = defineEmits(['close'])
 
 const modalRef = ref<HTMLElement>()
+const overlayRef = ref<HTMLElement>()
 let previousScrollPosition = 0
 let previousActiveElement: HTMLElement | null = null
 
@@ -85,32 +91,7 @@ watch(() => props.isOpen, async (isOpen) => {
     }, 100)
     
   } else {
-    // Restaurar scroll del body de forma inmediata sin transiciones
-    const scrollY = previousScrollPosition
-    
-    // Remover estilos de bloqueo
-    document.body.style.overflow = ''
-    document.body.style.position = ''
-    document.body.style.top = ''
-    document.body.style.width = ''
-    document.body.style.paddingRight = ''
-    
-    // Restaurar posición de scroll de forma inmediata y forzada
-    requestAnimationFrame(() => {
-      window.scrollTo({ top: scrollY, behavior: 'instant' })
-      // Forzar repaint para asegurar que la navbar se renderice correctamente
-      document.body.offsetHeight
-    })
-    
-    // Restaurar foco
-    if (previousActiveElement) {
-      setTimeout(() => {
-        if (previousActiveElement) {
-          previousActiveElement.focus()
-          previousActiveElement = null
-        }
-      }, 50)
-    }
+    // No limpiar aquí: esperar a que termine la animación (@after-leave)
   }
 })
 
@@ -131,6 +112,96 @@ onUnmounted(() => {
   document.body.style.overflow = ''
   document.body.style.paddingRight = ''
 })
+
+// Leave transition to zoom back to the source element
+const handleLeave = (el: Element, done: () => void) => {
+  const panel = modalRef.value
+  if (!panel) {
+    done();
+    return
+  }
+  const from = panel.getBoundingClientRect()
+  const to = (props as any).originRect as undefined | { left: number; top: number; width: number; height: number }
+
+  // Fallback to default fade if no origin provided
+  if (!to) {
+    const ov = overlayRef.value
+    if (ov) {
+      ov.style.transition = 'opacity 220ms ease'
+      ov.style.opacity = '0'
+    }
+    panel.style.transition = 'transform 250ms ease, opacity 250ms ease'
+    panel.style.transform = 'translateY(-12px)'
+    panel.style.opacity = '0'
+    panel.addEventListener('transitionend', () => done(), { once: true })
+    return
+  }
+
+  const fromCenterX = from.left + from.width / 2
+  const fromCenterY = from.top + from.height / 2
+  const toCenterX = to.left + to.width / 2
+  const toCenterY = to.top + to.height / 2
+  const dx = toCenterX - fromCenterX
+  const dy = toCenterY - fromCenterY
+
+  // Efecto "tragado": escalamos a ~0 y movemos al centro del origen
+  const targetScale = 0.001
+
+  panel.style.willChange = 'transform, opacity, filter'
+  panel.style.transformOrigin = 'center center'
+  // Cubic-bezier con aceleración marcada para succión
+  panel.style.transition = 'transform 420ms cubic-bezier(.2,.75,.2,1), opacity 260ms ease-out, filter 260ms ease-out'
+  const ov = overlayRef.value
+  if (ov) {
+    // Fondo se desvanece ligeramente antes para revelar la tarjeta
+    ov.style.transition = 'opacity 220ms ease-out'
+    ov.style.opacity = '0'
+  }
+
+  requestAnimationFrame(() => {
+    panel.style.transform = `translate(${dx}px, ${dy}px) scale(${targetScale})`
+    panel.style.opacity = '0.15'
+    panel.style.filter = 'blur(1px)'
+  })
+
+  panel.addEventListener('transitionend', () => {
+    // Cleanup
+    panel.style.transform = ''
+    panel.style.opacity = ''
+    panel.style.transition = ''
+    panel.style.willChange = ''
+    if (ov) {
+      ov.style.opacity = ''
+      ov.style.transition = ''
+    }
+    done()
+  }, { once: true })
+}
+
+// Do cleanup after the element is fully removed from DOM
+const handleAfterLeave = () => {
+  const scrollY = previousScrollPosition
+  // Remover estilos de bloqueo del body
+  document.body.style.overflow = ''
+  document.body.style.position = ''
+  document.body.style.top = ''
+  document.body.style.width = ''
+  document.body.style.paddingRight = ''
+
+  // Restaurar posición de scroll inmediatamente
+  requestAnimationFrame(() => {
+    window.scrollTo({ top: scrollY, behavior: 'instant' })
+    document.body.offsetHeight
+  })
+
+  // Restaurar foco al elemento que estaba activo antes de abrir
+  if (previousActiveElement) {
+    setTimeout(() => {
+      previousActiveElement?.focus()
+      previousActiveElement = null
+    }, 50)
+  }
+}
 </script>
 
 <style scoped>

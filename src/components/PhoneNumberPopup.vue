@@ -1,5 +1,5 @@
 <template>
-  <Modal :isOpen="isOpen" @close="closePopup">
+  <Modal :isOpen="isOpen" :originRect="originRect" @close="closePopup">
     <template #header>
       <div class="flex items-center justify-between">
         <div>
@@ -92,6 +92,7 @@ import { useRecharge, type RechargeOffer, type PhoneNumber } from '../composable
 interface Props {
   isOpen: boolean
   selectedOffer: RechargeOffer | null
+  originRect?: { left: number; top: number; width: number; height: number } | null
 }
 
 interface Emits {
