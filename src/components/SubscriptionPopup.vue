@@ -95,7 +95,7 @@
         <button
           type="button"
           @click="handleSubmit"
-          :disabled="isLoading || !form.acceptTerms || !form.phoneNumber || (isNautaHogar && !form.nautaEmail)"
+          :disabled="isLoading || !form.acceptTerms || !form.phoneNumber || (isNautaHogar && (!form.nautaEmail || !nautaEmailValid))"
           class="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:from-gray-600 disabled:to-gray-600 text-white px-4 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300 disabled:cursor-not-allowed"
         >
           <span v-if="isLoading" class="flex items-center">
