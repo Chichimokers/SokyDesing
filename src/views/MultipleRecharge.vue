@@ -12,8 +12,6 @@
 
     <!-- Contenido principal -->
     <div class="relative z-10">
-      <Navbar />
-      
       <div class="container mx-auto px-4 pt-28 md:pt-32 pb-8">
         <!-- Header -->
         <div class="text-center mb-8">
@@ -205,11 +203,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import Navbar from '@/components/Navbar.vue'
+import {computed, onMounted, ref} from 'vue'
+import {useRoute, useRouter} from 'vue-router'
 import Footer from '@/components/Footer.vue'
-import { useRecharge, type RechargeOffer } from '@/composables/useRecharge'
+import {type RechargeOffer, useRecharge} from '@/composables/useRecharge'
 
 interface RechargeResult {
   phoneNumber: string

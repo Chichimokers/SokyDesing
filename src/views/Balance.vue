@@ -1,8 +1,5 @@
 <template>
   <div class="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
-    <Navbar />
-    
-
     <div class="pt-28 md:pt-32 pb-12 px-4 sm:px-6 lg:px-8">
       <div class="max-w-6xl mx-auto">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -209,8 +206,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import Navbar from '../components/Navbar.vue'
+import {ref} from 'vue'
 import CryptoDepositPopup from '../components/CryptoDepositPopup.vue'
 import TransferBalancePopup from '../components/TransferBalancePopup.vue'
 import BalanceStatusPopup from '../components/BalanceStatusPopup.vue'

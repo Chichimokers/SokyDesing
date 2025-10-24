@@ -1,7 +1,5 @@
 <template>
   <div class="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
-    <Navbar />
-    
     <!-- Subscriptions Section -->
     <div class="pt-28 md:pt-32 pb-12 px-4 sm:px-6 lg:px-8">
       <div class="max-w-7xl mx-auto">
@@ -57,8 +55,8 @@
               </div>
               
               <div class="flex gap-2">
-                <router-link 
-                  :to="`/subscription/manage/${subscription.id}`"
+                <router-link
+                    :to="{name: RouteNames.MANAGE_SUBSCRIPTION, params: {id: subscription.id}}"
                   class="flex-1 bg-blue-500/20 text-blue-400 py-2 px-4 rounded-xl text-sm font-medium border border-blue-500/30 hover:bg-blue-500/30 transition-all text-center"
                 >
                   Gestionar
@@ -201,13 +199,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import Navbar from '../components/Navbar.vue'
-import Footer from '../components/Footer.vue'
+import {ref} from 'vue'
+import {useRouter} from 'vue-router'
 import SubscriptionPopup from '../components/SubscriptionPopup.vue'
 import TransactionStatusPopup from '../components/TransactionStatusPopup.vue'
 import RechargeStatus from '../components/RechargeStatus.vue'
+import {RouteNames} from "@/router";
 
 const router = useRouter()
 

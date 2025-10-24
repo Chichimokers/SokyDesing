@@ -20,8 +20,6 @@
 
     <!-- Contenido principal -->
     <div class="relative z-10">
-      <Navbar />
-      
       <div class="container mx-auto px-4 pt-24 md:pt-28 pb-8">
         <!-- Header -->
         <div class="text-center mb-12">
@@ -189,14 +187,12 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
-import { useRouter } from 'vue-router'
-import Navbar from '@/components/Navbar.vue'
-import Footer from '@/components/Footer.vue'
+import {computed, ref, watch} from 'vue'
+import {useRouter} from 'vue-router'
 import PhoneNumberManager from '@/components/PhoneNumberManager.vue'
 import PlanSelector from '@/components/PlanSelector.vue'
 import RechargeStatus from '@/components/RechargeStatus.vue'
-import { useRecharge } from '@/composables/useRecharge'
+import {useRecharge} from '@/composables/useRecharge'
 import backgroundImage from '@/assets/images/offer_phpqvu0b1h9ad7g92AMXgY_1760792874.webp'
 
 const router = useRouter()

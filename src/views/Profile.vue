@@ -1,7 +1,5 @@
 <template>
   <div class="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
-    <Navbar />
-    
     <!-- Success Notification - Completamente responsive y bien posicionado -->
     <transition 
       enter-active-class="transition-all duration-300 ease-out"
@@ -190,10 +188,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
-import { useRoute } from 'vue-router'
-import { useRecharge } from '../composables/useRecharge'
-import Navbar from '../components/Navbar.vue'
+import {computed, onMounted, ref} from 'vue'
+import {useRoute} from 'vue-router'
+import {useRecharge} from '../composables/useRecharge'
 import RechargeDetailPopup from '../components/RechargeDetailPopup.vue'
 
 const route = useRoute()

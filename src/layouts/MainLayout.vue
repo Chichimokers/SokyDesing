@@ -4,8 +4,8 @@
       <Navbar/>
     </div>
     <router-view/>
-    <Footer v-if="showFooter"/>
-    
+    <Footer/>
+
   </div>
 </template>
 
