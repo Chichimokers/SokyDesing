@@ -307,8 +307,9 @@ const cardOffers = computed(() => ({
 const handleCardSelect = (offer: RechargeOffer | null, originRect?: { left: number; top: number; width: number; height: number }) => {
   if (offer) {
     selectedOffer.value = offer
-    showPopup.value = true
+    // Establecer primero el rectángulo de origen para que la animación de entrada lo use
     popupOriginRect.value = originRect || null
+    showPopup.value = true
     resetTransaction() // Reset any previous transaction state
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <teleport to="body">
-  <transition name="modal-fade" @leave="handleLeave" @after-leave="handleAfterLeave">
+  <transition name="modal-fade" @before-enter="handleBeforeEnter" @enter="handleEnter" @leave="handleLeave" @after-leave="handleAfterLeave">
       <div v-if="isOpen" class="fixed inset-0 z-[55] flex items-center justify-center p-2 sm:p-4 md:p-6" @click="onOverlayClick">
         <!-- Overlay - Cobertura completa de pantalla (por debajo de la barra) -->
         <div ref="overlayRef" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-[45]"></div>
@@ -173,6 +173,89 @@ const handleLeave = (el: Element, done: () => void) => {
     if (ov) {
       ov.style.opacity = ''
       ov.style.transition = ''
+    }
+    done()
+  }, { once: true })
+}
+
+// Enter transition: zoom from source (shared element) when originRect is provided
+const handleBeforeEnter = () => {
+  const panel = modalRef.value
+  if (!panel) return
+  const to = (props as any).originRect as undefined | { left: number; top: number; width: number; height: number }
+
+  if (!to) {
+    // Fallback: let CSS classes handle default fade/scale
+    return
+  }
+
+  // Set starting state at the origin element
+  const target = panel.getBoundingClientRect()
+  const targetCenterX = target.left + target.width / 2
+  const targetCenterY = target.top + target.height / 2
+  const fromCenterX = to.left + to.width / 2
+  const fromCenterY = to.top + to.height / 2
+  const dx = fromCenterX - targetCenterX
+  const dy = fromCenterY - targetCenterY
+
+  const scaleX = Math.max(0.001, to.width / target.width)
+  const scaleY = Math.max(0.001, to.height / target.height)
+  const scale = Math.max(0.001, Math.min(scaleX, scaleY))
+
+  panel.style.willChange = 'transform, opacity, filter'
+  panel.style.transformOrigin = 'center center'
+  panel.style.transition = 'none'
+  panel.style.transform = `translate(${dx}px, ${dy}px) scale(${scale})`
+  panel.style.opacity = '0.15'
+  panel.style.filter = 'blur(1px)'
+
+  const ov = overlayRef.value
+  if (ov) {
+    ov.style.transition = 'none'
+    ov.style.opacity = '0'
+  }
+}
+
+const handleEnter = (_: Element, done: () => void) => {
+  const panel = modalRef.value
+  if (!panel) {
+    done()
+    return
+  }
+  const to = (props as any).originRect as undefined | { left: number; top: number; width: number; height: number }
+  if (!to) {
+    // Fallback to CSS-driven transition
+    done()
+    return
+  }
+
+  // Animate to final centered state
+  panel.style.transition = 'transform 440ms cubic-bezier(.2,.75,.2,1), opacity 300ms ease-out, filter 300ms ease-out'
+  requestAnimationFrame(() => {
+    panel.style.transform = 'translate(0, 0) scale(1)'
+    panel.style.opacity = '1'
+    panel.style.filter = 'blur(0)'
+  })
+
+  const ov = overlayRef.value
+  if (ov) {
+    // Slightly delay overlay fade-in to emphasize source zoom
+    requestAnimationFrame(() => {
+      ov.style.transition = 'opacity 260ms ease-out'
+      ov.style.opacity = '1'
+    })
+  }
+
+  panel.addEventListener('transitionend', () => {
+    // Cleanup inline styles to avoid interfering with layout
+    panel.style.transition = ''
+    panel.style.willChange = ''
+    panel.style.transform = ''
+    panel.style.opacity = ''
+    panel.style.filter = ''
+    if (ov) {
+      ov.style.transition = ''
+      ov.style.opacity = ''
     }
     done()
   }, { once: true })
