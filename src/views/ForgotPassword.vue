@@ -388,6 +388,13 @@ onUnmounted(() => {
   if (resendInterval) {
     clearInterval(resendInterval)
   }
+  
+  // Limpiar estilos del body que puedan quedar de modales
+  document.body.style.overflow = ''
+  document.body.style.position = ''
+  document.body.style.top = ''
+  document.body.style.width = ''
+  document.body.style.paddingRight = ''
 })
 </script>
 

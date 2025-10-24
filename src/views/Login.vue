@@ -117,7 +117,7 @@ const { ripples, handleMouseLeave } = useRippleEffect();
       </form>
 
       <div class="text-center mt-4">
-        <router-link to="/forgot-password" class="text-sm text-blue-400 hover:text-blue-300 hover:underline transition-colors">
+        <router-link to="/auth/forgot-password" class="text-sm text-blue-400 hover:text-blue-300 hover:underline transition-colors">
           ¿Olvidó su contraseña?
         </router-link>
       </div>

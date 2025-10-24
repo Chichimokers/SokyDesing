@@ -279,7 +279,7 @@
 </template>
 
 <script setup lang="ts">
-import {onMounted, ref} from 'vue'
+import {onMounted, onUnmounted, ref} from 'vue'
 import {useRoute, useRouter} from 'vue-router'
 import Footer from '../components/Footer.vue'
 import Modal from '../components/Modal.vue'
@@ -363,7 +363,19 @@ const statusMessage = ref({
 
 // Methods
 const goBack = () => {
-  router.push('/subscriptions')
+  // Cerrar cualquier modal abierto antes de navegar
+  showCancelModal.value = false
+  showStatusModal.value = false
+  
+  // Limpiar estilos del body por si acaso
+  document.body.style.overflow = ''
+  document.body.style.position = ''
+  document.body.style.top = ''
+  document.body.style.width = ''
+  document.body.style.paddingRight = ''
+  
+  // Navegar a la lista de suscripciones
+  router.push('/subscription')
 }
 
 const getSubscriptionIcon = (type: string) => {
@@ -464,6 +476,16 @@ onMounted(() => {
   // In real app, load subscription details from API based on route params
   const subscriptionId = route.params.id
   console.log('Loading subscription:', subscriptionId)
+})
+
+// Cleanup on unmount to ensure no modal styles remain
+onUnmounted(() => {
+  // Limpiar estilos del body que puedan quedar de modales
+  document.body.style.overflow = ''
+  document.body.style.position = ''
+  document.body.style.top = ''
+  document.body.style.width = ''
+  document.body.style.paddingRight = ''
 })
 </script>
 
