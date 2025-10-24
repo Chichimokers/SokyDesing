@@ -48,7 +48,7 @@
             v-model="form.nautaEmail"
             type="email"
             class="w-full px-4 py-4 bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300"
-            placeholder="usuario@nauta.cu"
+            placeholder="usuario@nauta.com.cu"
             :required="isNautaHogar"
           />
           <svg class="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -56,6 +56,7 @@
           </svg>
         </div>
         <p v-if="errors.nautaEmail" class="text-red-400 text-sm mt-2">{{ errors.nautaEmail }}</p>
+        <p v-else-if="isNautaHogar && form.nautaEmail && !nautaEmailValid" class="text-red-400 text-sm mt-2">Debe ser un correo válido terminado en <code>@nauta.com.cu</code></p>
       </div>
 
       <!-- Terms and Conditions -->
@@ -172,6 +173,13 @@ const {
 // Computed
 const isNautaHogar = computed(() => props.plan?.type === 'nauta_hogar')
 
+// Valid email for nauta: must end with @nauta.com.cu
+const nautaEmailValid = computed(() => {
+  if (!isNautaHogar.value) return true
+  const email = form.value.nautaEmail || ''
+  return /@nauta\.com\.cu$/i.test(email.trim())
+})
+
 // Methods
 const getServiceIcon = () => {
   if (!props.plan) return "M12 6v6l4 2"
@@ -205,13 +213,13 @@ const validateForm = () => {
     }
   }
 
-  // Validar email para Nauta Hogar
+  // Validar email para Nauta Hogar (debe terminar en @nauta.com.cu)
   if (isNautaHogar.value) {
     if (!form.value.nautaEmail.trim()) {
       errors.value.nautaEmail = 'El correo Nauta es requerido para Nauta Hogar'
       isValid = false
-    } else if (!/^[a-zA-Z0-9._%+-]+@nauta\.cu$/.test(form.value.nautaEmail)) {
-      errors.value.nautaEmail = 'Debe ser un correo @nauta.cu válido'
+    } else if (!/@nauta\.com\.cu$/i.test(form.value.nautaEmail.trim())) {
+      errors.value.nautaEmail = 'Debe ser un correo que termine en @nauta.com.cu'
       isValid = false
     }
   }

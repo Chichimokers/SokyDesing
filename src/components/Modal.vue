@@ -1,18 +1,18 @@
 <template>
   <teleport to="body">
-    <div v-if="isOpen" class="fixed inset-0 z-[999999] flex items-center justify-center p-2 sm:p-4 md:p-6" @click="onOverlayClick" style="z-index: 999999 !important;">
-      <!-- Overlay - Cobertura completa de pantalla -->
-      <div class="fixed inset-0 bg-black/70 backdrop-blur-sm transition-opacity duration-300" style="z-index: 999998 !important;"></div>
+    <div v-if="isOpen" class="fixed inset-0 z-[55] flex items-center justify-center p-2 sm:p-4 md:p-6" @click="onOverlayClick">
+      <!-- Overlay - Cobertura completa de pantalla (por debajo de la barra) -->
+      <div class="fixed inset-0 bg-black/70 backdrop-blur-sm transition-opacity duration-300 z-[45]"></div>
 
-      <!-- Container - Perfecto centrado responsive -->
-      <div class="relative w-35 max-w-[95vw] sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl mx-auto" style="z-index: 999999 !important;">
+      <!-- Container - Perfecto centrado responsive (por encima de la barra) -->
+      <div class="relative w-35 max-w-[95vw] sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl mx-auto z-[60]">
         <div 
           ref="modalRef"
           @click.stop 
           class="bg-black/70 rounded-lg sm:rounded-xl border border-white/10 text-left overflow-hidden shadow-2xl transform transition-all w-full flex flex-col max-h-[95vh] sm:max-h-[90vh] md:max-h-[85vh]"
           role="dialog"
           aria-modal="true"
-          style="z-index: 999999 !important;"
+          
         >
         <header v-if="$slots.header" class="px-3 sm:px-4 md:px-6 py-2 sm:py-2.5 md:py-3 border-b border-white/5 flex-shrink-0">
           <slot name="header"></slot>

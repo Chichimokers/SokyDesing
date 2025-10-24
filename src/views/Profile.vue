@@ -248,7 +248,7 @@ const user = ref({
       id: 2,
       type: 'nauta_hogar',
       title: 'Nauta Hogar Plus',
-      description: 'Paquete de internet activado • correo@nauta.cu',
+      description: 'Paquete de internet activado • correo@nauta.com.cu',
       amount: '$25.00',
       date: new Date('2024-01-10')
     },
