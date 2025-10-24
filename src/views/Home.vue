@@ -14,8 +14,6 @@
 
     <!-- Contenido sobre el banner -->
     <div class="relative z-10">
-      <Navbar />
-      
       <!-- Hero Section con transparencia -->
       <section class="pt-24 md:pt-28 pb-16 px-4 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto">
@@ -220,24 +218,21 @@
 
 <script setup lang="ts">
 
-import { computed, ref } from 'vue'
-import { useRouter } from 'vue-router'
-import Navbar from '../components/Navbar.vue'
-import Footer from '../components/Footer.vue'
+import {computed, ref} from 'vue'
+import {useRouter} from 'vue-router'
 import FeatureCard from '../components/Card.vue'
 import PhoneNumberPopup from '../components/PhoneNumberPopup.vue'
 import RechargeStatus from '../components/RechargeStatus.vue'
-import { LightningIcon, ShieldIcon, CurrencyIcon, SupportIcon } from '../components/icon'
-import { useRecharge, type RechargeOffer, type PhoneNumber } from '../composables/useRecharge'
-import { useAuth } from '../composables/useAuth'
+import {type PhoneNumber, type RechargeOffer, useRecharge} from '../composables/useRecharge'
+import {useAuth} from '../composables/useAuth'
 import backgroundImage from '@/assets/images/offer_phpqvu0b1h9ad7g92AMXgY_1760792874.webp'
 import bannerImage from '@/assets/images/offer_phpqvu0b1h9ad7g92AMXgY_1760792874.webp'
-import rechargeImage from '@/assets/images/offer_phpqvu0b1h9ad7g92AMXgY_1760792874.webp'
 import nautaImage from '@/assets/images/offer_phpvAETPl_1752334228.webp'
 import nautaPlusImage from '@/assets/images/offer_phpvs6t513o1seq2HjVWek_1759183674.webp'
 import dataImage from '@/assets/images/offer_phpsm6RzF_1750409890.webp'
 import specialImage from '@/assets/images/offer_phpsgr4K8_1754776835.webp'
 import multipleImage from '@/assets/images/offer_phph1je9vurekis8bYDwm3_1759729559.jpg'
+import '@/assets/home.css'
 
 const router = useRouter()
 const { availableOffers, minPrice, selectOffer, resetTransaction, processRecharge, currentTransaction } = useRecharge()
@@ -375,7 +370,6 @@ const handleStatusClose = () => {
     navigationPending.value = null
   }
 }
-import '@/assets/home.css'
 </script>
 
 <style scoped>

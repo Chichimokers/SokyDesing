@@ -1,7 +1,5 @@
 <template>
   <div class="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
-    <Navbar />
-    
     <!-- Edit Profile Header Section -->
     <div class="pt-24 pb-12 px-4 sm:px-6 lg:px-8">
       <div class="max-w-3xl mx-auto">
@@ -303,9 +301,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import Navbar from '../components/Navbar.vue'
+import {computed, onMounted, ref} from 'vue'
+import {useRouter} from 'vue-router'
 
 const router = useRouter()
 

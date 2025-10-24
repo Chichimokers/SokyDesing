@@ -1,10 +1,10 @@
 <template>
-  <nav class="bg-gray-900/95 backdrop-blur-md shadow-2xl border-b border-gray-800 fixed top-0 left-0 right-0 w-full z-[60]">
+  <nav class="bg-gray-900/95 backdrop-blur-md shadow-2xl border-b border-gray-800 z-[60]">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-16 md:h-20">
         <!-- Logo - Responsive -->
         <div class="flex items-center">
-          <router-link to="/" class="flex items-center space-x-2 md:space-x-3 group">
+          <router-link :to="{name: RouteNames.HOME}" class="flex items-center space-x-2 md:space-x-3 group">
             <div class="h-10 w-10 md:h-16 md:w-16 p-1 rounded-xl md:rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 group-hover:from-blue-600 group-hover:to-purple-700 transition-all duration-300 shadow-lg">
               <video
                 src="@/assets/images/doc_2025-10-21_08-33-30.mp4"
@@ -82,9 +82,9 @@
         <div class="flex items-center space-x-2">
           <!-- User Avatar - Desktop (when logged in) -->
           <div v-if="isLoggedIn" class="hidden md:flex items-center space-x-3">
-            <!-- Avatar clicable que navega al perfil -->
-            <router-link 
-              to="/profile"
+            <!-- Avatar clickable que navega al perfil -->
+            <router-link
+                :to="{name:RouteNames.PROFILE}"
               class="flex items-center space-x-2 bg-gray-800/50 backdrop-blur-sm rounded-full px-3 py-2 border border-gray-600 hover:bg-gray-700/50 hover:border-gray-500 transition-all duration-300 cursor-pointer group"
             >
               <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-sm group-hover:scale-105 transition-transform duration-300">
@@ -108,7 +108,7 @@
           <!-- Login Button - Desktop (when not logged in) -->
           <router-link 
             v-else
-            to="/login" 
+            :to="{name: RouteNames.LOGIN}"
             class="hidden md:block bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-4 lg:px-6 py-2 lg:py-3 rounded-lg lg:rounded-xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 text-sm lg:text-base"
           >
             Iniciar Sesión
@@ -199,8 +199,8 @@
         <div class="flex-1 overflow-y-auto py-4">
           <!-- Navigation Links -->
           <div class="space-y-1 px-4">
-            <router-link 
-              to="/" 
+            <router-link
+                :to="{name:RouteNames.HOME}"
               @click="closeMobileMenu"
               class="mobile-nav-link flex items-center px-4 py-3 rounded-xl transition-all duration-300"
               :class="{ 'mobile-nav-link-active': $route.path === '/' }"
@@ -210,12 +210,12 @@
               </svg>
               Inicio
             </router-link>
-            
-            <router-link 
-              to="/recargas" 
+
+            <router-link
+                :to="{name: RouteNames.RECARGAS}"
               @click="closeMobileMenu"
               class="mobile-nav-link flex items-center px-4 py-3 rounded-xl transition-all duration-300"
-              :class="{ 'mobile-nav-link-active': $route.path === '/recargas' }"
+                :class="{ 'mobile-nav-link-active': $route.name === RouteNames.RECARGAS }"
             >
               <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
@@ -343,8 +343,11 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
-import { useAuth } from '@/composables/useAuth'
+import {onMounted, onUnmounted, ref} from 'vue'
+import {useAuth} from '@/composables/useAuth'
+// Close menu on route change
+import {useRouter} from 'vue-router'
+import {RouteNames} from "@/router/index.js";
 
 const isMobileMenuOpen = ref(false)
 
@@ -382,8 +385,6 @@ const closeMobileMenu = () => {
   document.body.style.overflow = 'unset'
 }
 
-// Close menu on route change
-import { useRouter } from 'vue-router'
 const router = useRouter()
 
 onMounted(() => {

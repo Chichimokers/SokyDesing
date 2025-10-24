@@ -1,7 +1,5 @@
 <template>
   <div class="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
-    <Navbar />
-
     <div class="pt-28 md:pt-32 pb-16 px-4 sm:px-6 lg:px-8">
       <div class="max-w-7xl mx-auto">
         <!-- Header -->
@@ -296,9 +294,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useRecharge } from '@/composables/useRecharge'
-import Navbar from '@/components/Navbar.vue'
+import {ref} from 'vue'
+import {useRecharge} from '@/composables/useRecharge'
 import SimPurchaseConfirmation from '@/components/SimPurchaseConfirmation.vue'
 import ProductPurchaseConfirmation from '@/components/ProductPurchaseConfirmation.vue'
 import InfoModal from '@/components/InfoModal.vue'

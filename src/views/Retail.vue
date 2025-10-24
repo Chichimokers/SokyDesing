@@ -1,7 +1,5 @@
 <template>
   <div class="min-h-screen bg-gray-900">
-    <Navbar />
-    
     <!-- Retail Plan Section -->
     <div class="pt-28 md:pt-32 pb-12 px-4 sm:px-6 lg:px-8">
       <div class="max-w-7xl mx-auto">
@@ -236,9 +234,7 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
-import Navbar from '../components/Navbar.vue'
-import Footer from '../components/Footer.vue'
+import {useRouter} from 'vue-router'
 
 const router = useRouter()
 

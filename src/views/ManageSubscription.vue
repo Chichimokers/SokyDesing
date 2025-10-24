@@ -1,7 +1,5 @@
 <template>
   <div class="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
-    <Navbar />
-    
     <!-- Manage Subscription Section -->
     <div class="pt-28 md:pt-32 pb-12 px-4 sm:px-6 lg:px-8">
       <div class="max-w-4xl mx-auto">
@@ -281,9 +279,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
-import Navbar from '../components/Navbar.vue'
+import {onMounted, ref} from 'vue'
+import {useRoute, useRouter} from 'vue-router'
 import Footer from '../components/Footer.vue'
 import Modal from '../components/Modal.vue'
 
