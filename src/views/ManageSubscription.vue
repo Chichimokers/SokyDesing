@@ -27,7 +27,7 @@ Ejemplo al salir de me ocurre una animación top jaja, que se valla el poup así
           <div class="flex flex-col md:flex-row items-start gap-6">
             <!-- Subscription Icon & Info -->
             <div class="flex items-start gap-4">
-              <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center">
+              <div ssclass="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center">
                 <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="getSubscriptionIcon(subscription.type)"/>
                 </svg>

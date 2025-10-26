@@ -1,5 +1,5 @@
 <template>
-  <div class="space-y-4">
+  <div class="space-y-3 sm:space-y-4">
     <!-- Título del selector -->
     <div>
       <h4 class="text-sm font-medium text-gray-300 mb-2">
@@ -8,13 +8,13 @@
     </div>
 
     <!-- Selector de planes -->
-    <div class="grid grid-cols-2 gap-3" v-if="planType === 'nauta_hogar'">
+  <div class="grid grid-cols-2 gap-2.5 sm:gap-3" v-if="planType === 'nauta_hogar'">
       <!-- Planes Nauta Hogar -->
       <button
         v-for="plan in nautaHogarPlans"
         :key="plan.id"
         @click="selectPlan(plan)"
-        class="p-3 rounded-lg border text-left transition-all duration-200"
+  class="p-2.5 sm:p-3 rounded-lg border text-left transition-all duration-200"
         :class="{
           'border-blue-500 bg-blue-500/20 text-blue-300': selectedPlan?.id === plan.id,
           'border-gray-600 bg-gray-700/50 text-gray-300 hover:border-gray-500': selectedPlan?.id !== plan.id
@@ -25,13 +25,13 @@
       </button>
     </div>
 
-    <div class="grid grid-cols-1 gap-3" v-else-if="planType === 'nauta_plus'">
+    <div class="grid grid-cols-1 gap-2.5 sm:gap-3" v-else-if="planType === 'nauta_plus'">
       <!-- Planes Nauta Plus -->
       <button
         v-for="plan in nautaPlusPlans"
         :key="plan.id"
         @click="selectPlan(plan)"
-        class="p-3 rounded-lg border text-left transition-all duration-200"
+  class="p-2.5 sm:p-3 rounded-lg border text-left transition-all duration-200"
         :class="{
           'border-purple-500 bg-purple-500/20 text-purple-300': selectedPlan?.id === plan.id,
           'border-gray-600 bg-gray-700/50 text-gray-300 hover:border-gray-500': selectedPlan?.id !== plan.id
@@ -43,13 +43,13 @@
       </button>
     </div>
 
-    <div class="grid grid-cols-1 gap-3" v-else>
+    <div class="grid grid-cols-1 gap-2.5 sm:gap-3" v-else>
       <!-- Planes Móviles (usar ofertas existentes) -->
       <button
         v-for="plan in mobilePlans"
         :key="plan.id"
         @click="selectPlan(plan)"
-        class="p-3 rounded-lg border text-left transition-all duration-200"
+  class="p-2.5 sm:p-3 rounded-lg border text-left transition-all duration-200"
         :class="{
           'border-blue-500 bg-blue-500/20 text-blue-300': selectedPlan?.id === plan.id,
           'border-gray-600 bg-gray-700/50 text-gray-300 hover:border-gray-500': selectedPlan?.id !== plan.id

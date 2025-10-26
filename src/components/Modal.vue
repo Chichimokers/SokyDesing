@@ -1,16 +1,16 @@
 <template>
   <teleport to="body">
   <transition name="modal-fade" @before-enter="handleBeforeEnter" @enter="handleEnter" @leave="handleLeave" @after-leave="handleAfterLeave">
-      <div v-if="isOpen" class="fixed inset-0 z-[55] flex items-center justify-center p-2 sm:p-4 md:p-6" @click="onOverlayClick">
+    <div v-if="isOpen" class="fixed inset-0 z-[55] flex items-center justify-center p-0 sm:p-4 md:p-6" @click="onOverlayClick">
         <!-- Overlay - Cobertura completa de pantalla (por debajo de la barra) -->
         <div ref="overlayRef" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-[45]"></div>
 
         <!-- Container - Perfecto centrado responsive (por encima de la barra) -->
-        <div class="relative w-35 max-w-[95vw] sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl mx-auto z-[60]">
+        <div class="relative w-full sm:w-auto max-w-none sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl mx-auto z-[60]">
           <div 
             ref="modalRef"
             @click.stop 
-            class="bg-black/70 rounded-lg sm:rounded-xl border border-white/10 text-left overflow-hidden shadow-2xl w-full flex flex-col max-h-[95vh] sm:max-h-[90vh] md:max-h-[85vh] modal-content"
+            class="bg-black/70 rounded-none sm:rounded-xl border border-white/10 text-left overflow-hidden shadow-2xl w-full flex flex-col h-[100dvh] sm:h-auto max-h-[100dvh] sm:max-h-[90vh] md:max-h-[85vh] modal-content"
             role="dialog"
             aria-modal="true"
           >
@@ -18,7 +18,7 @@
           <slot name="header"></slot>
         </header>
 
-        <div class="px-6 py-2.5 sm:py-3 md:py-4 flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800">
+        <div class="px-4 sm:px-6 py-2 sm:py-3 md:py-4 flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800">
           <slot></slot>
         </div>
 
@@ -109,8 +109,36 @@ onMounted(() => {
 // Limpiar al desmontar
 onUnmounted(() => {
   document.removeEventListener('keydown', handleEscape)
+
+  // Asegurar desbloqueo total del scroll incluso si el componente se desmonta
+  // abruptamente (por ejemplo, al usar el botón Atrás del navegador),
+  // ya que en ese caso la transición @after-leave podría no ejecutarse.
+  const scrollY = previousScrollPosition
+
+  // Remover estilos de bloqueo del body
   document.body.style.overflow = ''
+  document.body.style.position = ''
+  document.body.style.top = ''
+  document.body.style.width = ''
   document.body.style.paddingRight = ''
+
+  // Restaurar posición de scroll
+  requestAnimationFrame(() => {
+    // Mantener la misma semántica usada en handleAfterLeave
+    window.scrollTo({ top: scrollY, behavior: 'instant' as any })
+    // Fuerza un reflow para asegurar que el navegador aplique los estilos
+    // antes de cualquier otro cálculo de layout
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    document.body.offsetHeight
+  })
+
+  // Intentar restaurar foco si se guardó previamente
+  if (previousActiveElement) {
+    setTimeout(() => {
+      previousActiveElement?.focus()
+      previousActiveElement = null
+    }, 50)
+  }
 })
 
 // Leave transition to zoom back to the source element

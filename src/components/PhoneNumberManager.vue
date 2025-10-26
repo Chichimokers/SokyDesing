@@ -1,19 +1,19 @@
 <template>
-  <div class="bg-black/50 backdrop-blur-md rounded-2xl p-6 border border-white/10">
-    <div class="flex items-center justify-between mb-6">
-      <h3 class="text-xl font-bold text-white">Números de teléfono</h3>
+  <div class="bg-black/50 backdrop-blur-md rounded-2xl p-4 sm:p-6 border border-white/10">
+    <div class="flex items-center justify-between mb-4 sm:mb-6">
+      <h3 class="text-lg sm:text-xl font-bold text-white">Números de teléfono</h3>
       <span class="text-sm text-gray-400">{{ phoneNumbers.length }}/5</span>
     </div>
 
     <!-- Input para agregar número -->
-    <div class="mb-6">
-      <div class="flex space-x-3">
+    <div class="mb-4 sm:mb-6">
+      <div class="flex space-x-2 sm:space-x-3">
         <div class="flex-1 relative">
           <input
             v-model="newPhoneNumber"
             type="tel"
             placeholder="+535XXXXXXX"
-            class="w-full bg-[#2a2a2a] border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            class="w-full bg-[#2a2a2a] border border-gray-600 rounded-lg px-4 py-2.5 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
             :class="{ 'border-red-500': showValidationError }"
             @keyup.enter="handleAddPhone"
             @input="showValidationError = false"
@@ -34,7 +34,7 @@
         <button
           @click="handleAddPhone"
           :disabled="phoneNumbers.length >= 5 || !newPhoneNumber.trim()"
-          class="bg-green-500 hover:bg-green-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white p-3 rounded-lg transition duration-300"
+          class="bg-green-500 hover:bg-green-600 disabled:bg-gray-600 disabled:cursor-not-allowed text-white p-3 sm:p-3 rounded-lg transition duration-300"
         >
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
@@ -54,7 +54,7 @@
     </div>
 
     <!-- Lista de números agregados -->
-    <div v-if="phoneNumbers.length > 0" class="space-y-3">
+    <div v-if="phoneNumbers.length > 0" class="space-y-2.5 sm:space-y-3">
       <div
         v-for="phone in phoneNumbers"
         :key="phone.id"
@@ -109,7 +109,7 @@
     </div>
 
     <!-- Estado vacío -->
-    <div v-else class="text-center py-8">
+    <div v-else class="text-center py-6 sm:py-8">
       <svg class="mx-auto h-12 w-12 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>
       </svg>
