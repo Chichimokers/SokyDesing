@@ -1,0 +1,22 @@
+name: Production-Deployment
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  deploy:
+    runs-on: [ self-hosted, soky-stage, soky ]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Decode .env file
+        run: echo "${{ secrets.ENV_STAGE }}" | base64 --decode > .env
+
+      - name: Build Image
+        run: docker compose build
+
+      - name: Run containers
+        run: docker compose up -d

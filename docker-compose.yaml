@@ -1,0 +1,14 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: ./docker/app/Dockerfile
+    container_name: "${DOCKER_CONTAINER_NAME:-soky-client-ui}"
+    ports:
+      - "${DOCKER_PORT:-8046}:80"
+    restart: unless-stopped
+    networks:
+      - public-network
+networks:
+  public-network:
+    external: true
