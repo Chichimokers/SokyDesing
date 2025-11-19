@@ -7,7 +7,7 @@ help:
 
 
 .PHONY: build
-build: format
+build:
 	@pnpm build
 	
 .PHONY: format
