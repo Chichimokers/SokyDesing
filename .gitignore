@@ -17,14 +17,9 @@ build/
 dev-dist/
 
 # Environment variables
-.env
-.env.development
-.env.production
-.env.local
 .env.local.*
 
 # Editor directories and files
-.vscode/
 .idea/
 *.swp
 *.swo
@@ -41,7 +36,6 @@ Thumbs.db
 
 # Vue CLI
 .vuepress/
-.vscode/
 
 # Cache files
 .cache/
@@ -82,3 +76,4 @@ pids
 
 # DynamoDB Local files
 .dynamodb/
+config.bat
